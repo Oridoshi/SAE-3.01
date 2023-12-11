@@ -2,20 +2,20 @@ package metier;
 
 import java.util.ArrayList;
 
-public class ModuleSae extends Module
+public class ModuleStage extends Module
 {
-	public static ArrayList<ModuleSae> lstModuleSae = new ArrayList<ModuleSae>();
-	private int nbHeuresPn;
+	public static ArrayList<ModuleStage> lstModuleStage = new ArrayList<ModuleStage>();
+	private int nbHeuresReh;
 	private int nbHeuresTut;
 	private ArrayList<Affectation> lstSousModuleSae;
 
-	public ModuleSae(int nbHeuresPn, int nbHeuresTut, String nom, boolean valider)
+	public ModuleStage(int nbHeuresReh, int nbHeuresTut, int semestre, String nom, boolean valider)
 	{
-		super("SAE", nom, valider);
-		this.nbHeuresPn = nbHeuresPn;
+		super("Stage", nom, valider);
+		this.nbHeuresReh = nbHeuresReh;
 		this.nbHeuresTut = nbHeuresTut;
 		this.lstSousModuleSae = new ArrayList<Affectation>();
-		lstModuleSae.add(this);
+		lstModuleStage.add(this);
 	}
 
 	public void AjouterAffectation(Intervenant Intervenant, TypeHeure typeH, int nbHeures, String commentaire)
@@ -23,8 +23,9 @@ public class ModuleSae extends Module
 		lstSousModuleSae.add(new Affectation(Intervenant, typeH, nbHeures, commentaire));
 	}
 
-	public static ArrayList<ModuleSae> getLstModuleSae(){return lstModuleSae;}
-	public int getNbHeuresPn(){return nbHeuresPn;}
+	public static ArrayList<ModuleStage> lstModuleStage(){return lstModuleStage;}
+	public int getNbHeuresReh(){return nbHeuresReh;}
 	public int getNbHeuresTut(){return nbHeuresTut;}
 	public ArrayList<Affectation> getLstSousModuleSae(){return lstSousModuleSae;}
 }
+

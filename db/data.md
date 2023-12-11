@@ -1,4 +1,3 @@
-
 **Module**
  - forceValider
  - semestre >= 1 && <= 6
@@ -12,7 +11,6 @@
  - nbHPromo (nullable)
  - nbSemaine (nullable)
  - nbHParSemaine (nullable)
-				// Où nbSemaine*nbHParSemaine = nbHTot
 Si nbHPromo alors pas de nbSemaine ou nbHParSemaine
 
 **Semestre**
