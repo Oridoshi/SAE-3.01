@@ -41,5 +41,22 @@ INSERT INTO Semestre VALUES
 (4, 2, 4, 52, 13);
 
 ---- Création des intervenants ----
-INSERT INTO Intervenant VALUES
-()
+INSERT INTO Intervenant (idCatIntervenant, nom, prenom) VALUES
+(0, "Boukachour", "Hadhoum"),
+(1, "Colignon", "Thomas"),
+(1, "Dubocage", "Tiphaine"),
+(2, "Hervé", "Nathalie"),
+(3, "Pecqueret", "Véronique"),
+(4, "Laffeach", "Quentin"),
+(4, "Lepivert", "Philippe"),
+(4, "Legrix", "Bruno"),
+(4, "Nivet", "Laurence");
+
+
+---- Création des modules ----
+INSERT INTO Module VALUES
+(false, 1, 0, "R1.01", "Initiation au développement", "Init Dev"),
+(false, 1, 0, "R1.01", "Développement interfaces Web", "Dev Web"),
+(false, 1, 0, "R1.01", "Introduction Architecture", "Architecture"),
+(false, 1, 0, "R1.01", "Introduction Système", "Système"),
+(false, 1, 0, "R1.01", "Introduction Base de données", "BDD"),

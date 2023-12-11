@@ -1,12 +1,12 @@
-DROP TABLE if exists Module cascade;
-DROP TABLE if exists RemplirProgramme cascade;
-DROP TABLE if exists Semestre cascade;
-DROP TABLE if exists Intervenant cascade;
-DROP TABLE if exists CategorieIntervenant cascade;
-DROP TABLE if exists CategorieHeure cascade;
-DROP TABLE if exists CategorieModule cascade;
-DROP TABLE if exists Affectation cascade;
-DROP TABLE if exists RemplirCategorieModule cascade;
+-- DROP TABLE if exists Module cascade;
+-- DROP TABLE if exists RemplirProgramme cascade;
+-- DROP TABLE if exists Semestre cascade;
+-- DROP TABLE if exists Intervenant cascade;
+-- DROP TABLE if exists CategorieIntervenant cascade;
+-- DROP TABLE if exists CategorieHeure cascade;
+-- DROP TABLE if exists CategorieModule cascade;
+-- DROP TABLE if exists Affectation cascade;
+-- DROP TABLE if exists RemplirCategorieModule cascade;
 
 CREATE TABLE Semestre (
 	idSemestre SERIAL PRIMARY KEY,
@@ -75,7 +75,7 @@ CREATE TABLE Intervenant (
 	idCatIntervenant INT NOT NULL,
 	nom VARCHAR(255) NOT NULL,
 	prenom VARCHAR(255) NOT NULL,
-	hMax INT default 0,
+	hMax INT,
 	FOREIGN KEY (idCatIntervenant) REFERENCES CategorieIntervenant(idCatIntervenant)
 );
 

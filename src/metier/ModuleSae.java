@@ -2,6 +2,11 @@ package metier;
 
 import java.util.ArrayList;
 
+
+/**
+ * ModuleSae
+ * Classe permettant de créer et gérer les différentes sae 
+ */
 public class ModuleSae extends Module
 {
 	public static ArrayList<ModuleSae> lstModuleSae = new ArrayList<ModuleSae>();
@@ -9,9 +14,9 @@ public class ModuleSae extends Module
 	private int nbHeuresTut;
 	private ArrayList<Affectation> lstSousModuleSae;
 
-	public ModuleSae(int nbHeuresPn, int nbHeuresTut, String nom, boolean valider)
+	public ModuleSae(int nbHeuresPn, int nbHeuresTut, String code, String nom, boolean valider)
 	{
-		super("SAE", nom, valider);
+		super("SAE", code, nom, valider);
 		this.nbHeuresPn = nbHeuresPn;
 		this.nbHeuresTut = nbHeuresTut;
 		this.lstSousModuleSae = new ArrayList<Affectation>();

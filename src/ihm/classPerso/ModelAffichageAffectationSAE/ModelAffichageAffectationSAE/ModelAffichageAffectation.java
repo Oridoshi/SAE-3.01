@@ -7,7 +7,7 @@ import javax.swing.table.AbstractTableModel;
 import controleur.Controleur;
 import metier.ModuleResource;
 
-public class ModelAffichageSemestre extends AbstractTableModel
+public class ModelAffichageAffectation extends AbstractTableModel
 {
 
 	private Controleur ctrl;
@@ -15,7 +15,7 @@ public class ModelAffichageSemestre extends AbstractTableModel
 	private String[] tabEntetes;
 	private Object[][] tabDonnees;
 
-	public ModelAffichageSemestre(Controleur ctrl, ArrayList<ModuleResource> lstRessource)
+	public ModelAffichageAffectation(Controleur ctrl, ArrayList<ModuleResource> lstRessource)
 	{
 		this.ctrl = ctrl;
 
@@ -41,9 +41,9 @@ public class ModelAffichageSemestre extends AbstractTableModel
 		this.tabEntetes = ctrl.getNomCol(table);
 	}
 
-	public int getRowCount()                               {return this.tabDonnees.length;}
-	public String getColumnName (int col)                  {return this.tabEntetes[col];}
-	public int getColumnCount()                            {return this.tabEntetes.length;}
-	public Object getValueAt(int rowIndex, int columnIndex){return this.tabDonnees[rowIndex][columnIndex];}
+	public int getRowCount()                               { return this.tabDonnees.length; }
+	public String getColumnName (int col)                  { return this.tabEntetes[col]; }
+	public int getColumnCount()                            { return this.tabEntetes.length; }
+	public Object getValueAt(int rowIndex, int columnIndex){ return this.tabDonnees[rowIndex][columnIndex]; }
 
 }

@@ -1,5 +1,10 @@
 package metier;
 
+/**
+ * TypeHeure
+ * Classe qui permet les différents types d'heures
+ */
+
 public class TypeHeure
 {
 	private String code;

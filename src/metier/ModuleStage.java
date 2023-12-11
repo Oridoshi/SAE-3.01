@@ -2,6 +2,11 @@ package metier;
 
 import java.util.ArrayList;
 
+/**
+ * ModuleStage
+ * Classe permettant de créer et gérer les différents stages 
+ */
+
 public class ModuleStage extends Module
 {
 	public static ArrayList<ModuleStage> lstModuleStage = new ArrayList<ModuleStage>();
@@ -9,9 +14,9 @@ public class ModuleStage extends Module
 	private int nbHeuresTut;
 	private ArrayList<Affectation> lstSousModuleSae;
 
-	public ModuleStage(int nbHeuresReh, int nbHeuresTut, int semestre, String nom, boolean valider)
+	public ModuleStage(int nbHeuresReh, int nbHeuresTut, int semestre, String code, String nom, boolean valider)
 	{
-		super("Stage", nom, valider);
+		super("Stage", code, nom, valider);
 		this.nbHeuresReh = nbHeuresReh;
 		this.nbHeuresTut = nbHeuresTut;
 		this.lstSousModuleSae = new ArrayList<Affectation>();

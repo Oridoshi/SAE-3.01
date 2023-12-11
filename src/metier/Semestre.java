@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Semestre
+ * Classe de création des semestres 
  */
 public class Semestre
 {

@@ -1,5 +1,10 @@
 package metier;
 
+/*
+ * Affectation
+ * Classe permettant de gérer les différentes affectations
+ */
+
 public class Affectation
 {
 	private Intervenant intervenant;

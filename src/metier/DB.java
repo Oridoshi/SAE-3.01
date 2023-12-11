@@ -1,53 +1,66 @@
 package metier;
 
 import java.sql.*;
+/*
+ * Classe permettant de faire des requetes sur la base de données
 
+ */
 
 public class DB 
 {
-	private String chemin;
-	private String identifiant;
-	private String motDePasse;
+	private static String chemin;
+	private static String identifiant;
+	private static String motDePasse;
+	private static Connection db;
 
+	static{
+		try{
+			Class.forName("org.postgresql.JDBC");
+			db = DriverManager.getConnection("jdbc:postgresql:"+ chemin, identifiant, motDePasse);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
 
-	public DB(String chemin, String id, String mdp)
-	{
-		this.chemin = chemin;
-		this.identifiant = id;
-		this.motDePasse = mdp;
+	public static Connection getInstance(){
+		return db;
+	}
+
+	public void query(PreparedStatement ps){
+
+		try{
+			Map<
+			ResultSet rs = ps.executeQuery();
+			for ( int i = 0 ; i < rs.getMetaData().getColumnCount() ; i++ ){
+
+			}
+			rs.getMetaData().
+
+		} catch ( Exception e) {}
+
+	}
+ 
+	public void update(){
+		try
 	}
 
 	public void requete(String req)
 	{
 			try {
-				Class.forName("org.postgresql.JDBC");
-				Connection con = DriverManager.getConnection("jdbc:postgresql:"+this.chemin, this.identifiant, this.motDePasse);
-				Statement stmt = con.createStatement();
+				Statement stmt = db.createStatement();
 				ResultSet rs = null;
-				String lbl = "";
 
 				if(req.contains("SELECT") || req.contains("select"))
 				{
-					rs = stmt.executeQuery(req);
+					return stmt.executeQuery(req);
 					ResultSetMetaData rsmd = rs.getMetaData();
 					while (rs.next()) 
 					{
-						for(int i = 0; i < rsmd.getColumnCount(); i++)
-						{
-							lbl += rs.getString(i+1);
-						}
-						lbl += "\n";
 					}
 				}
-				else
-				{
-					stmt.execute(req);
-					lbl = "Requete effectuée";
-				}
-				System.out.println(lbl);
+				else stmt.execute(req);
 				rs.close();
 				stmt.close();
-				con.close();
 			} catch (Exception e) {	}
 	}
 }

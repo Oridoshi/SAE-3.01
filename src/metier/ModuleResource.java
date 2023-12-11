@@ -2,25 +2,33 @@ package metier;
 
 import java.util.ArrayList;
 
+
+/**
+ * ModuleResource
+ * Classe permettant de créer et gérer les différentes ressources 
+ */
 public class ModuleResource extends Module
 {
-	private int hPnTd;   //heur programme pour TD
-	private int hPnTp;   //heur programme pour TP
-	private int hPnCm;   //heur programme pour CM
-	private int hPnTut;  //heur programme pour TUT
+	private int hPnTd;   //heures programme pour TD
+	private int hPnTp;   //heures programme pour TP
+	private int hPnCm;   //heures programme pour CM
+	private int hPnTut;  //heures programme pour TUT
 
-	private int hSemaineTd;  //heur TD par semaine
-	private int hSemaineTp;  //heur TP par semaine
-	private int hSemaineCm;  //heur CM par semaine
-	private int hSemaineTut; //heur TUT par semaine
+	private int hSemaineTd;  //heures TD par semaine
+	private int hSemaineTp;  //heures TP par semaine
+	private int hSemaineCm;  //heures CM par semaine
+	private int hSemaineTut; //heures TUT par semaine
 
-	private int hP; //heur ponctuelle
+	private int totalPromoEqTd;   //total des heures en équivalent TD pour la promo
+	private int totalAffecteEqTd;//total des heures Affecte en équivalent TD pour la promo
+
+	private int hP; //heures ponctuelle
 
 	private ArrayList<Affectation> lstAffectation;
 
-	public ModuleResource(int hPnTd, int hPnTp, int hPnCm, int hPnTut, int hSemaineTd, int hSemaineTp, int hSemaineCm, int hSemaineTut, int hP, String nom, boolean valider)
+	public ModuleResource(int hPnTd, int hPnTp, int hPnCm, int hPnTut, int hSemaineTd, int hSemaineTp, int hSemaineCm, int hSemaineTut, int hP, String nom, String code, boolean valider)
 	{
-		super("Ressource", nom, valider);
+		super("Ressource", code, nom, valider);
 		this.hPnTd = hPnTd;
 		this.hPnTp = hPnTp;
 		this.hPnCm = hPnCm;
@@ -30,7 +38,9 @@ public class ModuleResource extends Module
 		this.hSemaineCm = hSemaineCm;
 		this.hSemaineTut = hSemaineTut;
 		this.hP = hP;
-		lstAffectation = new ArrayList<Affectation>();
+		this.lstAffectation = new ArrayList<Affectation>();
+		this.totalPromoEqTd = 0;
+		this.totalAffecteEqTd = 0;
 	}
 
 	public int gethPnTd() {return hPnTd;}
@@ -43,6 +53,8 @@ public class ModuleResource extends Module
 	public int gethSemaineTut(){return hSemaineTut;}
 	public int gethP(){return hP;}
 	public ArrayList<Affectation> getLstAffectation(){return lstAffectation;}
+	public int getTotalPromoEqTd(){return totalPromoEqTd;}
+	public int getTotalAffecteEqTd(){return totalAffecteEqTd;}
 
 	public void sethPnTd(int hPnTd) {this.hPnTd = hPnTd;}
 	public void sethPnTp(int hPnTp) {this.hPnTp = hPnTp;}

@@ -1,5 +1,10 @@
 package metier;
 
+/*
+ * Intervenant
+ * Classe qui permet de creer un intervenant
+ */
+
 public class Intervenant
 {
 
