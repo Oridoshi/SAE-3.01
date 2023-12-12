@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
 
-public class pageSemestre extends JPanel implements ActionListener
+public class PagePrevisionnel extends JPanel implements ActionListener
 {
 	private Controleur ctrl;
 
@@ -28,13 +28,13 @@ public class pageSemestre extends JPanel implements ActionListener
 	private JFrame mere;
 	private JTabbedPane tabbedPane;
 
-	public pageSemestre(Controleur ctrl, JFrame mere)
+	public PagePrevisionnel(Controleur ctrl, JFrame mere)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
 
 		this.setLayout(new BorderLayout());
-		this.mere.setTitle("Prévisionnel");
+		this.mere.setTitle("Acceuil - Prévisionnel");
 		this.setBorder(new EmptyBorder(15, 30, 15, 30));
 
 		this.tabbedPane = new JTabbedPane();
@@ -109,13 +109,13 @@ public class pageSemestre extends JPanel implements ActionListener
 			panelInfoSemestre.setLayout(new GridLayout(1, 8));
 
 			panelInfoSemestre.add(new JLabel("nb gp TD"));
-			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField(this.semestreActu.getNbGroupeTd())));
+			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
 			panelInfoSemestre.add(new JLabel("nb gp TP"));
-			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField(this.semestreActu.getNbGroupeTd())));
+			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
 			panelInfoSemestre.add(new JLabel("nb Etd"));
-			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField(this.semestreActu.getNbGroupeTd())));
+			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
 			panelInfoSemestre.add(new JLabel("nb semaine"));
-			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField(this.semestreActu.getNbGroupeTd())));
+			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
 
 
 			/*----------PanelInfo----------*/

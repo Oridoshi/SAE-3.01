@@ -19,7 +19,15 @@ public class FrameIhm extends JFrame
 		this.setSize(800, 600);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.add(new pageSemestre(this.ctrl, this));
+		this.add(new PageAccueil(this.ctrl, this));
 		this.setVisible(true);
+	}
+
+	public void chagerPage(JPanel page)
+	{
+		this.getContentPane().removeAll();
+		this.getContentPane().add(page);
+		this.getContentPane().repaint();
+		this.getContentPane().revalidate();
 	}
 }
