@@ -33,7 +33,7 @@ public class CategorieModuleDB {
 		DBResult result = DB.query(this.psGetCategoriesModule);
 		List<CategorieModule> categoriesModule = new ArrayList<>();
 		for ( Map<String, String> ligne : result.getLignes() ){
-			categoriesModule.add(getCategorieModule(ligne));
+			categoriesModule.add(ligneToModule(ligne));
 		}
 		return categoriesModule;
 	}
@@ -43,13 +43,13 @@ public class CategorieModuleDB {
 			this.psGetCategorieModuleParId.setString(1, id);
 			DBResult result = DB.query(this.psGetCategorieModuleParId);
 			Map<String, String> ligne = result.getLignes().get(0);
-			return getCategorieModule(ligne);
+			return ligneToModule(ligne);
 		} catch ( Exception e ){
 			return null;
 		}
 	}
 
-	public CategorieModule getCategorieModule(Map<String, String> ligne){
+	private CategorieModule ligneToModule(Map<String, String> ligne){
 		return new CategorieModule(
 				ligne.get("nom"),
 				categorieHeureDB.getCategorieHeureParCategorieModuleName(ligne.get("nom"))

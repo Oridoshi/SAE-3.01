@@ -52,7 +52,7 @@ public class IntervenantDB {
     private Intervenant ligneToIntervenant(Map<String, String> ligne){
         return new Intervenant(
                 Integer.parseInt(ligne.get("id")),
-                categorieIntervenantDB.getCategorieParId(ligne.get("idCatIntervenant")),
+                categorieIntervenantDB.getCategorieParId(ligne.get("codeCatIntervenant")),
                 ligne.get("nom"),
                 ligne.get("prenom"),
                 Integer.parseInt(ligne.get("hMax"))

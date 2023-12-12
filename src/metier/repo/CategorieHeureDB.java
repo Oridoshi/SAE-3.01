@@ -33,7 +33,7 @@ public class CategorieHeureDB {
 		DBResult result = DB.query(this.psGetCategoriesHeure);
 		List<CategorieHeure> categoriesHeure = new ArrayList<>();
 		for ( Map<String, String> ligne : result.getLignes() ){
-			categoriesHeure.add(getCategorieHeure(ligne));
+			categoriesHeure.add(ligneToHeures(ligne));
 		}
 		return categoriesHeure;
 	}
@@ -43,7 +43,7 @@ public class CategorieHeureDB {
 			this.psGetCategorieHeureParId.setString(1, id);
 			DBResult result = DB.query(this.psGetCategorieHeureParId);
 			Map<String, String> ligne = result.getLignes().get(0);
-			return getCategorieHeure(ligne);
+			return ligneToHeures(ligne);
 		} catch ( Exception e ){
 			return null;
 		}
@@ -55,7 +55,7 @@ public class CategorieHeureDB {
 			DBResult result = DB.query(this.psGetCategorieHeureParCategorieModule);
 			List<CategorieHeure> categoriesHeure = new ArrayList<>();
 			for ( Map<String, String> ligne : result.getLignes() ){
-				categoriesHeure.add(getCategorieHeure(ligne));
+				categoriesHeure.add(ligneToHeures(ligne));
 			}
 			return categoriesHeure;
 		} catch ( Exception e ){
@@ -63,7 +63,7 @@ public class CategorieHeureDB {
 		}
 	}
 
-	public CategorieHeure getCategorieHeure(Map<String, String> ligne){
+	private CategorieHeure ligneToHeures(Map<String, String> ligne){
 		return new CategorieHeure(
 				ligne.get("nom"),
 				Double.parseDouble(ligne.get("coeffCat"))

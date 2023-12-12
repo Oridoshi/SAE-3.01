@@ -34,6 +34,17 @@ public class SemestreDB{
 		return semestres;
 	}
 
+	public Semestre getSemestreParId(int id){
+		try{
+			this.psGetSemestreParId.setInt(1, id);
+		} catch ( Exception e ){
+			return null;
+		}
+		DBResult result = DB.query(this.psGetSemestreParId);
+		Map<String, String> ligne = result.getLignes().get(0);
+		return ligneToSemestre(ligne);
+	}
+
 	private Semestre ligneToSemestre(Map<String, String> ligne){
 		return new Semestre(
 			Integer.parseInt(ligne.get("id")),
@@ -44,38 +55,6 @@ public class SemestreDB{
 		);
 	}
 
-	public Semestre getSemestreParId(int id){
-		try{
-			this.psGetSemestreParId.setInt(1, id);
-		} catch ( Exception e ){
-			return null;
-		}
-		DBResult result = DB.query(this.psGetSemestreParId);
-		Map<String, String> ligne = result.getLignes().get(0);
-		return new Semestre(
-			Integer.parseInt(ligne.get(id)),
-			Integer.parseInt(ligne.get("nbGrpTd")),
-			Integer.parseInt(ligne.get("nbGrpTp")),
-			Integer.parseInt(ligne.get("nbEtd")),
-			Integer.parseInt(ligne.get("nbSemaines"))
-		);
-	}
 
-	public Semestre getSemestreParId(int id){
-		try{
-			this.psGetSemestreParId.setInt(1, id);
-		} catch ( Exception e ){
-			return null;
-		}
-		DBResult result = DB.query(this.psGetSemestreParId);
-		Map<String, String> ligne = result.getLignes().get(0);
-		return new Semestre(
-			Integer.parseInt(ligne.get(id)),
-			Integer.parseInt(ligne.get("nbGrpTd")),
-			Integer.parseInt(ligne.get("nbGrpTp")),
-			Integer.parseInt(ligne.get("nbEtd")),
-			Integer.parseInt(ligne.get("nbSemaines"))
-		);
-	}
 
 }

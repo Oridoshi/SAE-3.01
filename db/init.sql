@@ -51,7 +51,6 @@ CREATE TABLE RemplirProgramme(
 	nbHProgramme INT NOT NULL,
 	nbHPromo INT default 0,
 	nbSemaine INT default 0,
-	nbHParSemaine INT default 0,
 	FOREIGN KEY (nomCatModule) REFERENCES CategorieModule(nom),
 	FOREIGN KEY (nomCatH) REFERENCES CategorieHeure(nom),
 	FOREIGN KEY (codeModule) REFERENCES Module(code),

@@ -32,7 +32,7 @@ public class CategorieIntervenantDB
 		DBResult result = DB.query(this.psGetCategories);
 		List<CategorieIntervenant> categories = new ArrayList<>();
 		for ( Map<String, String> ligne : result.getLignes() ){
-			categories.add(getCategorieIntevernant(ligne));
+			categories.add(ligneToCategorieIntervenant(ligne));
 
 		}
 		return categories;
@@ -43,13 +43,13 @@ public class CategorieIntervenantDB
 			this.psGetCategorieParId.setString(1, id);
 			DBResult result = DB.query(this.psGetCategorieParId);
 			Map<String, String> ligne = result.getLignes().get(0);
-			return getCategorieIntevernant(ligne);
+			return ligneToCategorieIntervenant(ligne);
 		} catch ( SQLException e ){
 			return null;
 		}
 	}
 
-	private CategorieIntervenant getCategorieIntevernant(Map<String, String> ligne)
+	private CategorieIntervenant ligneToCategorieIntervenant(Map<String, String> ligne)
 	{
 			return new CategorieIntervenant(
 			ligne.get("code"),
