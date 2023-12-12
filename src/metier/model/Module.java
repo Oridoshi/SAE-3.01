@@ -43,4 +43,14 @@ public class Module
 	}
 
 	public String getLibelleLong() {return libelleLong;}
+
+	public int getTotalAffecteEqTd()
+	{
+		return 0;
+	}
+
+	public int getTotalPromoEqTd()
+	{
+		return 0;
+	}
 }

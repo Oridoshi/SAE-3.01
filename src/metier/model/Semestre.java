@@ -28,5 +28,10 @@ public class Semestre
 	public int getNbGroupeTp()             {return nbGroupeTp;}
 	public int getNbEtu()                  {return nbEtu;}
 	public int getNbSemaine()              {return nbSemaine;}
+
+	public ArrayList<Module> getlstRessource()
+	{
+		return null;
+	}
 	
 }

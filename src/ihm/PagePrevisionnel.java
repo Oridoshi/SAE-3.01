@@ -5,8 +5,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import controleur.Controleur;
-import metier.ModuleResource;
-import metier.Semestre;
+import metier.model.Module;
+import metier.model.Semestre;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -126,7 +126,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			JPanel panelTab = new JPanel();
 			panelTab.setLayout(new BorderLayout());
 
-			this.tableRessource = new JTable( new ModelAffichageTableau(this.ctrl, this.ctrl.getlstRessource(s)) );
+			this.tableRessource = new JTable( new ModelAffichageTableau(this.ctrl, this.semestreActu.getlstRessource()) );
 			this.tableRessource.setFillsViewportHeight(true);
 			this.tableRessource.setRowHeight(25);
 			this.tableRessource.setShowVerticalLines(false); // pour ne pas afficher les lignes verticales dans le tableau
@@ -148,7 +148,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 
 		private Object[][] tabDonnees;
 
-		public ModelAffichageTableau(Controleur ctrl, ArrayList<ModuleResource> lstRessource)
+		public ModelAffichageTableau(Controleur ctrl, ArrayList<Module> lstRessource)
 		{
 			this.ctrl = ctrl;
 
@@ -160,7 +160,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			for (int ligne = 0; ligne < nbLig; ligne++)
 			{
 				tabDonnees[ligne][0] = lstRessource.get(ligne).getCode();
-				tabDonnees[ligne][1] = lstRessource.get(ligne).getNom();
+				tabDonnees[ligne][1] = lstRessource.get(ligne).getLibelleLong();
 				tabDonnees[ligne][2] = lstRessource.get(ligne).getTotalAffecteEqTd() + "/" + lstRessource.get(ligne).getTotalPromoEqTd();
 				tabDonnees[ligne][3] = lstRessource.get(ligne).getValider();
 			}
