@@ -3,10 +3,12 @@ package ihm;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import controleur.Controleur;
 
-public class PageAccueil extends JPanel
+public class PageAccueil extends JPanel implements ActionListener
 {
 	private Controleur ctrl;
 
@@ -17,9 +19,12 @@ public class PageAccueil extends JPanel
 	private JButton btnIntervenants;
 	private JButton btnEtats;
 
-	public PageAccueil(Controleur ctrl)
+	private FrameIhm mere;
+
+	public PageAccueil(Controleur ctrl, FrameIhm mere)
 	{
 		this.ctrl = ctrl;
+		this.mere = mere;
 
 
 		this.setLayout(new GridBagLayout());
@@ -27,42 +32,66 @@ public class PageAccueil extends JPanel
 		GridBagConstraints c = new GridBagConstraints(); 
 		c.insets = new Insets(0, 0, 7, 7); 
 
+		GridBagConstraints gbc = new GridBagConstraints();
+
 		// lblTitre //
 		lblTitre = new JLabel("ASTRE");
-		//lblTitre.setFont(new Font("Segoe UI", Font.BOLD, 36));
-		this.add(lblTitre, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
-				new Insets(0, 0, 7, 7), 0, 0));
+		lblTitre.setFont(new Font("Segoe UI", Font.BOLD, 36));
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.add(lblTitre, gbc);
 
 		// lblVersion //
-		lblVersion = new JLabel("" + this.ctrl.getVersion());
-		this.add(lblVersion, new GridBagConstraints(1, 8, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
-				new Insets(0, 0, 0, 7), 0, 0));
+		lblVersion = new JLabel(this.ctrl.getVersion());
+		gbc.gridy = 1;
+		this.add(lblVersion, gbc);
+
+		JPanel panelBtn = new JPanel();
+		panelBtn.setLayout(new GridLayout(4, 1, 5, 0));
 
 		// btnParametres //
-		btnParametres = new JButton("Paramètres");
-		this.add(btnParametres, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(0, 0, 7, 7), 0, 0));
+		this.btnParametres = new JButton("Paramètres");
+		this.btnParametres.addActionListener(this);
+		panelBtn.add(btnParametres, gbc);
 
 		// btnParametres //
-		btnPrevisionnel = new JButton("Prévisionnel");
-		this.add(btnPrevisionnel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(0, 0, 7, 7), 0, 0));
+		this.btnPrevisionnel = new JButton("Prévisionnel");
+		this.btnPrevisionnel.addActionListener(this);
+		panelBtn.add(btnPrevisionnel, gbc);
 
 		// btnParametres //
-		btnIntervenants = new JButton("Intervenants");
-		this.add(btnIntervenants, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(0, 0, 7, 7), 0, 0));
+		this.btnIntervenants = new JButton("Intervenants");
+		this.btnIntervenants.addActionListener(this);
+		this.btnIntervenants.setPreferredSize(new Dimension(500, 500));
+		panelBtn.add(btnIntervenants, gbc);
 
 		// btnParametres //
-		btnEtats = new JButton("Etats");
-		this.add(btnEtats, new GridBagConstraints(1, 6, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(0, 0, 7, 7), 0, 0));
+		this.btnEtats = new JButton("Etats");
+		this.btnEtats.addActionListener(this);
+		panelBtn.add(btnEtats, gbc);
+		
+		gbc.gridy = 2;
+		this.add(panelBtn, gbc);
+	}
 
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == this.btnParametres)
+		{
+			// this.mere.chagerPage(new PageParametres(this.ctrl, this.mere));
+		}
+		else if (e.getSource() == this.btnPrevisionnel)
+		{
+			this.mere.chagerPage(new PagePrevisionnel(this.ctrl, this.mere));
+		}
+		else if (e.getSource() == this.btnIntervenants)
+		{
+			// this.mere.chagerPage(new PageParametres(this.ctrl, this.mere));
+		}
+		else if (e.getSource() == this.btnEtats)
+		{
+			// this.mere.chagerPage(new PageParametres(this.ctrl, this.mere));
+		}
 	}
 }

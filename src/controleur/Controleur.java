@@ -13,10 +13,10 @@ public class Controleur
 	public Controleur()
 	{
 		//this.database = new DB(/*chemin, identifiant, mdp*/ );
-		new FrameIhm(this);
-
-
+		
 		this.version = "v0.0.1";
+
+		new FrameIhm(this);
 	}
 
 	public static void main(String[] args)
