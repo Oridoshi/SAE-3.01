@@ -1,5 +1,10 @@
 package metier;
 
+import metier.model.Affectation;
+import metier.model.CategorieHeure;
+import metier.model.Intervenant;
+import metier.model.Module;
+
 import java.util.ArrayList;
 
 
@@ -23,7 +28,7 @@ public class ModuleSae extends Module
 		lstModuleSae.add(this);
 	}
 
-	public void AjouterAffectation(Intervenant Intervenant, TypeHeure typeH, int nbHeures, String commentaire)
+	public void AjouterAffectation(Intervenant Intervenant, CategorieHeure typeH, int nbHeures, String commentaire)
 	{
 		lstSousModuleSae.add(new Affectation(Intervenant, typeH, nbHeures, commentaire));
 	}

@@ -20,7 +20,7 @@ Si nbHPromo alors pas de nbSemaine ou nbHParSemaine
  - nbSemaines
 
 **Intervenant**
- - categorie
+ - categorieIntervenant
  - nom
  - prenom
  - hMax (nullable)

@@ -9,7 +9,7 @@
 -- DROP TABLE if exists RemplirCategorieModule cascade;
 
 CREATE TABLE Semestre (
-	idSemestre SERIAL PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	nbGrpTd INT NOT NULL,
 	nbGrpTp INT NOT NULL,
 	nbEtd INT NOT NULL,
@@ -17,8 +17,7 @@ CREATE TABLE Semestre (
 );
 
 CREATE TABLE CategorieIntervenant (
-	idCatIntervenant SERIAL PRIMARY KEY,
-	code VARCHAR(255) NOT NULL,
+	code VARCHAR(255) PRIMARY KEY,
 	nom VARCHAR(255) NOT NULL,
 	minH INT NOT NULL,
 	maxH INT NOT NULL,
@@ -26,69 +25,66 @@ CREATE TABLE CategorieIntervenant (
 );
 
 CREATE TABLE CategorieHeure (
-	idCatHeure SERIAL PRIMARY KEY,
-	nomCat VARCHAR(50) NOT NULL,
+	nom VARCHAR(50) PRIMARY KEY,
 	coeffCat DECIMAL(5, 2) NOT NULL default 1
 );
 
 CREATE TABLE CategorieModule(
-	idCatModule SERIAL PRIMARY KEY,
-	name VARCHAR(50) NOT NULL
+	nom VARCHAR(50) PRIMARY KEY
 );
 
 CREATE TABLE Module (
-	idModule SERIAL PRIMARY KEY,
-	forceValider boolean NOT NULL,
+    code VARCHAR(30) PRIMARY KEY,
+    forceValider boolean NOT NULL,
 	idSemestre INT NOT NULL,
-	idCatModule INT NOT NULL,
-	code VARCHAR(30) NOT NULL,
+	nomCatModule VARCHAR(50) NOT NULL,
 	libLong VARCHAR(255) NOT NULL,
 	libCourt VARCHAR(50) NOT NULL,
-	FOREIGN KEY (idSemestre) REFERENCES Semestre(idSemestre),
-	FOREIGN KEY (idCatModeul) REFERENCES CategorieModule(idCatModule)
+	FOREIGN KEY (idSemestre) REFERENCES Semestre(id),
+	FOREIGN KEY (nomCatModule) REFERENCES CategorieModule(name)
 );
 
 CREATE TABLE RemplirProgramme(
-	idCatModule INT NOT NULL,
-	idCatH INT NOT NULL,
-	idModule INT NOT NULL,
+	nomCatModule VARCHAR(50) NOT NULL,
+    nomCatH VARCHAR(50) NOT NULL,
+	codeModule VARCHAR(50) NOT NULL,
 	nbHProgramme INT NOT NULL,
 	nbHPromo INT default 0,
 	nbSemaine INT default 0,
 	nbHParSemaine INT default 0,
-	FOREIGN KEY (idCatModule) REFERENCES CategorieModule(idCatModule),
-	FOREIGN KEY (idCatH) REFERENCES CategorieHeure(idCatHeure),
-	FOREIGN KEY (idModule) REFERENCES Module(idModule),
-	PRIMARY KEY(idCatModule, idCatH, idModule)
+	FOREIGN KEY (nomCatModule) REFERENCES CategorieModule(nom),
+	FOREIGN KEY (nomCatH) REFERENCES CategorieHeure(nom),
+	FOREIGN KEY (codeModule) REFERENCES Module(code),
+	PRIMARY KEY(nomCatModule, nomCatH, codeModule)
 );
 
 CREATE TABLE RemplirCategorieModule (
-	idCatModule INT NOT NULL,
-	idCatH INT NOT NULL,
-	FOREIGN KEY (idCatModule) REFERENCES CategorieModule(idCatModule),
-	FOREIGN KEY (idCatH) REFERENCES CategorieHeure(idCatHeure),
-	PRIMARY KEY(idCatModule, idCatH)
+	nomCatModule VARCHAR(50) NOT NULL,
+	nomCatH VARCHAR(50) NOT NULL,
+	FOREIGN KEY (nomCatModule) REFERENCES CategorieModule(nom),
+	FOREIGN KEY (nomCatH) REFERENCES CategorieHeure(nom),
+	PRIMARY KEY(nomCatModule, nomCatH)
 );
 
 CREATE TABLE Intervenant (
-	idIntervenant SERIAL PRIMARY KEY,
-	idCatIntervenant INT NOT NULL,
+	id SERIAL PRIMARY KEY,
+	codeCatIntervenant VARCHAR(50) NOT NULL,
 	nom VARCHAR(255) NOT NULL,
 	prenom VARCHAR(255) NOT NULL,
 	hMax INT,
-	FOREIGN KEY (idCatIntervenant) REFERENCES CategorieIntervenant(idCatIntervenant)
+	FOREIGN KEY (codeCatIntervenant) REFERENCES CategorieIntervenant(code)
 );
 
 CREATE TABLE Affectation (
-	idAffectation SERIAL PRIMARY KEY,
 	idIntervenant INT NOT NULL,
-	idCatHeure INT NOT NULL,
+	nomCatHeure INT NOT NULL,
 	nbH INT default 0,
 	nbGrp INT default 0,
-	idModule INT NOT NULL,
+	codeModule VARCHAR(50) NOT NULL,
 	commentaire TEXT,
 	nbSemaine INT,
 	FOREIGN KEY (idIntervenant) REFERENCES Intervenant(idIntervenant),
-	FOREIGN KEY (idCatHeure) REFERENCES CategorieHeure(idCatHeure),
-	FOREIGN KEY (idModule) REFERENCES Module(idModule)
+	FOREIGN KEY (nomCatHeure) REFERENCES CategorieHeure(nom),
+	FOREIGN KEY (codeModule) REFERENCES Module(code),
+	PRIMARY KEY(idIntervenant, nomCatHeure, codeModule)
 );

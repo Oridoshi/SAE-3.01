@@ -1,5 +1,10 @@
 package metier;
 
+import metier.model.Affectation;
+import metier.model.CategorieHeure;
+import metier.model.Intervenant;
+import metier.model.Module;
+
 import java.util.ArrayList;
 
 
@@ -67,15 +72,15 @@ public class ModuleResource extends Module
 	public void sethP(int hP){this.hP = hP;}
 	public void setLstAffectation(ArrayList<Affectation> lstAffectation){this.lstAffectation = lstAffectation;}
 
-	public void addAffectation(Intervenant intervenant, TypeHeure typeHeure, int nbGroupe, int nbSemaine, String commentaire)
+	public void addAffectation(Intervenant intervenant, CategorieHeure categorieHeure, int nbGroupe, int nbSemaine, String commentaire)
 	{
-		Affectation affectation = new Affectation(intervenant, typeHeure, nbGroupe, nbSemaine, commentaire);
+		Affectation affectation = new Affectation(intervenant, categorieHeure, nbGroupe, nbSemaine, commentaire);
 		lstAffectation.add(affectation);
 	}
 
-	public void addAffectation(Intervenant intervenant, TypeHeure typeHeure, int nbHeure, String commentaire)
+	public void addAffectation(Intervenant intervenant, CategorieHeure categorieHeure, int nbHeure, String commentaire)
 	{
-		Affectation affectation = new Affectation(intervenant, typeHeure, nbHeure, commentaire);
+		Affectation affectation = new Affectation(intervenant, categorieHeure, nbHeure, commentaire);
 		lstAffectation.add(affectation);
 	}
 }

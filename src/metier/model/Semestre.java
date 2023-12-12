@@ -1,4 +1,4 @@
-package metier;
+package metier.model;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class Semestre
 {
 	private int id;
-	private ArrayList<Module> lstModule;
 	private int nbGroupeTd;
 	private int nbGroupeTp;
 	private int nbEtu;
@@ -22,11 +21,9 @@ public class Semestre
 		this.nbGroupeTp = nbGroupeTp;
 		this.nbEtu = nbEtu;
 		this.nbSemaine = nbSemaine;
-		lstModule = new ArrayList<Module>();
 	}
 
 	public int getId()                     {return id;}
-	public ArrayList<Module> getLstModule(){return lstModule;}
 	public int getNbGroupeTd()             {return nbGroupeTd;}
 	public int getNbGroupeTp()             {return nbGroupeTp;}
 	public int getNbEtu()                  {return nbEtu;}
