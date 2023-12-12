@@ -33,13 +33,7 @@ public class IntervenantDB {
         DBResult result = DB.query(this.psGetIntervenants);
         List<Intervenant> intervenants = new ArrayList<>();
         for ( Map<String, String> ligne : result.getLignes() ){
-            intervenants.add(new Intervenant(
-                    Integer.parseInt(ligne.get("id")),
-                    categorieIntervenantDB.getCategorieParId(ligne.get("idCatIntervenant")),
-                    ligne.get("nom"),
-                    ligne.get("prenom"),
-                    Integer.parseInt(ligne.get("hMax"))
-            ));
+            intervenants.add(ligneToIntervenant(ligne));
         }
         return intervenants;
     }
@@ -49,16 +43,20 @@ public class IntervenantDB {
             this.psGetIntervenantParId.setString(1, id);
             DBResult result = DB.query(this.psGetIntervenantParId);
             Map<String, String> ligne = result.getLignes().get(0);
-            return new Intervenant(
-                    Integer.parseInt(ligne.get("id")),
-                    categorieIntervenantDB.getCategorieParId(ligne.get("idCatIntervenant")),
-                    ligne.get("nom"),
-                    ligne.get("prenom"),
-                    Integer.parseInt(ligne.get("hMax"))
-            );
+            return ligneToIntervenant(ligne);
         } catch ( Exception e ){
             return null;
         }
+    }
+
+    private Intervenant ligneToIntervenant(Map<String, String> ligne){
+        return new Intervenant(
+                Integer.parseInt(ligne.get("id")),
+                categorieIntervenantDB.getCategorieParId(ligne.get("idCatIntervenant")),
+                ligne.get("nom"),
+                ligne.get("prenom"),
+                Integer.parseInt(ligne.get("hMax"))
+        );
     }
 
 

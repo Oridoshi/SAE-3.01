@@ -32,13 +32,8 @@ public class CategorieIntervenantDB
 		DBResult result = DB.query(this.psGetCategories);
 		List<CategorieIntervenant> categories = new ArrayList<>();
 		for ( Map<String, String> ligne : result.getLignes() ){
-			categories.add(new CategorieIntervenant(
-					ligne.get("code"),
-					ligne.get("nom"),
-					Integer.parseInt(ligne.get("minH")),
-					Integer.parseInt(ligne.get("maxH")),
-					Double.parseDouble(ligne.get("coefTp"))
-			));
+			categories.add(getCategorieIntevernant(ligne));
+
 		}
 		return categories;
 	}
@@ -48,16 +43,20 @@ public class CategorieIntervenantDB
 			this.psGetCategorieParId.setString(1, id);
 			DBResult result = DB.query(this.psGetCategorieParId);
 			Map<String, String> ligne = result.getLignes().get(0);
-			return new CategorieIntervenant(
-					ligne.get("code"),
-					ligne.get("nom"),
-					Integer.parseInt(ligne.get("minH")),
-					Integer.parseInt(ligne.get("maxH")),
-					Double.parseDouble(ligne.get("coefTp"))
-			);
+			return getCategorieIntevernant(ligne);
 		} catch ( SQLException e ){
 			return null;
 		}
+	}
+
+	private CategorieIntervenant getCategorieIntevernant(Map<String, String> ligne)
+	{
+			return new CategorieIntervenant(
+			ligne.get("code"),
+			ligne.get("nom"),
+			Integer.parseInt(ligne.get("minH")),
+			Integer.parseInt(ligne.get("maxH")),
+			Double.parseDouble(ligne.get("coefTp")));
 	}
 
 }

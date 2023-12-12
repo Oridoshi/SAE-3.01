@@ -27,15 +27,19 @@ public class SemestreDB{
 		DBResult result = DB.query(this.psGetSemestres);
 		List<Semestre> semestres = new ArrayList<>();
 		for ( Map<String, String> ligne : result.getLignes() ){
-			semestres.add(new Semestre(
-				Integer.parseInt(ligne.get("id")),
-				Integer.parseInt(ligne.get("nbGrpTd")),
-				Integer.parseInt(ligne.get("nbGrpTp")),
-				Integer.parseInt(ligne.get("nbEtd")),
-				Integer.parseInt(ligne.get("nbSemaines"))
-			));
+			semestres.add(ligneToSemestre(ligne));
 		}
 		return semestres;
+	}
+
+	private Semestre ligneToSemestre(Map<String, String> ligne){
+		return new Semestre(
+			Integer.parseInt(ligne.get("id")),
+			Integer.parseInt(ligne.get("nbGrpTd")),
+			Integer.parseInt(ligne.get("nbGrpTp")),
+			Integer.parseInt(ligne.get("nbEtd")),
+			Integer.parseInt(ligne.get("nbSemaines"))
+		);
 	}
 
 }
