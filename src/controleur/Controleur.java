@@ -32,4 +32,9 @@ public class Controleur
 		lstRessource.add(new ModuleResource(semestre, semestre, semestre, semestre, semestre, semestre, semestre, semestre, semestre, "C'est la ressource 2", "R2", false));
 		return lstRessource;
 	}
+
+	public Semestre getSemestre(int s)
+	{
+		return new Semestre(1, 50, 60, 92, 14);
+	}
 }

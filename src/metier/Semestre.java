@@ -26,7 +26,6 @@ public class Semestre
 	}
 
 	public int getId()                     {return id;}
-	public ArrayList<Module> getLstModule(){return lstModule;}
 	public int getNbGroupeTd()             {return nbGroupeTd;}
 	public int getNbGroupeTp()             {return nbGroupeTp;}
 	public int getNbEtu()                  {return nbEtu;}
