@@ -38,9 +38,9 @@ public class CategorieHeureDB {
 		return categoriesHeure;
 	}
 
-	public CategorieHeure getCategorieHeureParId(String id){
+	public CategorieHeure getCategorieHeureParId(String nom){
 		try{
-			this.psGetCategorieHeureParId.setString(1, id);
+			this.psGetCategorieHeureParId.setString(1, nom);
 			DBResult result = DB.query(this.psGetCategorieHeureParId);
 			Map<String, String> ligne = result.getLignes().get(0);
 			return ligneToHeures(ligne);

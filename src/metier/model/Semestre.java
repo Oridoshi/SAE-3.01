@@ -1,6 +1,7 @@
 package metier.model;
+import java.util.List;
 
-import java.util.ArrayList;
+import metier.repo.ModuleDB;
 
 /**
  * Semestre
@@ -29,9 +30,9 @@ public class Semestre
 	public int getNbEtu()                  {return nbEtu;}
 	public int getNbSemaine()              {return nbSemaine;}
 
-	public ArrayList<Module> getlstRessource()
+	public List<Module> getlstRessource(int id)
 	{
-		return null;
+		return new ModuleDB().getModulesParSemestre(id);
 	}
 	
 }
