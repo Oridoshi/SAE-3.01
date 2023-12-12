@@ -14,10 +14,12 @@ public class SemestreDB{
 	private Connection db = DB.getInstance();
 
 	private PreparedStatement psGetSemestres;
+	private PreparedStatement psGetSemestreParId;
 
 	public SemestreDB(){
 		try{
 			this.psGetSemestres = db.prepareStatement("SELECT * FROM Semestre");
+			this.psGetSemestreParId = db.prepareStatement("SELECT * FROM Semestre WHERE id = ?");
 		} catch ( Exception e ){
 			e.printStackTrace();
 		}
@@ -35,6 +37,40 @@ public class SemestreDB{
 	private Semestre ligneToSemestre(Map<String, String> ligne){
 		return new Semestre(
 			Integer.parseInt(ligne.get("id")),
+			Integer.parseInt(ligne.get("nbGrpTd")),
+			Integer.parseInt(ligne.get("nbGrpTp")),
+			Integer.parseInt(ligne.get("nbEtd")),
+			Integer.parseInt(ligne.get("nbSemaines"))
+		);
+	}
+
+	public Semestre getSemestreParId(int id){
+		try{
+			this.psGetSemestreParId.setInt(1, id);
+		} catch ( Exception e ){
+			return null;
+		}
+		DBResult result = DB.query(this.psGetSemestreParId);
+		Map<String, String> ligne = result.getLignes().get(0);
+		return new Semestre(
+			Integer.parseInt(ligne.get(id)),
+			Integer.parseInt(ligne.get("nbGrpTd")),
+			Integer.parseInt(ligne.get("nbGrpTp")),
+			Integer.parseInt(ligne.get("nbEtd")),
+			Integer.parseInt(ligne.get("nbSemaines"))
+		);
+	}
+
+	public Semestre getSemestreParId(int id){
+		try{
+			this.psGetSemestreParId.setInt(1, id);
+		} catch ( Exception e ){
+			return null;
+		}
+		DBResult result = DB.query(this.psGetSemestreParId);
+		Map<String, String> ligne = result.getLignes().get(0);
+		return new Semestre(
+			Integer.parseInt(ligne.get(id)),
 			Integer.parseInt(ligne.get("nbGrpTd")),
 			Integer.parseInt(ligne.get("nbGrpTp")),
 			Integer.parseInt(ligne.get("nbEtd")),

@@ -18,10 +18,12 @@ public class AffectationDB {
     private IntervenantDB intervenantDB;
     private CategorieHeureDB categorieHeureDB;
     private CategorieModuleDB categorieModuleDB;
+    private ModuleDB moduleDB;
 
     private PreparedStatement psGetAffectations;
 
     public AffectationDB(){
+        this.moduleDB = new ModuleDB();
         this.intervenantDB = new IntervenantDB();
         this.categorieHeureDB = new CategorieHeureDB();
         this.categorieModuleDB = new CategorieModuleDB();
@@ -43,7 +45,7 @@ public class AffectationDB {
                     new Integer(ligne.get("nbSemaine")),
                     new Integer(ligne.get("nbH")),
                     ligne.get("commentaire"),
-                    new Module()
+                    moduleDB.get
                 ));
         }
         return null;
