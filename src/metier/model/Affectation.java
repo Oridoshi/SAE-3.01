@@ -1,4 +1,4 @@
-package metier;
+package metier.model;
 
 /*
  * Affectation
@@ -8,33 +8,34 @@ package metier;
 public class Affectation
 {
 	private Intervenant intervenant;
-	private TypeHeure typeHeure;
+	private CategorieHeure categorieHeure;
 	private Integer nbGroupe;
 	private Integer nbSemaine;
 	private Integer nbHeure;
 	private String commentaire;
+	private Module module;
 
-	public Affectation(Intervenant intervenant, TypeHeure typeHeure, int nbGroupe, int nbSemaine, String commentaire)
-	{
+	public Affectation(Intervenant intervenant, CategorieHeure categorieHeure, Integer nbGroupe, Integer nbSemaine, Integer nbHeure, String commentaire, Module module) {
 		this.intervenant = intervenant;
-		this.typeHeure = typeHeure;
+		this.categorieHeure = categorieHeure;
 		this.nbGroupe = nbGroupe;
 		this.nbSemaine = nbSemaine;
-		this.commentaire = commentaire;
-	}
-
-	public Affectation(Intervenant intervenant, TypeHeure typeHeure, int nbHeure, String commentaire)
-	{
-		this.intervenant = intervenant;
-		this.typeHeure = typeHeure;
 		this.nbHeure = nbHeure;
 		this.commentaire = commentaire;
+		this.module = module;
 	}
 
 	public Intervenant getIntervenant(){return intervenant;}
-	public TypeHeure getTypeHeure(){return typeHeure;}
 	public int getNbGroupe(){return nbGroupe;}
 	public int getNbSemaine(){return nbSemaine;}
 	public String getCommentaire(){return commentaire;}
 	public int getNbHeure(){return nbHeure;}
+
+	public CategorieHeure getCategorieHeure() {
+		return categorieHeure;
+	}
+
+	public Module getModule() {
+		return module;
+	}
 }

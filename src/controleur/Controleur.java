@@ -3,7 +3,8 @@ package controleur;
 import java.util.ArrayList;
 
 import ihm.FrameIhm;
-import metier.*;
+import metier.model.*;
+import metier.DB;
 
 public class Controleur
 {
@@ -13,10 +14,10 @@ public class Controleur
 	public Controleur()
 	{
 		//this.database = new DB(/*chemin, identifiant, mdp*/ );
-		new FrameIhm(this);
-
-
+		
 		this.version = "v0.0.1";
+
+		new FrameIhm(this);
 	}
 
 	public static void main(String[] args)
@@ -26,12 +27,6 @@ public class Controleur
 
 	public String getVersion() { return this.version; }
 
-	public ArrayList<ModuleResource> getlstRessource(int semestre)
-	{
-		ArrayList<ModuleResource> lstRessource = new ArrayList<ModuleResource>();
-		lstRessource.add(new ModuleResource(semestre, semestre, semestre, semestre, semestre, semestre, semestre, semestre, semestre, "C'est la ressource 2", "R2", false));
-		return lstRessource;
-	}
 
 	public Semestre getSemestre(int s)
 	{

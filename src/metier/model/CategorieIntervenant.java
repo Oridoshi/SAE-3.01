@@ -1,21 +1,20 @@
-package metier;
+package metier.model;
+
+import metier.DB;
 
 /**
  * Categorie
  * Classe servant a la gestion des types d'intervenants 
  */
-public class Categorie
+public class CategorieIntervenant
 {
-	private int    id;
 	private String code;
 	private String nom;
 	private int    minH;
 	private int    maxH;
 	private double coefTp;
 
-	private DB db;
-
-	public Categorie(String code, String nom, int minH, int maxH, double coefTp )
+	public CategorieIntervenant(String code, String nom, int minH, int maxH, double coefTp )
 	{
 		this.code   = code;
 		this.nom    = nom;
