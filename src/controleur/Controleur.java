@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import ihm.FrameIhm;
 import metier.*;
+import metier.DB;
 
 public class Controleur
 {
