@@ -8,17 +8,23 @@ import metier.*;
 public class Controleur
 {
 	private DB database;
+	private String version;
 
 	public Controleur()
 	{
 		//this.database = new DB(/*chemin, identifiant, mdp*/ );
 		new FrameIhm(this);
+
+
+		this.version = "v0.0.1";
 	}
 
 	public static void main(String[] args)
 	{
 		new Controleur();
 	}
+
+	public String getVersion() { return this.version; }
 
 	public ArrayList<ModuleResource> getlstRessource(int semestre)
 	{
