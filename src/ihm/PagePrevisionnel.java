@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PagePrevisionnel extends JPanel implements ActionListener
 {
@@ -148,7 +149,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 
 		private Object[][] tabDonnees;
 
-		public ModelAffichageTableau(Controleur ctrl, ArrayList<Module> lstRessource)
+		public ModelAffichageTableau(Controleur ctrl, List<Module> lstRessource)
 		{
 			this.ctrl = ctrl;
 
