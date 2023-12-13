@@ -59,19 +59,19 @@ public class Module
 	public int getTotalPromoEqTd()
 	{
 		int total = 0;
-		for ( String key : programme.keySet() ){
-			ProgrammeItem programmeItem = programme.get(key);
-			CategorieHeure categorieHeure = new CategorieHeureDB().getCategorieHeureParId(key);
-			int h = programmeItem.getNbHeure();
-			if ( programmeItem.getNbSemaine() != null ){
-				h = h * programmeItem.getNbSemaine();
-			}
-			if ( key.equals("TD")){
-				h = h * semestre.getNbGroupeTd();
-			}
-			h = (int) ( h * categorieHeure.getCoef() );
-			total += h;
-		}
+		// for ( String key : programme.keySet() ){
+		// 	ProgrammeItem programmeItem = programme.get(key);
+		// 	CategorieHeure categorieHeure = new CategorieHeureDB().getCategorieHeureParId(key);
+		// 	int h = programmeItem.getNbHeure();
+		// 	if ( programmeItem.getNbSemaine() != null ){
+		// 		h = h * programmeItem.getNbSemaine();
+		// 	}
+		// 	if ( key.equals("TD")){
+		// 		h = h * semestre.getNbGroupeTd();
+		// 	}
+		// 	h = (int) ( h * categorieHeure.getCoef() );
+		// 	total += h;
+		// }
 		return total;
 	}
 }

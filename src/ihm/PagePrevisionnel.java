@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import controleur.Controleur;
+import ihm.creationObjet.PageCreaRessource;
 import metier.model.Module;
 import metier.model.Semestre;
 
@@ -26,10 +27,10 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 	private JButton btnModif;
 	private JButton btnSupp;
 
-	private JFrame mere;
+	private FrameIhm mere;
 	private JTabbedPane tabbedPane;
 
-	public PagePrevisionnel(Controleur ctrl, JFrame mere)
+	public PagePrevisionnel(Controleur ctrl, FrameIhm mere)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
@@ -76,13 +77,32 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		this.add(new JLabel(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex())), BorderLayout.SOUTH);
+		if (e.getSource() == this.btnCreaRessource)
+		{
+			new PageCreaRessource(this.mere, this.ctrl);
+		}
+		else if (e.getSource() == this.btnCreaSae)
+		{
+
+		}
+		else if (e.getSource() == this.btnCreaStage)
+		{
+
+		}
+		else if (e.getSource() == this.btnModif)
+		{
+
+		}
+		else if (e.getSource() == this.btnSupp)
+		{
+
+		}
 	}
 
 	private class PanelInfoSemestre extends JPanel
 	{
 		private JTextField txtFNbGpTd; //Nombre de groupe TD
-		private JTextField txtFNbGpTP; //Nombre de groupe TP
+		private JTextField txtFNbGpTp; //Nombre de groupe TP
 		private JTextField txtFNbEtud; //Nombre d'etudiant
 		private JTextField txtFNbSeme; //Nombre de semaine
 
@@ -112,7 +132,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			panelInfoSemestre.add(new JLabel("nb gp TD"));
 			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
 			panelInfoSemestre.add(new JLabel("nb gp TP"));
-			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
+			panelInfoSemestre.add((this.txtFNbGpTp = new JTextField("" + this.semestreActu.getNbGroupeTp())));
 			panelInfoSemestre.add(new JLabel("nb Etd"));
 			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
 			panelInfoSemestre.add(new JLabel("nb semaine"));
