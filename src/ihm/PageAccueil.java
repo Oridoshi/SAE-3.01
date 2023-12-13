@@ -79,19 +79,19 @@ public class PageAccueil extends JPanel implements ActionListener
 	{
 		if (e.getSource() == this.btnParametres)
 		{
-			// this.mere.chagerPage(new PageParametres(this.ctrl, this.mere));
+			this.mere.changerPage(new PageParametres(this.ctrl, this.mere));
 		}
 		else if (e.getSource() == this.btnPrevisionnel)
 		{
-			this.mere.chagerPage(new PagePrevisionnel(this.ctrl, this.mere));
+			this.mere.changerPage(new PagePrevisionnel(this.ctrl, this.mere));
 		}
 		else if (e.getSource() == this.btnIntervenants)
 		{
-			// this.mere.chagerPage(new PageParametres(this.ctrl, this.mere));
+			// this.mere.changerPage(new PageParametres(this.ctrl, this.mere));
 		}
 		else if (e.getSource() == this.btnEtats)
 		{
-			// this.mere.chagerPage(new PageParametres(this.ctrl, this.mere));
+			// this.mere.changerPage(new PageParametres(this.ctrl, this.mere));
 		}
 	}
 }

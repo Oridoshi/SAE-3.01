@@ -1,6 +1,7 @@
 package controleur;
-
+import metier.repo.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import ihm.FrameIhm;
 import metier.model.*;
@@ -11,10 +12,11 @@ public class Controleur
 	private DB database;
 	private String version;
 
+	private IntervenantDB intervenantDB;
+
 	public Controleur()
 	{
-		//this.database = new DB(/*chemin, identifiant, mdp*/ );
-		
+		this.intervenantDB = new IntervenantDB();
 		this.version = "v0.0.1";
 
 		new FrameIhm(this);

@@ -7,6 +7,7 @@ package metier.model;
 
 public class CategorieHeure
 {
+	
 	private String nom;
 	private double coef;
 
