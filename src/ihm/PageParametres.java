@@ -5,6 +5,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import controleur.Controleur;
+import ihm.creationObjet.PageCreaCategorieHeure;
+import ihm.creationObjet.PageCreaRessource;
 import metier.model.CategorieHeure;
 import metier.model.CategorieIntervenant;
 import metier.model.Intervenant;
@@ -45,7 +47,7 @@ public class PageParametres extends JPanel implements ActionListener
 		this.tabbedPane = new JTabbedPane();
 		this.tabbedPane.setBorder(new EmptyBorder(0, 0, 15, 0));
 		this.tabbedPane.addTab("Catégories d'intervenants", new PanelCategoriesIntervenant(ctrl, this.ctrl.getLstCategorieIntervenant()));
-		this.tabbedPane.addTab("Catégories d'heures", new PanelCategoriesHeure(ctrl, this.ctrl.getLstCategorieHeure()));
+		this.tabbedPane.addTab("Catégories d'heures", new PanelCategoriesHeure(ctrl, this.mere, this.ctrl.getLstCategorieHeure()));
 		
 		this.add(this.tabbedPane, BorderLayout.CENTER);
 
@@ -146,6 +148,7 @@ public class PageParametres extends JPanel implements ActionListener
 	private class PanelCategoriesHeure extends JPanel implements ActionListener
 	{
 		private Controleur ctrl;
+		private FrameIhm mere;
 		private ArrayList<CategorieHeure> lstCategorieHeure;
 
 		private JPanel panelBoutonsTableau;
@@ -155,9 +158,10 @@ public class PageParametres extends JPanel implements ActionListener
 		private JTable tableCategorieHeure;
 		private JScrollPane spTableauCategorieHeure;
 
-		public PanelCategoriesHeure(Controleur ctrl, ArrayList<CategorieHeure> lstCategorieHeure)
+		public PanelCategoriesHeure(Controleur ctrl, FrameIhm mere, ArrayList<CategorieHeure> lstCategorieHeure)
 		{
 			this.ctrl = ctrl;
+			this.mere = mere;
 			this.lstCategorieHeure = lstCategorieHeure;
 
 			this.setLayout(new BorderLayout());
@@ -193,7 +197,10 @@ public class PageParametres extends JPanel implements ActionListener
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			// TODO Auto-generated method stub
+			if (e.getSource() == this.btnAjouter)
+			{
+				new PageCreaCategorieHeure(this.mere, ctrl);
+			}
 		}
 	}
 
