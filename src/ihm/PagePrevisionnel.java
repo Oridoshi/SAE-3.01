@@ -35,7 +35,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 		this.mere = mere;
 
 		this.setLayout(new BorderLayout());
-		this.mere.setTitle("Acceuil - Prévisionnel");
+		this.mere.setTitle("Accueil - Prévisionnel");
 		this.setBorder(new EmptyBorder(15, 30, 15, 30));
 
 		this.tabbedPane = new JTabbedPane();
@@ -133,9 +133,9 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			panelInfoSemestre.add(new JLabel("nb gp TP"));
 			panelInfoSemestre.add((this.txtFNbGpTp = new JTextField("" + this.semestreActu.getNbGroupeTp())));
 			panelInfoSemestre.add(new JLabel("nb Etd"));
-			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
+			panelInfoSemestre.add((this.txtFNbEtud = new JTextField("" + this.semestreActu.getNbEtu())));
 			panelInfoSemestre.add(new JLabel("nb semaine"));
-			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
+			panelInfoSemestre.add((this.txtFNbSeme = new JTextField("" + this.semestreActu.getNbSemaine())));
 
 
 			/*----------PanelInfo----------*/
