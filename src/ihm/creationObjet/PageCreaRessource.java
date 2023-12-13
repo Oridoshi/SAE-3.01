@@ -52,16 +52,16 @@ public class PageCreaRessource implements ActionListener, KeyListener
 		gbc.insets = new Insets(5, 5, 5, 5); // Marge autour des composants
 
 		// Code \\
-		JLabel labelNom = new JLabel("NCLI : ");
-		this.textFieldNcli = new JTextField(15);
+		JLabel lblCode = new JLabel("Code : ");
+		this.textFieldCode = new JTextField(15);
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		panelFormulaire.add(labelNom, gbc);
+		panelFormulaire.add(lblCode, gbc);
 		gbc.gridx = 1;
-		panelFormulaire.add(textFieldNcli, gbc);
+		panelFormulaire.add(textFieldCode, gbc);
 
 		// libelleLong \\
-		JLabel labelPrenom = new JLabel("TYPE : ");
+		JLabel libelleLong = new JLabel("libelleLong : ");
 		this.textFieldType = new JTextField(15);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -170,7 +170,7 @@ public class PageCreaRessource implements ActionListener, KeyListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		this.ctrl.ajouterModule(new Module(null, null, null, false, null, null, null));
+		// this.ctrl.ajouterModule(new Module(null, null, null, false, null, null, null));
 		// this.mere.majTable();
 		this.dial.dispose();
 	}
@@ -180,7 +180,7 @@ public class PageCreaRessource implements ActionListener, KeyListener
 	{
 		if(e.getKeyChar() == KeyEvent.VK_ENTER)
 		{
-			this.ctrl.ajouterUtilisation(Integer.parseInt(this.textFieldNcli.getText()), Integer.parseInt(this.textFieldType.getText()));
+			// this.ctrl.ajouterModule(new Module(null, null, null, false, null, null, null));
 			// this.mere.majTable();
 			this.dial.dispose();
 		}
