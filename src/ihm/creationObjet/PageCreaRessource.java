@@ -70,34 +70,94 @@ public class PageCreaRessource implements ActionListener, KeyListener
 		panelFormulaire.add(textFieldType, gbc);
 
 		// libelleCourt \\
-
+		JLabel labelPrenom = new JLabel("TYPE : ");
+		this.textFieldType = new JTextField(15);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelFormulaire.add(labelPrenom, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(textFieldType, gbc);
 
 		// Heures Programme TD \\
-
+		JLabel labelPrenom = new JLabel("TYPE : ");
+		this.textFieldType = new JTextField(15);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelFormulaire.add(labelPrenom, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(textFieldType, gbc);
 
 		// Heures Programme TP \\
-
+		JLabel labelPrenom = new JLabel("TYPE : ");
+		this.textFieldType = new JTextField(15);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelFormulaire.add(labelPrenom, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(textFieldType, gbc);
 
 		// Heures Programme CM \\
-
+		JLabel labelPrenom = new JLabel("TYPE : ");
+		this.textFieldType = new JTextField(15);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelFormulaire.add(labelPrenom, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(textFieldType, gbc);
 
 		// Heures Semaine TD \\
-
+		JLabel labelPrenom = new JLabel("TYPE : ");
+		this.textFieldType = new JTextField(15);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelFormulaire.add(labelPrenom, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(textFieldType, gbc);
 
 		// Nb Semaine TD \\
-
+		JLabel labelPrenom = new JLabel("TYPE : ");
+		this.textFieldType = new JTextField(15);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelFormulaire.add(labelPrenom, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(textFieldType, gbc);
 
 		// Heures Semaine TP \\
-
+		JLabel labelPrenom = new JLabel("TYPE : ");
+		this.textFieldType = new JTextField(15);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelFormulaire.add(labelPrenom, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(textFieldType, gbc);
 
 		// Nb Semaine TP \\
-
+		JLabel labelPrenom = new JLabel("TYPE : ");
+		this.textFieldType = new JTextField(15);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelFormulaire.add(labelPrenom, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(textFieldType, gbc);
 
 		// Heures Semaine CM \\
-
+		JLabel labelPrenom = new JLabel("TYPE : ");
+		this.textFieldType = new JTextField(15);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelFormulaire.add(labelPrenom, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(textFieldType, gbc);
 
 		// Nb Semaine CM \\
-
+		JLabel labelPrenom = new JLabel("TYPE : ");
+		this.textFieldType = new JTextField(15);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelFormulaire.add(labelPrenom, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(textFieldType, gbc);
 
 		// Ajout du panelFormulaire au panel principal \\
 		this.dial.add(panelFormulaire, BorderLayout.CENTER);
@@ -110,7 +170,7 @@ public class PageCreaRessource implements ActionListener, KeyListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		this.ctrl.ajouterModule();
+		this.ctrl.ajouterModule(new Module(null, null, null, false, null, null, null));
 		// this.mere.majTable();
 		this.dial.dispose();
 	}
