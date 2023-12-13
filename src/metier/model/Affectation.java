@@ -26,15 +26,22 @@ public class Affectation
 	}
 
 	public Intervenant getIntervenant(){return intervenant;}
-	public int getNbGroupe(){return nbGroupe;}
-	public int getNbSemaine(){return nbSemaine;}
+	public Integer getNbGroupe(){return nbGroupe;}
+	public Integer getNbSemaine(){return nbSemaine;}
 	public String getCommentaire(){return commentaire;}
-	public int getNbHeure(){return nbHeure;}
+	public Integer getNbHeure(){return nbHeure;}
+	public Float getNbEqTd (){
+		int nbHeure = this.module.getProgrammeItem(this.categorieHeure.getNom()).getNbHeure();
+		if ( this.getNbSemaine() == null ){
+			nbHeure = nbHeure * this.getNbSemaine() * this.getNbGroupe();
+		}
+		nbHeure = (int) ( nbHeure * this.getCategorieHeure().getCoef() );
+		return nbHeure * 0F;
+	}
 
 	public CategorieHeure getCategorieHeure() {
 		return categorieHeure;
 	}
-
 	public Module getModule() {
 		return module;
 	}
