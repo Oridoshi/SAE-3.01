@@ -76,6 +76,21 @@ public class Intervenant
 		return totalHImpair;
 	}
 
+	public int getHMin()
+	{
+		return this.categorieIntervenant.getMinH();
+	}
+
+	public double getCoefTP()
+	{
+		return this.categorieIntervenant.getCoefTp();
+	}
+
+	public double getTotal()
+	{
+		return this.getTotalParImpair() + this.getTotalParPair();
+	}
+
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
