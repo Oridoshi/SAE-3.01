@@ -34,8 +34,8 @@ CREATE TABLE CategorieModule(
 );
 
 CREATE TABLE Module (
-    code VARCHAR(30) PRIMARY KEY,
-    forceValider boolean NOT NULL,
+	code VARCHAR(30) PRIMARY KEY,
+	forceValider boolean NOT NULL,
 	idSemestre INT NOT NULL,
 	nomCatModule VARCHAR(50) NOT NULL,
 	libLong VARCHAR(255) NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE Module (
 
 CREATE TABLE RemplirProgramme(
 	nomCatModule VARCHAR(50) NOT NULL,
-    nomCatH VARCHAR(50) NOT NULL,
+	nomCatH VARCHAR(50) NOT NULL,
 	codeModule VARCHAR(50) NOT NULL,
 	nbHProgramme INT NOT NULL,
 	nbHPromo INT default 0,
