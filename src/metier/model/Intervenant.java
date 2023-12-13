@@ -1,5 +1,7 @@
 package metier.model;
 
+import metier.repo.IntervenantDB;
+
 /*
  * Intervenant
  * Classe qui permet de creer un intervenant
@@ -80,5 +82,16 @@ public class Intervenant
 
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
+	}
+
+
+	public void ajouterIntervenantToBd()
+	{
+		new IntervenantDB().ajouterIntervenant(this);
+	}
+
+	public void suppIntervenantFromBd()
+	{
+		new IntervenantDB().suppIntervenant(this);
 	}
 }

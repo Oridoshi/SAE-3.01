@@ -5,6 +5,7 @@ import java.util.Map;
 
 import metier.repo.AffectationDB;
 import metier.repo.CategorieHeureDB;
+import metier.repo.ModuleDB;
 
 /**
  * Module
@@ -82,5 +83,15 @@ public class Module
 			total += h;
 		}
 		return total;
+	}
+
+	public void ajouterModuleToBd()
+	{
+		new ModuleDB().ajouterModule(this);
+	}
+
+	public void suppModuleFromBd()
+	{
+		new ModuleDB().suppModule(this);
 	}
 }

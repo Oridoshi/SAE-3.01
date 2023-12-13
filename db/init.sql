@@ -76,7 +76,7 @@ CREATE TABLE Intervenant (
 
 CREATE TABLE Affectation (
 	idIntervenant INT NOT NULL,
-	nomCatHeure INT NOT NULL,
+	nomCatHeure VARCHAR(50) NOT NULL,
 	nbH INT default 0,
 	nbGrp INT default 0,
 	codeModule VARCHAR(50) NOT NULL,

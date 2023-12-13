@@ -1,5 +1,7 @@
 package metier.model;
 
+import metier.repo.AffectationDB;
+
 /*
  * Affectation
  * Classe permettant de gérer les différentes affectations
@@ -44,5 +46,15 @@ public class Affectation
 	}
 	public Module getModule() {
 		return module;
+	}
+
+	public void ajouterAffectationToBd()
+	{
+		new AffectationDB().ajouterAffectation(this);
+	}
+
+	public void suppAffectationFromBd()
+	{
+		new AffectationDB().suppAffectation(this);
 	}
 }
