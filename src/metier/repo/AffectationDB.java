@@ -21,6 +21,8 @@ public class AffectationDB {
 	private ModuleDB moduleDB;
 
 	private PreparedStatement psGetAffectations;
+	private PreparedStatement psGetAffectationsParIdIntervenant;
+	private PreparedStatement psGetAffectationsParCodeModule;
 	private PreparedStatement psAjouterAffectation;
 	private PreparedStatement psSuppAffectation;
 
@@ -31,6 +33,8 @@ public class AffectationDB {
 		this.categorieModuleDB = new CategorieModuleDB();
 		try{
 			db.prepareStatement("SELECT * FROM Affectation");
+			db.prepareStatement("SELECT * FROM Affectation WHERE idIntervenant = ?");
+			db.prepareStatement("SELECT * FROM Affectation WHERE codeModule = ?");
 			db.prepareStatement("INSERT INTO Affectation VALUES(?,?,?,?,?,?,?)");
 			db.prepareStatement("DELETE FROM Affectation WHERE idIntervenant = ? AND nomCatHeure = ? AND codeModule = ?");
 		} catch ( SQLException e ){
@@ -40,6 +44,34 @@ public class AffectationDB {
 
 	public List<Affectation> getAffectations(){
 		DBResult result = DB.query(this.psGetAffectations);
+		List<Affectation> affectations = new ArrayList<>();
+		for ( Map<String, String> ligne : result.getLignes() ){
+			affectations.add(ligneToAffectation(ligne));
+		}
+		return null;
+	}
+
+	public List<Affectation> getAffectationsParCodeModule(String codeModule){
+		try{
+			this.psGetAffectationsParCodeModule.setString(1, codeModule);
+		} catch ( SQLException e ){
+			e.printStackTrace();
+		}
+		DBResult result = DB.query(this.psGetAffectationsParCodeModule);
+		List<Affectation> affectations = new ArrayList<>();
+		for ( Map<String, String> ligne : result.getLignes() ){
+			affectations.add(ligneToAffectation(ligne));
+		}
+		return null;
+	}
+
+	public List<Affectation> getAffectationsParIntervenantId(int idIntervenant){
+		try{
+			this.psGetAffectationsParIdIntervenant.setInt(1, idIntervenant);
+		} catch ( SQLException e ){
+			e.printStackTrace();
+		}
+		DBResult result = DB.query(this.psGetAffectationsParIdIntervenant);
 		List<Affectation> affectations = new ArrayList<>();
 		for ( Map<String, String> ligne : result.getLignes() ){
 			affectations.add(ligneToAffectation(ligne));
