@@ -17,18 +17,22 @@ public class AffectationDB {
 
 	private IntervenantDB intervenantDB;
 	private CategorieHeureDB categorieHeureDB;
-	private CategorieModuleDB categorieModuleDB;
 	private ModuleDB moduleDB;
 
 	private PreparedStatement psGetAffectations;
+	private PreparedStatement getPsGetAffectationsParCodeModule;
+	private PreparedStatement psGetAffectationsParIntervenantId;
+
 
 	public AffectationDB(){
 		this.moduleDB = new ModuleDB();
 		this.intervenantDB = new IntervenantDB();
 		this.categorieHeureDB = new CategorieHeureDB();
-		this.categorieModuleDB = new CategorieModuleDB();
 		try{
-			db.prepareStatement("SELECT * FROM Affectation");
+			psGetAffectations = db.prepareStatement("SELECT * FROM Affectation");
+			getPsGetAffectationsParCodeModule = db.prepareStatement("SELECT * FROM Affectation WHERE codeModule = ?");
+			psGetAffectationsParIntervenantId = db.prepareStatement("SELECT * FROM Affectation WHERE idIntervenant = ?");
+			);
 		} catch ( SQLException e ){
 			e.printStackTrace();
 		}
@@ -150,6 +154,35 @@ public class AffectationDB {
 		return null;
 	}
 
+	public List<Affectation> getAffectationsParIntervenantId(int id){
+		try{
+			psGetAffectationsParIntervenantId.setInt(1, id);
+		} catch ( Exception e ){
+			e.printStackTrace();
+		}
+		DBResult result = DB.query(this.psGetAffectationsParIntervenantId);
+		List<Affectation> affectations = new ArrayList<>();
+		for ( Map<String, String> ligne : result.getLignes() ){
+			affectations.add(ligneToAffectation(ligne));
+		}
+		return affectations;
+	}
+
+	public List<Affectation> getAffectationsParCodeModule(String code){
+		try{
+			this.getPsGetAffectationsParCodeModule.setString(1, code);
+		} catch ( Exception e ){
+			e.printStackTrace();
+			return null;
+		}
+		DBResult result = DB.query(this.getPsGetAffectationsParCodeModule);
+		List<Affectation> affectations = new ArrayList<>();
+		for ( Map<String, String> ligne : result.getLignes() ){
+			affectations.add(ligneToAffectation(ligne));
+		}
+		return affectations;
+	}
+
 	private Affectation ligneToAffectation(Map<String, String> ligne){
 		return new Affectation(
 				intervenantDB.getIntervenantParId(ligne.get("idIntervenant")),
@@ -161,20 +194,4 @@ public class AffectationDB {
 				moduleDB.getModuleParCode("codeModule")
 		);
 	}
-
-		/*
-	idIntervenant INT NOT NULL,
-	nomCatHeure INT NOT NULL,
-	nbH INT default 0,
-	nbGrp INT default 0,
-	codeModule VARCHAR(50) NOT NULL,
-	commentaire TEXT,
-	nbSemaine INT,
-	FOREIGN KEY (idIntervenant) REFERENCES Intervenant(idIntervenant),
-	FOREIGN KEY (nomCatHeure) REFERENCES CategorieHeure(nom),
-	FOREIGN KEY (codeModule) REFERENCES Module(code),
-	PRIMARY KEY(idIntervenant, nomCatHeure, codeModule)
-	 */
-
-
 }
