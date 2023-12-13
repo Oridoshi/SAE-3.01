@@ -118,8 +118,20 @@ public class PageIntervenants extends JPanel
 				tabDonnees[ligne][0] = lstIntervenants.get(ligne).getCategorie();
 				tabDonnees[ligne][1] = lstIntervenants.get(ligne).getNom();
 				tabDonnees[ligne][2] = lstIntervenants.get(ligne).getPrenom();
-				//tabDonnees[ligne][3] = lstIntervenants.get(ligne).getHServ();
-				// ...
+				tabDonnees[ligne][3] = lstIntervenants.get(ligne).getHMin();
+				tabDonnees[ligne][4] = lstIntervenants.get(ligne).gethMax();
+				tabDonnees[ligne][5] = lstIntervenants.get(ligne).getCoefTP();
+				tabDonnees[ligne][6] = lstIntervenants.get(ligne).getHParSemestre(1);
+				tabDonnees[ligne][7] = lstIntervenants.get(ligne).getHParSemestre(3);
+				tabDonnees[ligne][8] = lstIntervenants.get(ligne).getHParSemestre(5);
+				tabDonnees[ligne][9] = lstIntervenants.get(ligne).getTotalParImpair();
+				tabDonnees[ligne][10] = lstIntervenants.get(ligne).getHParSemestre(2);
+				tabDonnees[ligne][11] = lstIntervenants.get(ligne).getHParSemestre(4);
+				tabDonnees[ligne][12] = lstIntervenants.get(ligne).getHParSemestre(6);
+				tabDonnees[ligne][13] = lstIntervenants.get(ligne).getTotalParPair();
+				tabDonnees[ligne][14] = lstIntervenants.get(ligne).getTotal();
+				
+				
 			}
 		}
 
