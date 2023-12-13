@@ -14,7 +14,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PagePrevisionnel extends JPanel implements ActionListener
@@ -174,16 +173,23 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			this.ctrl = ctrl;
 
 			int nbCol = 4;
-			int nbLig = lstRessource.size();
-
-			this.tabDonnees = new Object[nbLig][nbCol];
-
-			for (int ligne = 0; ligne < nbLig; ligne++)
+			if(lstRessource != null && lstRessource.size() > 0)
 			{
-				tabDonnees[ligne][0] = lstRessource.get(ligne).getCode();
-				tabDonnees[ligne][1] = lstRessource.get(ligne).getLibelleLong();
-				tabDonnees[ligne][2] = lstRessource.get(ligne).getTotalAffecteEqTd() + "/" + lstRessource.get(ligne).getTotalPromoEqTd();
-				tabDonnees[ligne][3] = lstRessource.get(ligne).getValider();
+				int nbLig = lstRessource.size();
+
+				this.tabDonnees = new Object[nbLig][nbCol];
+
+				for (int ligne = 0; ligne < nbLig; ligne++)
+				{
+					tabDonnees[ligne][0] = lstRessource.get(ligne).getCode();
+					tabDonnees[ligne][1] = lstRessource.get(ligne).getLibelleLong();
+					tabDonnees[ligne][2] = lstRessource.get(ligne).getTotalAffecteEqTd() + "/" + lstRessource.get(ligne).getTotalPromoEqTd();
+					tabDonnees[ligne][3] = lstRessource.get(ligne).getValider();
+				}
+			}
+			else
+			{
+				this.tabDonnees = new Object[1][nbCol];
 			}
 		}
 
