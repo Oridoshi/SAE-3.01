@@ -3,6 +3,7 @@ package ihm.creationObjet;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.text.NumberFormatter;
 
 import controleur.Controleur;
 import ihm.FrameIhm;
@@ -18,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.NumberFormat;
 
 public class PageCreaRessource implements ActionListener, KeyListener
 {
@@ -45,7 +47,7 @@ public class PageCreaRessource implements ActionListener, KeyListener
 
 		this.dial = new JDialog(mere, "Création d'un Module - Ressource", true);
 		this.dial.setLayout(new BorderLayout());
-		this.dial.setSize(300, 1000);
+		this.dial.setSize(500, 500);
 		this.dial.setLocationRelativeTo(mere);
 		
 		// Ajout du Button Ajouter
@@ -62,6 +64,11 @@ public class PageCreaRessource implements ActionListener, KeyListener
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.insets = new Insets(5, 5, 5, 5); // Marge autour des composants
 
+		NumberFormat format = NumberFormat.getIntegerInstance();
+        NumberFormatter formatter = new NumberFormatter(format);
+        formatter.setValueClass(Integer.class);
+        formatter.setMinimum(0); // Valeur minimale autorisée
+
 		// Code \\
 		JLabel lblCode = new JLabel("Code : ");
 		this.textFieldCode = new JTextField(15);
@@ -72,7 +79,7 @@ public class PageCreaRessource implements ActionListener, KeyListener
 		panelFormulaire.add(this.textFieldCode, gbc);
 
 		// LibelleLong \\
-		JLabel lblLibelleLong = new JLabel("LibelleLong : ");
+		JLabel lblLibelleLong = new JLabel("Libelle Long : ");
 		this.textFieldLibelleLong = new JTextField(15);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -81,7 +88,7 @@ public class PageCreaRessource implements ActionListener, KeyListener
 		panelFormulaire.add(this.textFieldLibelleLong, gbc);
 
 		// LibelleCourt \\
-		JLabel lblLibelleCourt = new JLabel("TYPE : ");
+		JLabel lblLibelleCourt = new JLabel("Libelle Court : ");
 		this.textFieldLibelleCourt = new JTextField(15);
 		gbc.gridx = 0;
 		gbc.gridy = 2;
@@ -90,8 +97,9 @@ public class PageCreaRessource implements ActionListener, KeyListener
 		panelFormulaire.add(this.textFieldLibelleCourt, gbc);
 
 		// Heures Programme TD \\
-		JLabel lblHProTd = new JLabel("TYPE : ");
-		this.textFieldHProTd = new JTextField(15);
+		JLabel lblHProTd = new JLabel("Heures Programme TD : ");
+		this.textFieldHProTd = new JFormattedTextField(formatter);
+		this.textFieldHProTd.setColumns(15);
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		panelFormulaire.add(lblHProTd, gbc);
@@ -99,8 +107,9 @@ public class PageCreaRessource implements ActionListener, KeyListener
 		panelFormulaire.add(this.textFieldHProTd, gbc);
 
 		// Heures Programme TP \\
-		JLabel lblHProTp = new JLabel("TYPE : ");
-		this.textFieldHProTp = new JTextField(15);
+		JLabel lblHProTp = new JLabel("Heures Programme TP : ");
+		this.textFieldHProTp = new JFormattedTextField(formatter);
+		this.textFieldHProTp.setColumns(15);
 		gbc.gridx = 0;
 		gbc.gridy = 4;
 		panelFormulaire.add(lblHProTp, gbc);
@@ -108,8 +117,9 @@ public class PageCreaRessource implements ActionListener, KeyListener
 		panelFormulaire.add(this.textFieldHProTp, gbc);
 
 		// Heures Programme CM \\
-		JLabel lblHProCm = new JLabel("TYPE : ");
-		this.textFieldHProCm = new JTextField(15);
+		JLabel lblHProCm = new JLabel("Heures Programme CM : ");
+		this.textFieldHProCm = new JFormattedTextField(formatter);
+		this.textFieldHProCm.setColumns(15);
 		gbc.gridx = 0;
 		gbc.gridy = 5;
 		panelFormulaire.add(lblHProCm, gbc);
@@ -118,8 +128,9 @@ public class PageCreaRessource implements ActionListener, KeyListener
 
 
 		// Heures Semaine TD \\
-		JLabel lblHSemTd = new JLabel("TYPE : ");
-		this.textFieldHSemTd = new JTextField(15);
+		JLabel lblHSemTd = new JLabel("Heures TD/Semaine : ");
+		this.textFieldHSemTd = new JFormattedTextField(formatter);
+		this.textFieldHSemTd.setColumns(15);
 		gbc.gridx = 0;
 		gbc.gridy = 6;
 		panelFormulaire.add(lblHSemTd, gbc);
@@ -128,8 +139,9 @@ public class PageCreaRessource implements ActionListener, KeyListener
 
 
 		// Nb Semaine TD \\
-		JLabel lblSemTd = new JLabel("TYPE : ");
-		this.textFieldSemTd = new JTextField(15);
+		JLabel lblSemTd = new JLabel("Nombre de Semaine TD : ");
+		this.textFieldSemTd = new JFormattedTextField(formatter);
+		this.textFieldSemTd.setColumns(15);
 		gbc.gridx = 0;
 		gbc.gridy = 7;
 		panelFormulaire.add(lblSemTd, gbc);
@@ -138,8 +150,9 @@ public class PageCreaRessource implements ActionListener, KeyListener
 
 
 		// Heures Semaine TP \\
-		JLabel lblHSemTp = new JLabel("TYPE : ");
-		this.textFieldHSemTp = new JTextField(15);
+		JLabel lblHSemTp = new JLabel("Heures TP/Semaine : ");
+		this.textFieldHSemTp = new JFormattedTextField(formatter);
+		this.textFieldHSemTp.setColumns(15);
 		gbc.gridx = 0;
 		gbc.gridy = 8;
 		panelFormulaire.add(lblHSemTp, gbc);
@@ -147,7 +160,7 @@ public class PageCreaRessource implements ActionListener, KeyListener
 		panelFormulaire.add(this.textFieldHSemTp, gbc);
 
 		// Nb Semaine Tp \\
-		JLabel lblSemTp = new JLabel("TYPE : ");
+		JLabel lblSemTp = new JLabel("Nombre de Semaine TP : ");
 		this.textFieldSemTp = new JTextField(15);
 		gbc.gridx = 0;
 		gbc.gridy = 9;
@@ -156,8 +169,9 @@ public class PageCreaRessource implements ActionListener, KeyListener
 		panelFormulaire.add(this.textFieldSemTp, gbc);
 
 		// Heures Semaine CM \\
-		JLabel lblHSemCm = new JLabel("TYPE : ");
-		this.textFieldHSemCm = new JTextField(15);
+		JLabel lblHSemCm = new JLabel("Heures CM/Semaine : ");
+		this.textFieldHSemCm = new JFormattedTextField(formatter);
+		this.textFieldHSemCm.setColumns(15);
 		gbc.gridx = 0;
 		gbc.gridy = 10;
 		panelFormulaire.add(lblHSemCm, gbc);
@@ -165,8 +179,9 @@ public class PageCreaRessource implements ActionListener, KeyListener
 		panelFormulaire.add(this.textFieldHSemCm, gbc);
 
 		// Nb Semaine CM \\
-		JLabel lblSemCm = new JLabel("TYPE : ");
-		this.textFieldSemCm = new JTextField(15);
+		JLabel lblSemCm = new JLabel("Nombre de Semaine TP : ");
+		this.textFieldSemCm = new JFormattedTextField(formatter);
+		this.textFieldSemCm.setColumns(15);
 		gbc.gridx = 0;
 		gbc.gridy = 11;
 		panelFormulaire.add(lblSemCm, gbc);
