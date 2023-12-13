@@ -19,23 +19,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-public class PageCreaCategorieHeure implements ActionListener, KeyListener
+public class PageCreaCategorieIntervenant implements ActionListener, KeyListener
 {
 	private JDialog    dial;
 	private Controleur ctrl;
 	private FrameIhm   mere;
 
+	private JTextField textFieldCode;
 	private JTextField textFieldNom;
 	private JTextField textFieldCoefTP;
+	private JTextField textFieldMinH;
+	private JTextField textFieldMaxH;
 
-	public PageCreaCategorieHeure(FrameIhm mere, Controleur ctrl)
+	public PageCreaCategorieIntervenant(FrameIhm mere, Controleur ctrl)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
 
-		this.dial = new JDialog(mere, "Création d'une catégorie d'heure", true);
+		this.dial = new JDialog(mere, "Création d'une catégorie d'intervenant", true);
 		this.dial.setLayout(new BorderLayout());
 		this.dial.setSize(500, 500);
 		this.dial.setLocationRelativeTo(mere);
@@ -54,28 +58,62 @@ public class PageCreaCategorieHeure implements ActionListener, KeyListener
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.insets = new Insets(5, 5, 5, 5); // Marge autour des composants
 
-		NumberFormat format = NumberFormat.getIntegerInstance();
-        NumberFormatter formatter = new NumberFormatter(format);
-        formatter.setValueClass(Integer.class);
-        formatter.setMinimum(0); // Valeur minimale autorisée
-		formatter.setAllowsInvalid(false); // Empêcher les valeurs invalides
-		
+		NumberFormat formatInteger = NumberFormat.getIntegerInstance();
+        NumberFormatter formatterInteger = new NumberFormatter(formatInteger);
+        formatterInteger.setValueClass(Integer.class);
+        formatterInteger.setMinimum(0); // Valeur minimale autorisée
+		formatterInteger.setAllowsInvalid(false); // Empêcher les valeurs invalides
+
+        NumberFormatter formatter = new NumberFormatter(new DecimalFormat("#0.00"));
+        formatter.setValueClass(Double.class); // Définir la classe de valeur comme Double
+        formatter.setMinimum(0.0); // Valeur minimale autorisée
+        formatter.setMaximum(Double.MAX_VALUE); // Valeur maximale autorisée
+        formatter.setAllowsInvalid(false); // Empêcher les valeurs invalides
+
+		// Code \\
+		JLabel lblCode = new JLabel("Code de la catégorie : ");
+		this.textFieldCode = new JTextField(15);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panelFormulaire.add(lblCode, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(this.textFieldCode, gbc);
 
 		// Nom \\
 		JLabel lblNom = new JLabel("Nom de la catégorie : ");
 		this.textFieldNom = new JTextField(15);
 		gbc.gridx = 0;
-		gbc.gridy = 0;
+		gbc.gridy = 1;
 		panelFormulaire.add(lblNom, gbc);
 		gbc.gridx = 1;
 		panelFormulaire.add(this.textFieldNom, gbc);
 
-		// Coef \\
-		JLabel lblCoefTP = new JLabel("Coefficient : ");
+		// minH \\
+		JLabel lblMinH = new JLabel("Min. d'heures : ");
+		this.textFieldMinH = new JFormattedTextField(formatterInteger);
+		this.textFieldMinH.setColumns(15);
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		panelFormulaire.add(lblMinH, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(this.textFieldMinH, gbc);
+
+		// maxH \\
+		JLabel lblMaxH = new JLabel("Max. d'heures : ");
+		this.textFieldMaxH = new JFormattedTextField(formatterInteger);
+		this.textFieldMaxH.setColumns(15);
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		panelFormulaire.add(lblMaxH, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(this.textFieldMaxH, gbc);
+
+		// CoefTP \\
+		JLabel lblCoefTP = new JLabel("Coefficient TP : ");
 		this.textFieldCoefTP = new JFormattedTextField(formatter);
 		this.textFieldCoefTP.setColumns(15);
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 4;
 		panelFormulaire.add(lblCoefTP, gbc);
 		gbc.gridx = 1;
 		panelFormulaire.add(this.textFieldCoefTP, gbc);

@@ -68,6 +68,7 @@ public class PageCreaRessource implements ActionListener, KeyListener
         NumberFormatter formatter = new NumberFormatter(format);
         formatter.setValueClass(Integer.class);
         formatter.setMinimum(0); // Valeur minimale autorisée
+		formatter.setAllowsInvalid(false); // Empêcher les valeurs invalides
 
 		// Code \\
 		JLabel lblCode = new JLabel("Code : ");
