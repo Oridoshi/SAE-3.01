@@ -1,7 +1,9 @@
 package metier.model;
 
+import java.util.List;
 import java.util.Map;
 
+import metier.repo.AffectationDB;
 import metier.repo.CategorieHeureDB;
 
 /**
@@ -50,10 +52,14 @@ public class Module
 
 
 
-
 	public int getTotalAffecteEqTd()
 	{
-		return 0;
+		List<Affectation> affectations = new AffectationDB().getAffectationsParCodeModule(this.code);
+		int totalHeure = 0;
+		for ( Affectation affectation : affectations ){
+			totalHeure += affectation.getNbEqTd();
+		}
+		return totalHeure;
 	}
 
 	public int getTotalPromoEqTd()
@@ -68,6 +74,9 @@ public class Module
 			}
 			if ( key.equals("TD")){
 				h = h * semestre.getNbGroupeTd();
+			}
+			if ( key.equals("TP")){
+				h = h * semestre.getNbGroupeTp();
 			}
 			h = (int) ( h * categorieHeure.getCoef() );
 			total += h;
