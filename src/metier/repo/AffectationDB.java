@@ -77,12 +77,15 @@ public class AffectationDB {
 
 	public void suppAffectation(Affectation a)
 	{
-		try {
+		try
+		{
 			this.psSuppAffectation.setInt(1, a.getIntervenant().getId());
 			this.psSuppAffectation.setString(2, a.getCategorieHeure().getNom());
 			this.psSuppAffectation.setString(3, a.getModule().getCode());
-		} catch (Exception e) {
-			// TODO: handle exception
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
 		}
 	}
 
