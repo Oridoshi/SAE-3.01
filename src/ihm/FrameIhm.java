@@ -23,7 +23,7 @@ public class FrameIhm extends JFrame
 		this.setVisible(true);
 	}
 
-	public void chagerPage(JPanel page)
+	public void changerPage(JPanel page)
 	{
 		this.getContentPane().removeAll();
 		this.getContentPane().add(page);

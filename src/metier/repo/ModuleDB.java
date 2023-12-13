@@ -22,6 +22,7 @@ public class ModuleDB {
 	private PreparedStatement psGetModules;
 	private PreparedStatement psGetModuleParCode;
 	private PreparedStatement psGetProgrammeItem;
+	private PreparedStatement psGetModuleParSemestre;
 
 	public ModuleDB(){
 		this.semestreDB = new SemestreDB();
@@ -30,6 +31,7 @@ public class ModuleDB {
 			this.psGetModules = db.prepareStatement("SELECT * FROM Module");
 			this.psGetModuleParCode = db.prepareStatement("SELECT * FROM Module WHERE code = ?");
 			this.psGetProgrammeItem = db.prepareStatement("SELECT * FROM ProgrammeItem WHERE codeModule = ?");
+			this.psGetModuleParSemestre = db.prepareStatement("SELECT * FROM Module WHERE idSemestre = ?");
 		} catch ( Exception e ){
 			e.printStackTrace();
 		}
@@ -48,6 +50,16 @@ public class ModuleDB {
 		catch ( Exception e ) { e.printStackTrace(); }
 		DBResult result = DB.query(this.psGetModuleParCode);
 		return ligneToModule(result.getLignes().get(0));
+	}
+
+	public List<Module> getModulesParSemestre(int idSemestre){
+		try{ this.psGetModuleParSemestre.setInt(1, idSemestre); }
+		catch ( Exception e ) { e.printStackTrace(); }
+		DBResult result = DB.query(this.psGetModuleParSemestre);
+		List<Module> modules = new ArrayList<>();
+		for ( Map<String, String> ligne : result.getLignes() )
+			modules.add(ligneToModule(ligne));
+		return modules;
 	}
 
 	private Module ligneToModule(Map<String, String> ligne){
