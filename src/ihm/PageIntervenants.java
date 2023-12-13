@@ -5,7 +5,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import controleur.Controleur;
-import metier.Intervenant;
+import metier.model.Intervenant;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -35,7 +35,7 @@ public class PageIntervenants extends JPanel
 	private JFrame mere;
 
 
-	public PageIntervenants(Controleur ctrl, JFrame mere)
+	public PageIntervenants(Controleur ctrl, FrameIhm mere)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
@@ -62,7 +62,7 @@ public class PageIntervenants extends JPanel
 		this.panelTableau = new JPanel(new BorderLayout());
 
 		// Ajout de la table
-		this.tableIntervenants = new JTable( new ModelAffichageTableau(this.ctrl, this.ctrl.getlstIntervenants()) );
+		this.tableIntervenants = new JTable( new ModelAffichageTableau(this.ctrl, this.ctrl.getLstIntervenants()) );
 			this.tableIntervenants.setFillsViewportHeight(true);
 			this.tableIntervenants.setRowHeight(25);
 			this.tableIntervenants.setShowVerticalLines(false); // pour ne pas afficher les lignes verticales dans le tableau
