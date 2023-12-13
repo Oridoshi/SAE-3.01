@@ -31,7 +31,12 @@ public class Semestre
 
 	public ArrayList<Module> getlstRessource()
 	{
-		return null;
+		ArrayList<Module> dd = new ArrayList<Module>();
+		dd.add(new Module("R1.03", this, null, false, "Dev", "Developpement efficace", null));
+		dd.add(new Module("R1.01", this, null, false, "Int Dev", "Iniciation Developpement", null));
+		dd.add(new Module("R1.02", this, null, false, "Web", "Developpement Web", null));
+
+		return dd;
 	}
 	
 }
