@@ -1,4 +1,5 @@
 package metier.model;
+import java.util.ArrayList;
 import java.util.List;
 
 import metier.repo.ModuleDB;
@@ -30,9 +31,14 @@ public class Semestre
 	public int getNbEtu()                  {return nbEtu;}
 	public int getNbSemaine()              {return nbSemaine;}
 
-	public List<Module> getlstRessource(int id)
+	public List<Module> getlstRessource()
 	{
-		return new ModuleDB().getModulesParSemestre(id);
+		ArrayList<Module> dd = new ArrayList<Module>();
+		dd.add(new Module("R1.03", this, null, false, "Dev", "Developpement efficace", null));
+		dd.add(new Module("R1.01", this, null, false, "Int Dev", "Iniciation Developpement", null));
+		dd.add(new Module("R1.02", this, null, false, "Web", "Developpement Web", null));
+
+		return dd;
 	}
 	
 }
