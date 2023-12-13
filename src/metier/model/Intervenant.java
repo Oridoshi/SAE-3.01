@@ -36,10 +36,12 @@ public class Intervenant
 
 	public void setNom(String nom) {
 		this.nom = nom;
+		this.updateChange();
 	}
 
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
+		this.updateChange();
 	}
 
 
@@ -51,5 +53,11 @@ public class Intervenant
 	public void suppIntervenantFromBd()
 	{
 		new IntervenantDB().suppIntervenant(this);
+	}
+
+
+	public void updateChange()
+	{
+		new IntervenantDB().updateIntervenant(this);
 	}
 }

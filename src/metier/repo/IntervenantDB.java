@@ -20,6 +20,7 @@ public class IntervenantDB {
 	private PreparedStatement psGetIntervenantParId;
 	private PreparedStatement psAjouterIntervenant;
 	private PreparedStatement psSuppIntervenant;
+	private PreparedStatement psUpdateIntervenant;
 
 
 
@@ -30,6 +31,7 @@ public class IntervenantDB {
 			this.psGetIntervenantParId = db.prepareStatement("SELECT * FROM CategorieIntervenant WHERE idIntervenant = ?");
 			this.psAjouterIntervenant = db.prepareStatement("INSERT INTO Intervenant (id, codeCatIntervenant, nom, prenom, hmax) VALUES (?, ?, ?, ?, ?)");
 			this.psSuppIntervenant = db.prepareStatement("DELETE FROM Intervenant WHERE id = ?");
+			this.psUpdateIntervenant = db.prepareStatement("UPDATE Intervenant SET codeCatIntervenant = ?, nom = ?, prenom = ?, hmax = ? WHERE id = ?");
 
 		} catch ( Exception e ){
 			e.printStackTrace();
@@ -85,6 +87,20 @@ public class IntervenantDB {
 			psSuppIntervenant.executeUpdate();
 		} catch ( Exception e ){
 			e.printStackTrace();
+		}
+	}
+
+	public void updateIntervenant(Intervenant i)
+	{
+		try {
+			psUpdateIntervenant.setString(1, i.getCategorie().getCode());
+			psUpdateIntervenant.setString(2, i.getNom());
+			psUpdateIntervenant.setString(3, i.getPrenom());
+			psUpdateIntervenant.setInt(4, i.gethMax());
+			psUpdateIntervenant.setInt(5, i.getId());
+			psUpdateIntervenant.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 

@@ -85,4 +85,9 @@ public class Module
 	{
 		new ModuleDB().suppModule(this);
 	}
+
+	public void updateChange()
+	{
+		new ModuleDB().updateModule(this);
+	}
 }

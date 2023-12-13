@@ -50,4 +50,9 @@ public class Affectation
 	{
 		new AffectationDB().suppAffectation(this);
 	}
+
+	public void updateChange()
+	{
+		new AffectationDB().updateAffectation(this);
+	}
 }

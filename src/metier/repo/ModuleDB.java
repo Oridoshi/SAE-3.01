@@ -25,6 +25,7 @@ public class ModuleDB {
 	private PreparedStatement psGetModuleParSemestre;
 	private PreparedStatement psAjouterModule;
 	private PreparedStatement psSuppModule;
+	private PreparedStatement psUpdateModule;
 
 
 	public ModuleDB(){
@@ -37,6 +38,7 @@ public class ModuleDB {
 			this.psGetModuleParSemestre = db.prepareStatement("SELECT * FROM Module WHERE idSemestre = ?");
 			this.psAjouterModule = db.prepareStatement("INSERT INTO Module VALUES(?,?,?,?,?,?,?)");
 			this.psSuppModule = db.prepareStatement("DELETE FROM Module WHERE code = ?");
+			this.psUpdateModule = db.prepareStatement("UPDATE Module SET valider = ?, idSemestre = ?, nomCatModule = ?, libLong = ?, libCourt = ? WHERE code = ?");
 		} catch ( Exception e ){
 			e.printStackTrace();
 		}
@@ -120,6 +122,19 @@ public class ModuleDB {
 		try {
 			psSuppModule.setString(1, m.getCode());
 			psSuppModule.executeUpdate();
+		} catch (Exception e) {}
+	}
+
+	public void updateModule(Module m)
+	{
+		try {
+			psAjouterModule.setBoolean(1, m.getValider());
+			psAjouterModule.setInt(2, m.getSemestre().getId());
+			psAjouterModule.setString(3, m.getCategorieModule().getNom());
+			psAjouterModule.setString(4, m.getLibelleLong());
+			psAjouterModule.setString(5, m.getLibelleCourt());
+			psAjouterModule.setString(6, m.getCode());
+			psAjouterModule.executeUpdate();
 		} catch (Exception e) {}
 	}
 }

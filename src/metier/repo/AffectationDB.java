@@ -23,6 +23,7 @@ public class AffectationDB {
 	private PreparedStatement psGetAffectations;
 	private PreparedStatement psAjouterAffectation;
 	private PreparedStatement psSuppAffectation;
+	private PreparedStatement psUpdateAffectation;
 
 	public AffectationDB(){
 		this.moduleDB = new ModuleDB();
@@ -33,6 +34,8 @@ public class AffectationDB {
 			db.prepareStatement("SELECT * FROM Affectation");
 			db.prepareStatement("INSERT INTO Affectation VALUES(?,?,?,?,?,?,?)");
 			db.prepareStatement("DELETE FROM Affectation WHERE idIntervenant = ? AND nomCatHeure = ? AND codeModule = ?");
+			db.prepareStatement("UPDATE Affectation SET idIntervenant = ?, nomCatHeure = ?, nbH = ?, nbGrp = ?, codeModule = ? commentaire = ?, nbSemaine = ? WHERE idIntervenant = ? AND nomCatHeure = ? AND codeModule = ?");
+
 		} catch ( SQLException e ){
 			e.printStackTrace();
 		}
@@ -84,6 +87,22 @@ public class AffectationDB {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+	}
+	
+	public void updateAffectation(Affectation a)
+	{
+		try {
+			this.psUpdateAffectation.setInt(1, a.getIntervenant().getId());
+			this.psUpdateAffectation.setString(2, a.getCategorieHeure().getNom());
+			this.psUpdateAffectation.setInt(3, a.getNbHeure());
+			this.psUpdateAffectation.setInt(4, a.getNbGroupe());
+			this.psUpdateAffectation.setString(5, a.getModule().getCode());
+			this.psUpdateAffectation.setString(6, a.getCommentaire());
+			this.psUpdateAffectation.setInt(7, a.getNbSemaine());
+			this.psUpdateAffectation.setInt(8, a.getIntervenant().getId());
+			this.psUpdateAffectation.setString(9, a.getCategorieHeure().getNom());
+			this.psUpdateAffectation.setString(10, a.getModule().getCode());
+		} catch (Exception e) {}
 	}
 
 		/*
