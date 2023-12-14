@@ -14,7 +14,6 @@ import java.awt.event.FocusListener;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Flow;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -92,12 +91,15 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 	private JTextField txtFTotTp3;
 	private JTextField txtFHPonctu3;
 	private JTextField txtFTotSom3;
-	
+
 	private List<Affectation> lstAffectation;
 	private JTable tableAffectation;
 	private int nbTotAffHPonctu;
 	private JButton btnAjouterAffectation;
 	private JButton btnSupprimerAffectation;
+	private JButton btnValider;
+	private JButton btnAnnuler;
+	private JCheckBox chkValider;
 
 	public PageCreationRessource(Controleur ctrl, FrameIhm mere, Semestre semestre)
 	{
@@ -367,13 +369,25 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		JLabel lblValider = new JLabel("Validation");
 		lblValider.setForeground(PageCreationRessource.COULEUR_LABEL);
 		lblValider.setFont(PageCreationRessource.FONT_LABEL);
-		JCheckBox chkValider = new JCheckBox();
-		chkValider.setSelected(false);
+		this.chkValider = new JCheckBox();
+		this.chkValider.setSelected(false);
 
 		panelValider.add(lblValider);
-		panelValider.add(chkValider);
+		panelValider.add(this.chkValider);
 
 		panelTmpOuest.add(panelValider, BorderLayout.SOUTH);
+
+		//Label
+		JPanel panelTmpLabel1 = new JPanel();
+
+		JLabel lblPnLocal = new JLabel("PN local (nb h tot/etd)");
+		lblPnLocal.setForeground(PageCreationRessource.COULEUR_LABEL);
+		lblPnLocal.setFont(PageCreationRessource.FONT_LABEL);
+
+		panelTmpLabel1.add(lblPnLocal);
+
+		panelTmpOuest.add(panelTmpLabel1, BorderLayout.NORTH);
+
 
 		this.panelOuest.add(panelTmpOuest, BorderLayout.NORTH);
 		/*---------Fin Panel  Ouest---------*/
@@ -689,10 +703,34 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 
 		panelTab.add(panelBoutonPanelCenter, BorderLayout.SOUTH);
 
+		//Label
+		JPanel panelTmpLabel2 = new JPanel();
+
+		JLabel lblRepartition = new JLabel("Répartition");
+		lblRepartition.setForeground(PageCreationRessource.COULEUR_LABEL);
+		lblRepartition.setFont(PageCreationRessource.FONT_LABEL);
+
+		panelTmpLabel2.add(lblRepartition);
+
+		panelRepartition.add(panelTmpLabel2, BorderLayout.NORTH);
+
 
 		this.panelCentre.add(panelRepartition, BorderLayout.NORTH);
 		this.panelCentre.add(panelTab, BorderLayout.CENTER);
 		/*---------Fin Panel Centre---------*/
+
+		/*----------Panel Bouton----------*/
+		JPanel panelBtn = new JPanel();
+		panelBtn.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+		this.btnValider = new JButton("Enregistrer");
+		this.btnValider.addActionListener(this);
+		this.btnAnnuler = new JButton("Annuler");
+		this.btnAnnuler.addActionListener(this);
+
+		panelBtn.add(this.btnValider);
+		panelBtn.add(this.btnAnnuler);
+		/*----------Fin Panel Bouton----------*/
 
 		this.setLayout(new BorderLayout());
 		this.setBorder(new EmptyBorder(15, 10, 15, 10));
@@ -701,6 +739,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		this.add(this.panelNord, BorderLayout.NORTH);
 		this.add(this.panelCentre, BorderLayout.CENTER);
 		this.add(this.panelOuest, BorderLayout.WEST);
+		this.add(panelBtn, BorderLayout.SOUTH);
 	}
 
 	@Override

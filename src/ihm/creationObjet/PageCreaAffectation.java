@@ -137,6 +137,7 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 		JLabel lblNbGroupe = new JLabel("Nombre de groupe : ");
 		this.txtFNbGroupe = new JFormattedTextField(formatter);
 		this.txtFNbGroupe.setColumns(5);
+		this.txtFNbGroupe.addFocusListener(this);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 4;
@@ -210,7 +211,7 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 	{
 		if(e.getSource() == this.btnValider)
 		{
-			if((this.txtFNbHeure.getText().equals("") && this.txtFNbSemaine.getText().equals("")) || (this.txtFNbGroupe.getText().equals("") && this.txtFNbSemaine.getText().equals("")))
+			if(this.txtFNbHeure.getText().equals("") && (this.txtFNbGroupe.getText().equals("") || this.txtFNbSemaine.getText().equals("")))
 			{
 				JOptionPane.showMessageDialog(this.dial, "Veuillez remplir tous les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
@@ -223,13 +224,25 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 				Integer nbGroupe = null;
 				if(this.txtFNbSemaine.getText().equals(""))
 				{
-					nbHeure = Integer.parseInt(this.txtFNbHeure.getText());
-					nbGroupe = 1;
+					try
+					{
+						nbHeure = Integer.parseInt(this.txtFNbHeure.getValue().toString().replace(" ", ""));
+						nbGroupe = 1;
+					} catch (Exception err) {
+						JOptionPane.showMessageDialog(this.dial, "Veuillez remplir tous les champs avec des valeur valide", "Erreur", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 				}
 				else
 				{
-					nbSemaine = Integer.parseInt(this.txtFNbSemaine.getText());
-					nbGroupe  = Integer.parseInt(this.txtFNbGroupe.getText());
+					try
+					{
+						nbSemaine = Integer.parseInt(this.txtFNbSemaine.getValue().toString().replace(" ", ""));
+						nbGroupe  = Integer.parseInt(this.txtFNbGroupe.getValue().toString().replace(" ", ""));
+					} catch (Exception err) {
+						JOptionPane.showMessageDialog(this.dial, "Veuillez remplir tous les champs avec des valeur valide", "Erreur", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 				}
 				
 				String  commentaire = this.txtFCommentaire.getText();
@@ -249,12 +262,12 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 	@Override
 	public void focusGained(FocusEvent e)
 	{
-		if(e.getSource() == this.txtFNbHeure)
+		if(e.getSource() == this.txtFNbHeure)	
 		{
 			this.txtFNbSemaine.setEditable(false);
 			this.txtFNbGroupe.setEditable(false);
 		}
-		else if(e.getSource() == this.txtFNbSemaine)
+		else if(e.getSource() == this.txtFNbSemaine || e.getSource() == this.txtFNbGroupe)
 		{
 			this.txtFNbHeure.setEditable(false);
 		}
@@ -271,9 +284,9 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 				this.txtFNbGroupe.setEditable(true);
 			}
 		}
-		else if(e.getSource() == this.txtFNbSemaine)
+		else if(e.getSource() == this.txtFNbSemaine  || e.getSource() == this.txtFNbGroupe)
 		{
-			if(this.txtFNbSemaine.getText().equals(""))
+			if(this.txtFNbSemaine.getText().equals("") && this.txtFNbGroupe.getText().equals(""))
 			{
 				this.txtFNbHeure.setEditable(true);
 			}
