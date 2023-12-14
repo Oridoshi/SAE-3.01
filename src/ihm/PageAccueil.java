@@ -59,7 +59,7 @@ public class PageAccueil extends JPanel implements ActionListener
 		this.btnPrevisionnel.addActionListener(this);
 		panelBtn.add(btnPrevisionnel, gbc);
 
-		// btnParametres //
+		// btnIntervenants //
 		this.btnIntervenants = new JButton("Intervenants");
 		this.btnIntervenants.addActionListener(this);
 		this.btnIntervenants.setPreferredSize(new Dimension(500, 500));
@@ -92,7 +92,7 @@ public class PageAccueil extends JPanel implements ActionListener
 		}
 		else if (e.getSource() == this.btnIntervenants)
 		{
-			// this.mere.changerPage(new PageParametres(this.ctrl, this.mere));
+			this.mere.changerPage(new PageIntervenants(this.ctrl, this.mere));
 		}
 		else if (e.getSource() == this.btnEtats)
 		{

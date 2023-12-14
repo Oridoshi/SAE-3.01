@@ -18,7 +18,7 @@ public class Controleur
 	public Controleur()
 	{
 		this.intervenantDB = new IntervenantDB();
-		this.version = "v0.0.1";
+		this.version = "v0.1.4";
 
 		new FrameIhm(this);
 	}
@@ -36,34 +36,20 @@ public class Controleur
 		return SemestreDB.getParId(s);
 	}
 
-	public ArrayList<Intervenant> getLstIntervenants()
+	public List<Intervenant> getLstIntervenants()
 	{
-		ArrayList<Intervenant> lstIntervenants = new ArrayList<Intervenant>();
-		
-		lstIntervenants.add(new Intervenant(1, this.getLstCategorieIntervenant().get(1), "Dupont", "Axelito", 192));
-
-		return lstIntervenants;
+		return IntervenantDB.list();
 	}
 
 
-	public ArrayList<CategorieIntervenant> getLstCategorieIntervenant()
+	public List<CategorieIntervenant> getLstCategorieIntervenant()
 	{
-		ArrayList<CategorieIntervenant> lstCategorieIntervenant = new ArrayList<CategorieIntervenant>();
-		lstCategorieIntervenant.add(new CategorieIntervenant("type_prof", "Professeur", 192, 384, 1));
-		lstCategorieIntervenant.add(new CategorieIntervenant("type_vac", "Vacataire", 124, 258, 1));
-
-		return lstCategorieIntervenant;
+		return CategorieIntervenantDB.list();
 	}
 
-	public ArrayList<CategorieHeure> getLstCategorieHeure()
+	public List<CategorieHeure> getLstCategorieHeure()
 	{
-		ArrayList<CategorieHeure> lstCategorieHeure = new ArrayList<CategorieHeure>();
-
-		lstCategorieHeure.add(new CategorieHeure("TD", 1));
-		lstCategorieHeure.add(new CategorieHeure("TP", 2/3));
-		lstCategorieHeure.add(new CategorieHeure("CM", 1));
-
-		return lstCategorieHeure;
+		return CategorieHeureDB.list();
 	}
 
 	public double getCoefH(String string)
