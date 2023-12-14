@@ -9,6 +9,7 @@ import metier.DB;
 
 public class Controleur
 {
+	private static final CategorieHeureDB CateHeurDb = new CategorieHeureDB();
 	private DB database;
 	private String version;
 
@@ -39,6 +40,7 @@ public class Controleur
 	{
 		ArrayList<Intervenant> lstIntervenants = new ArrayList<Intervenant>();
 		
+		lstIntervenants.add(new Intervenant(1, this.getLstCategorieIntervenant().get(1), "Dupont", "Axelito", 192));
 
 		return lstIntervenants;
 	}
@@ -62,5 +64,11 @@ public class Controleur
 		lstCategorieHeure.add(new CategorieHeure("CM", 1));
 
 		return lstCategorieHeure;
+	}
+
+	public double getCoefH(String string)
+	{
+		return 1;
+		// return (Controleur.CateHeurDb.getCategorieHeureParId(string)).getCoef();
 	}
 }

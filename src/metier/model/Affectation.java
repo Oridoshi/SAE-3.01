@@ -32,13 +32,15 @@ public class Affectation
 	public Integer getNbSemaine(){return nbSemaine;}
 	public String getCommentaire(){return commentaire;}
 	public Integer getNbHeure(){return nbHeure;}
-	public Float getNbEqTd (){
-		int nbHeure = this.module.getProgrammeItem(this.categorieHeure.getNom()).getNbHeure();
-		if ( this.getNbSemaine() == null ){
-			nbHeure = nbHeure * this.getNbSemaine() * this.getNbGroupe();
-		}
-		nbHeure = (int) ( nbHeure * this.getCategorieHeure().getCoef() );
-		return nbHeure * 0F;
+	public Float getNbEqTd ()
+	{
+		return 0F;
+		// int nbHeure = this.module.getProgrammeItem(this.categorieHeure.getNom()).getNbHeure();
+		// if ( this.getNbSemaine() == null ){
+		// 	nbHeure = nbHeure * this.getNbSemaine() * this.getNbGroupe();
+		// }
+		// nbHeure = (int) ( nbHeure * this.getCategorieHeure().getCoef() );
+		// return nbHeure * 0F;
 	}
 
 	public CategorieHeure getCategorieHeure() {

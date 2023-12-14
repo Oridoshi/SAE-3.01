@@ -5,7 +5,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import controleur.Controleur;
-import ihm.creationObjet.PageCreaRessource;
+import ihm.creationObjet.PageCreationRessource;
 import metier.model.Module;
 import metier.model.Semestre;
 
@@ -78,7 +78,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 	{
 		if (e.getSource() == this.btnCreaRessource)
 		{
-			new PageCreaRessource(this.mere, this.ctrl);
+			this.mere.changerPage(new PageCreationRessource(this.ctrl, this.mere, this.ctrl.getSemestre(this.tabbedPane.getSelectedIndex() + 1)));
 		}
 		else if (e.getSource() == this.btnCreaSae)
 		{
@@ -146,7 +146,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			JPanel panelTab = new JPanel();
 			panelTab.setLayout(new BorderLayout());
 
-			this.tableRessource = new JTable( new ModelAffichageTableau(this.ctrl, this.semestreActu.getlstRessource()) );
+			this.tableRessource = new JTable( new ModelAffichageTableau(this.ctrl, this.semestreActu.getlstModules()) );
 			this.tableRessource.setFillsViewportHeight(true);
 			this.tableRessource.setRowHeight(25);
 			this.tableRessource.setShowVerticalLines(false); // pour ne pas afficher les lignes verticales dans le tableau

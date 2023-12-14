@@ -2,6 +2,7 @@ package metier.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 import metier.repo.AffectationDB;
 import metier.repo.CategorieHeureDB;
@@ -55,35 +56,50 @@ public class Module
 
 	public int getTotalAffecteEqTd()
 	{
-		List<Affectation> affectations = new AffectationDB().getAffectationsParCodeModule(this.code);
-		int totalHeure = 0;
-		for ( Affectation affectation : affectations ){
-			totalHeure += affectation.getNbEqTd();
-		}
-		return totalHeure;
+		return 10;
+		// List<Affectation> affectations = new AffectationDB().getAffectationsParCodeModule(this.code);
+		// int totalHeure = 0;
+		// for ( Affectation affectation : affectations ){
+		// 	totalHeure += affectation.getNbEqTd();
+		// }
+		// return totalHeure;
 	}
 
 	public int getTotalPromoEqTd()
 	{
-		int total = 0;
-		for ( String key : programme.keySet() ){
-			ProgrammeItem programmeItem = programme.get(key);
-			CategorieHeure categorieHeure = new CategorieHeureDB().getCategorieHeureParId(key);
-			int h = programmeItem.getNbHeure();
-			if ( programmeItem.getNbSemaine() != null ){
-				h = h * programmeItem.getNbSemaine();
-			}
-			if ( key.equals("TD")){
-				h = h * semestre.getNbGroupeTd();
-			}
-			if ( key.equals("TP")){
-				h = h * semestre.getNbGroupeTp();
-			}
-			h = (int) ( h * categorieHeure.getCoef() );
-			total += h;
-		}
-		return total;
+		return 11;
+		// int total = 0;
+		// for ( String key : programme.keySet() ){
+		// 	ProgrammeItem programmeItem = programme.get(key);
+		// 	CategorieHeure categorieHeure = new CategorieHeureDB().getCategorieHeureParId(key);
+		// 	int h = programmeItem.getNbHeure();
+		// 	if ( programmeItem.getNbSemaine() != null ){
+		// 		h = h * programmeItem.getNbSemaine();
+		// 	}
+		// 	if ( key.equals("TD")){
+		// 		h = h * semestre.getNbGroupeTd();
+		// 	}
+		// 	if ( key.equals("TP")){
+		// 		h = h * semestre.getNbGroupeTp();
+		// 	}
+		// 	h = (int) ( h * categorieHeure.getCoef() );
+		// 	total += h;
+		// }
+		// return total;
 	}
+
+	public void setValider(boolean valider)
+	{
+		this.valider = valider;
+	}
+
+	public List<Affectation> getlstAffectations()
+	{
+		ArrayList<Affectation> dd = new ArrayList<Affectation>();
+
+		return dd;
+	}
+	
 
 	public void ajouterModuleToBd()
 	{

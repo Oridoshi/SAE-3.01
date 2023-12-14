@@ -23,7 +23,6 @@ public class CategorieHeureDB {
 		try{
 			this.psGetCategoriesHeure = db.prepareStatement("SELECT * FROM CategorieHeure");
 			this.psGetCategorieHeureParId = db.prepareStatement("SELECT * FROM CategorieHeure WHERE nom = ?");
-			this.psGetCategorieHeureParCategorieModule = db.prepareStatement("SELECT * FROM RemplirCategorieModule WHERE nom = ?");
 		} catch ( Exception e ){
 			e.printStackTrace();
 		}
@@ -63,7 +62,8 @@ public class CategorieHeureDB {
 		}
 	}
 
-	private CategorieHeure ligneToHeures(Map<String, String> ligne){
+	private CategorieHeure ligneToHeures(Map<String, String> ligne)
+	{
 		return new CategorieHeure(
 				ligne.get("nom"),
 				Double.parseDouble(ligne.get("coeffCat"))

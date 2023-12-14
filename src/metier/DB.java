@@ -14,10 +14,13 @@ public class DB
 	private static Connection db;
 
 	static{
-		try{
+		try
+		{
 			Class.forName("org.postgresql.JDBC");
 			db = DriverManager.getConnection("jdbc:postgresql:"+ chemin, identifiant, motDePasse);
-		} catch (Exception e){
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}

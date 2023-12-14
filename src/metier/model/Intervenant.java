@@ -30,7 +30,7 @@ public class Intervenant
 		this.nom = nom;
 		this.prenom = prenom;
 		this.hMax = hServ;
-		initHParSemestre();
+		// initHParSemestre();
 	}
 
 	public int getId() {return id;}

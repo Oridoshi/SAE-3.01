@@ -37,7 +37,7 @@ public class AffectationDB {
 			db.prepareStatement("SELECT * FROM Affectation WHERE codeModule = ?");
 			db.prepareStatement("INSERT INTO Affectation VALUES(?,?,?,?,?,?,?)");
 			db.prepareStatement("DELETE FROM Affectation WHERE idIntervenant = ? AND nomCatHeure = ? AND codeModule = ?");
-		} catch ( SQLException e ){
+		}catch ( SQLException e ){
 			e.printStackTrace();
 		}
 	}

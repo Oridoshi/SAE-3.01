@@ -31,7 +31,7 @@ public class Semestre
 	public int getNbEtu()                  {return nbEtu;}
 	public int getNbSemaine()              {return nbSemaine;}
 
-	public List<Module> getlstRessource()
+	public List<Module> getlstModules()
 	{
 		ArrayList<Module> dd = new ArrayList<Module>();
 		dd.add(new Module("R1.03", this, null, false, "Dev", "Developpement efficace", null));
@@ -40,5 +40,5 @@ public class Semestre
 
 		return dd;
 	}
-	
+
 }

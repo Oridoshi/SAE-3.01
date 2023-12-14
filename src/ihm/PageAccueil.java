@@ -47,7 +47,7 @@ public class PageAccueil extends JPanel implements ActionListener
 		this.add(lblVersion, gbc);
 
 		JPanel panelBtn = new JPanel();
-		panelBtn.setLayout(new GridLayout(4, 1, 5, 0));
+		panelBtn.setLayout(new GridLayout(5, 1, 5, 0));
 
 		// btnParametres //
 		this.btnParametres = new JButton("Paramètres");
@@ -69,6 +69,11 @@ public class PageAccueil extends JPanel implements ActionListener
 		this.btnEtats = new JButton("Etats");
 		this.btnEtats.addActionListener(this);
 		panelBtn.add(btnEtats, gbc);
+
+		// btnTestPage //
+		JButton btnTest = new JButton("Test");
+		btnTest.addActionListener(this);
+		panelBtn.add(btnTest, gbc);
 		
 		gbc.gridy = 2;
 		this.add(panelBtn, gbc);
@@ -91,7 +96,11 @@ public class PageAccueil extends JPanel implements ActionListener
 		}
 		else if (e.getSource() == this.btnEtats)
 		{
-			// this.mere.changerPage(new PageParametres(this.ctrl, this.mere));
+			//this.mere.changerPage(new PageParametres(this.ctrl, this.mere));
+		}
+		else
+		{
+			this.mere.changerPage(new PageEditionModule(this.ctrl, this.mere));
 		}
 	}
 }

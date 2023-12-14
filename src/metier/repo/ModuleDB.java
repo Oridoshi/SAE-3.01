@@ -18,7 +18,6 @@ public class ModuleDB {
 
 	private SemestreDB semestreDB;
 	private CategorieModuleDB categorieModuleDB;
-
 	private PreparedStatement psGetModules;
 	private PreparedStatement psGetModuleParCode;
 	private PreparedStatement psGetProgrammeItem;
