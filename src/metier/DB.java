@@ -8,9 +8,9 @@ import java.sql.*;
 
 public class DB 
 {
-	private static String chemin = "bernouy.com/sae301";
-	private static String identifiant = "postgres";
-	private static String motDePasse = "mon_mot_de_passe";
+	private static String chemin = "woody/dt220522";
+	private static String identifiant = "dt220522";
+	private static String motDePasse = "22555225Tt.";
 	private static Connection db;
 
 
