@@ -2,9 +2,14 @@ package ihm;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 
 import controleur.Controleur;
+import ihm.creationObjet.PageCreaCategorieHeure;
+import ihm.creationObjet.PageCreaCategorieIntervenant;
+import ihm.creationObjet.PageCreaRessource;
 import metier.model.CategorieHeure;
 import metier.model.CategorieIntervenant;
 import metier.model.Intervenant;
@@ -44,8 +49,8 @@ public class PageParametres extends JPanel implements ActionListener
 		// Ajout du tabbedPane
 		this.tabbedPane = new JTabbedPane();
 		this.tabbedPane.setBorder(new EmptyBorder(0, 0, 15, 0));
-		this.tabbedPane.addTab("Catégories d'intervenants", new PanelCategoriesIntervenant(ctrl, this.ctrl.getLstCategorieIntervenant()));
-		this.tabbedPane.addTab("Catégories d'heures", new PanelCategoriesHeure(ctrl, this.ctrl.getLstCategorieHeure()));
+		this.tabbedPane.addTab("Catégories d'intervenants", new PanelCategoriesIntervenant(ctrl, this.mere, this.ctrl.getLstCategorieIntervenant()));
+		this.tabbedPane.addTab("Catégories d'heures", new PanelCategoriesHeure(ctrl, this.mere, this.ctrl.getLstCategorieHeure()));
 		
 		this.add(this.tabbedPane, BorderLayout.CENTER);
 
@@ -83,9 +88,10 @@ public class PageParametres extends JPanel implements ActionListener
 	/*---------------------------*/
 	//   Catégorie Intervenant   //
 	/*---------------------------*/
-	private class PanelCategoriesIntervenant extends JPanel implements ActionListener
+	private class PanelCategoriesIntervenant extends JPanel implements ActionListener, ListSelectionListener
 	{
 		private Controleur ctrl;
+		private FrameIhm mere;
 		private ArrayList<CategorieIntervenant> lstCategorieIntervenant;
 
 		private JPanel panelBoutonsTableau;
@@ -94,8 +100,9 @@ public class PageParametres extends JPanel implements ActionListener
 
 		private JTable tableCategorieIntervenant;
 		private JScrollPane spTableauCategorieIntervenant;
+		private ListSelectionModel selectionModel;
 
-		public PanelCategoriesIntervenant(Controleur ctrl, ArrayList<CategorieIntervenant> lstCategorieIntervenant)
+		public PanelCategoriesIntervenant(Controleur ctrl, FrameIhm mere, ArrayList<CategorieIntervenant> lstCategorieIntervenant)
 		{
 			this.ctrl = ctrl;
 			this.lstCategorieIntervenant = lstCategorieIntervenant;
@@ -110,6 +117,9 @@ public class PageParametres extends JPanel implements ActionListener
 
 			spTableauCategorieIntervenant = new JScrollPane(this.tableCategorieIntervenant);
 			this.add(this.spTableauCategorieIntervenant, BorderLayout.CENTER);
+			this.selectionModel = this.tableCategorieIntervenant.getSelectionModel();
+			this.selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			this.selectionModel.addListSelectionListener(this);
 			
 
 			// Ajout des boutons
@@ -121,6 +131,7 @@ public class PageParametres extends JPanel implements ActionListener
 
 			this.panelBoutonsTableau.add(this.btnAjouter);
 			this.panelBoutonsTableau.add(this.btnSupprimer);
+			this.btnSupprimer.setEnabled(false);
 
 			this.add(this.panelBoutonsTableau, BorderLayout.SOUTH);
 
@@ -133,7 +144,20 @@ public class PageParametres extends JPanel implements ActionListener
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			// TODO Auto-generated method stub
+			if (e.getSource() == this.btnAjouter)
+			{
+				new PageCreaCategorieIntervenant(this.mere, ctrl);
+			}
+		}
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			// Vérifier si une ligne est sélectionnée
+			if (!e.getValueIsAdjusting() && this.tableCategorieIntervenant.getSelectedRow() != -1) {
+				this.btnSupprimer.setEnabled(true); // Activer le bouton
+			} else {
+				this.btnSupprimer.setEnabled(false); // Désactiver le bouton si aucune ligne n'est sélectionnée
+			}
 		}
 	}
 
@@ -143,9 +167,10 @@ public class PageParametres extends JPanel implements ActionListener
 	/*---------------------------*/
 	//   Catégorie Heures        //
 	/*---------------------------*/
-	private class PanelCategoriesHeure extends JPanel implements ActionListener
+	private class PanelCategoriesHeure extends JPanel implements ActionListener, ListSelectionListener
 	{
 		private Controleur ctrl;
+		private FrameIhm mere;
 		private ArrayList<CategorieHeure> lstCategorieHeure;
 
 		private JPanel panelBoutonsTableau;
@@ -154,10 +179,12 @@ public class PageParametres extends JPanel implements ActionListener
 
 		private JTable tableCategorieHeure;
 		private JScrollPane spTableauCategorieHeure;
+		private ListSelectionModel selectionModel;
 
-		public PanelCategoriesHeure(Controleur ctrl, ArrayList<CategorieHeure> lstCategorieHeure)
+		public PanelCategoriesHeure(Controleur ctrl, FrameIhm mere, ArrayList<CategorieHeure> lstCategorieHeure)
 		{
 			this.ctrl = ctrl;
+			this.mere = mere;
 			this.lstCategorieHeure = lstCategorieHeure;
 
 			this.setLayout(new BorderLayout());
@@ -170,6 +197,10 @@ public class PageParametres extends JPanel implements ActionListener
 
 			spTableauCategorieHeure = new JScrollPane(this.tableCategorieHeure);
 			this.add(this.spTableauCategorieHeure, BorderLayout.CENTER);
+
+			this.selectionModel = this.tableCategorieHeure.getSelectionModel();
+			this.selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			this.selectionModel.addListSelectionListener(this);
 			
 
 			// Ajout des boutons
@@ -178,6 +209,7 @@ public class PageParametres extends JPanel implements ActionListener
 
 			this.btnAjouter = new JButton("ajouter");
 			this.btnSupprimer = new JButton("supprimer");
+			this.btnSupprimer.setEnabled(false);
 
 			this.panelBoutonsTableau.add(this.btnAjouter);
 			this.panelBoutonsTableau.add(this.btnSupprimer);
@@ -193,7 +225,21 @@ public class PageParametres extends JPanel implements ActionListener
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			// TODO Auto-generated method stub
+			if (e.getSource() == this.btnAjouter)
+			{
+				new PageCreaCategorieHeure(this.mere, ctrl);
+			}
+		}
+
+		@Override
+		public void valueChanged(ListSelectionEvent e)
+		{
+			// Vérifier si une ligne est sélectionnée
+			if (!e.getValueIsAdjusting() && tableCategorieHeure.getSelectedRow() != -1) {
+				btnSupprimer.setEnabled(true); // Activer le bouton
+			} else {
+				btnSupprimer.setEnabled(false); // Désactiver le bouton si aucune ligne n'est sélectionnée
+			}
 		}
 	}
 
