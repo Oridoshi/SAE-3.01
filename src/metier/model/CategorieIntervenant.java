@@ -1,6 +1,8 @@
 package metier.model;
 
 import metier.DB;
+import metier.repo.CategorieIntervenantDB;
+import metier.repo.CategorieModuleDB;
 
 /**
  * Categorie
@@ -30,10 +32,40 @@ public class CategorieIntervenant
 	public double getCoefTp() { return coefTp; }
 
 
-	public void setCode  ( String code   ) { this.code   = code;   }
-	public void setNom   ( String nom    ) { this.nom    = nom;    }
-	public void setMinH  ( int minH      ) { this.minH   = minH;   }
-	public void setMaxH  ( int maxH      ) { this.maxH   = maxH;   }
-	public void setCoefTp( double coefTp ) { this.coefTp = coefTp; }
+	public boolean setCode  ( String code   ) { 
+		if ( CategorieIntervenantDB.getParCode(code) != null ) return false;
+		this.code   = code;
+		return true;
+	}
+	public void setNom   ( String nom    ) {
+		this.nom    = nom;
+	}
+	public boolean setMinH  ( int minH      ) {
+		if ( minH < 0 ) return false;
+		if ( minH > this.maxH ) return false;
+		this.minH   = minH;
+		return true;
+	}
+	public boolean setMaxH  ( int maxH      ) {
+		if ( maxH < 0 ) return false;
+		if ( maxH < this.minH ) return false;
+		this.maxH   = maxH;
+		return true;
+	}
+	public boolean setCoefTp( double coefTp ) {
+		if ( coefTp > 0 ){
+			this.coefTp = coefTp;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean sauvegarder(){
+        return CategorieIntervenantDB.save(this);
+    }
+
+    public boolean supprimer(){
+        return CategorieIntervenantDB.delete(this);
+    }
 
 }

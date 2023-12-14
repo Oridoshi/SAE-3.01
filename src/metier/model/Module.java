@@ -2,11 +2,13 @@ package metier.model;
 
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
 
 import metier.repo.AffectationDB;
 import metier.repo.CategorieHeureDB;
+import metier.repo.CategorieModuleDB;
 import metier.repo.ModuleDB;
+import metier.repo.ProgrammeItemDB;
+import metier.repo.SemestreDB;
 
 /**
  * Module
@@ -20,25 +22,53 @@ public class Module
 	private boolean  valider;
 	private String libelleCourt;
 	private String libelleLong;
-	private Map<String, ProgrammeItem> programme;
 
-	public Module(String code, Semestre semestre, CategorieModule categorieModule, boolean valider, String libelleCourt, String libelleLong, Map<String, ProgrammeItem> programme) {
+	public Module(String code, Semestre semestre, CategorieModule categorieModule, boolean valider, String libelleCourt, String libelleLong) {
 		this.code = code;
 		this.semestre = semestre;
 		this.categorieModule = categorieModule;
 		this.valider = valider;
 		this.libelleCourt = libelleCourt;
 		this.libelleLong = libelleLong;
-		this.programme = programme;
+	}
 
 	
+
+	public boolean setCode(String code) {
+		if ( ModuleDB.getParCode(code) != null ) return false;
+		this.code = code;
+		return true;
 	}
 
-	public ProgrammeItem getProgrammeItem(String key) {
-		return programme.get(key);
+	public boolean setCategorieModule(CategorieModule categorieModule) {
+		if ( !CategorieModuleDB.list().contains(categorieModule) ) return false;
+		this.categorieModule = categorieModule;
+		return true;
 	}
-	public CategorieModule getCategorieModule(){return categorieModule;}
-	public Semestre getSemestre(){return semestre;}
+
+	public void setValider(boolean valider) {
+		this.valider = valider;
+	}
+
+	public void setLibelleCourt(String libelleCourt) {
+		this.libelleCourt = libelleCourt;
+	}
+
+	public void setLibelleLong(String libelleLong) {
+		this.libelleLong = libelleLong;
+	}
+
+	public Programme getProgramme(){
+		Programme programme = new Programme();
+		if ( ProgrammeItemDB.listParCodeModule(this.code) == null ) return null;
+		for ( ProgrammeItem item : ProgrammeItemDB.listParCodeModule(this.code)){
+			programme.addItem(item);
+		}
+		return programme;
+	}
+
+	public CategorieModule getCategorieModule(){return this.categorieModule;}
+	public Semestre getSemestre(){return this.semestre;}
 	public boolean getValider(){return valider;}
 	public String  getCode(){return code;}
 
@@ -50,64 +80,37 @@ public class Module
 		return libelleCourt;
 	}
 
-	public String getLibelleLong() {return libelleLong;}
-
-
-
-	public int getTotalAffecteEqTd()
-	{
-		return 10;
-		// List<Affectation> affectations = new AffectationDB().getAffectationsParCodeModule(this.code);
-		// int totalHeure = 0;
-		// for ( Affectation affectation : affectations ){
-		// 	totalHeure += affectation.getNbEqTd();
-		// }
-		// return totalHeure;
+	public String getLibelleLong() {
+		return libelleLong;
 	}
 
-	public int getTotalPromoEqTd()
+	public Integer getTotalAffecteEqTd()
 	{
-		return 11;
-		// int total = 0;
-		// for ( String key : programme.keySet() ){
-		// 	ProgrammeItem programmeItem = programme.get(key);
-		// 	CategorieHeure categorieHeure = new CategorieHeureDB().getCategorieHeureParId(key);
-		// 	int h = programmeItem.getNbHeure();
-		// 	if ( programmeItem.getNbSemaine() != null ){
-		// 		h = h * programmeItem.getNbSemaine();
-		// 	}
-		// 	if ( key.equals("TD")){
-		// 		h = h * semestre.getNbGroupeTd();
-		// 	}
-		// 	if ( key.equals("TP")){
-		// 		h = h * semestre.getNbGroupeTp();
-		// 	}
-		// 	h = (int) ( h * categorieHeure.getCoef() );
-		// 	total += h;
-		// }
-		// return total;
+		int h = 0;
+		if ( AffectationDB.getAffectationsParModule(this.code) == null ) return null;
+		for ( Affectation affectation : AffectationDB.getAffectationsParModule(this.code)){
+			h+= affectation.getNbEqTd();
+		}
+		return h;
 	}
 
-	public void setValider(boolean valider)
+	public Integer getTotalPromoEqTd()
 	{
-		this.valider = valider;
+		int h = 0;
+		if ( this.getProgramme() == null ) return 0;
+		for ( PatternCategorieModuleItem item : this.getCategorieModule().getCategorieHeures() ){
+			h += this.getProgramme().getItem(item.getCategorieHeure().getNom()).getPromoEqTd();
+		}
+		return h;
 	}
 
-	public List<Affectation> getlstAffectations()
+	public boolean sauvegarder()
 	{
-		ArrayList<Affectation> dd = new ArrayList<Affectation>();
-
-		return dd;
-	}
-	
-
-	public void ajouterModuleToBd()
-	{
-		new ModuleDB().ajouterModule(this);
+		return ModuleDB.save(this);
 	}
 
-	public void suppModuleFromBd()
+	public boolean supprimer()
 	{
-		new ModuleDB().suppModule(this);
+		return ModuleDB.delete(this);
 	}
 }

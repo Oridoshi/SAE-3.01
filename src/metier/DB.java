@@ -8,22 +8,36 @@ import java.sql.*;
 
 public class DB 
 {
-	private static String chemin = "";
-	private static String identifiant = "ba222202";
-	private static String motDePasse = "Isabelle02121966!";
+	private static String chemin = "bernouy.com/sae301";
+	private static String identifiant = "postgres";
+	private static String motDePasse = "mon_mot_de_passe";
 	private static Connection db;
 
-	static{
-		try
-		{
-			Class.forName("org.postgresql.JDBC");
-			db = DriverManager.getConnection("jdbc:postgresql:"+ chemin, identifiant, motDePasse);
+
+	static {
+		try {
+			Class.forName("org.postgresql.Driver");
+		} 
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
-		catch (Exception e)
-		{
+
+		try {
+			db = DriverManager.getConnection("jdbc:postgresql://" + chemin,identifiant,motDePasse);
+		} 
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+
+	/*
+	static{
+		try{
+			db = DriverManager.getConnection("jdbc:postgresql://"+ chemin + "/" + identifiant, identifiant, motDePasse);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}*/
 
 	public static Connection getInstance(){
 		return db;
