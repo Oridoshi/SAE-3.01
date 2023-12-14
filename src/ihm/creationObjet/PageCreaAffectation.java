@@ -210,32 +210,35 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 	{
 		if(e.getSource() == this.btnValider)
 		{
-			if((this.txtFNbHeure.getText().equals("") && this.txtFNbSemaine.getText().equals("")) || (!this.txtFNbGroupe.getText().equals("") && !this.txtFNbSemaine.getText().equals("")))
+			if((this.txtFNbHeure.getText().equals("") && this.txtFNbSemaine.getText().equals("")) || (this.txtFNbGroupe.getText().equals("") && this.txtFNbSemaine.getText().equals("")))
 			{
 				JOptionPane.showMessageDialog(this.dial, "Veuillez remplir tous les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
-			Intervenant inter = (Intervenant) this.cbIntervenant.getSelectedItem();
-			CategorieHeure catHeure = (CategorieHeure) this.cbCategorieHeure.getSelectedItem();
-			Integer nbSemaine = null;
-			Integer nbHeure = null;
-			Integer nbGroupe = null;
-			if(this.txtFNbSemaine.getText().equals(""))
-			{
-				nbHeure = Integer.parseInt(this.txtFNbHeure.getText());
-				nbGroupe = 1;
-			}
 			else
 			{
-				nbSemaine = Integer.parseInt(this.txtFNbSemaine.getText());
-				nbGroupe = Integer.parseInt(this.txtFNbGroupe.getText());
-			}
-			
-			String  commentaire = this.txtFCommentaire.getText();
+				Intervenant inter = (Intervenant) this.cbIntervenant.getSelectedItem();
+				CategorieHeure catHeure = (CategorieHeure) this.cbCategorieHeure.getSelectedItem();
+				Integer nbSemaine = null;
+				Integer nbHeure = null;
+				Integer nbGroupe = null;
+				if(this.txtFNbSemaine.getText().equals(""))
+				{
+					nbHeure = Integer.parseInt(this.txtFNbHeure.getText());
+					nbGroupe = 1;
+				}
+				else
+				{
+					nbSemaine = Integer.parseInt(this.txtFNbSemaine.getText());
+					nbGroupe  = Integer.parseInt(this.txtFNbGroupe.getText());
+				}
+				
+				String  commentaire = this.txtFCommentaire.getText();
 
-			Affectation affectation = new Affectation(inter, catHeure, nbGroupe, nbSemaine, nbHeure, commentaire, module);
-			this.lstAffectation.add(affectation);
-			this.tableRessource.repaint();
-			this.dial.dispose();
+				Affectation affectation = new Affectation(inter, catHeure, nbGroupe, nbSemaine, nbHeure, commentaire, module);
+				this.lstAffectation.add(affectation);
+				this.tableRessource.repaint();
+				this.dial.dispose();
+			}
 		}
 		else if(e.getSource() == this.btnAnnuler)
 		{

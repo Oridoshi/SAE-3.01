@@ -658,8 +658,9 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		this.tableAffectation.setFillsViewportHeight(true);
 		this.tableAffectation.setRowHeight(25);
 		TableColumnModel model = this.tableAffectation.getColumnModel();
+		(model.getColumn(0)).setPreferredWidth(50);
 		(model.getColumn(1)).setPreferredWidth(22);
-		(model.getColumn(2)).setPreferredWidth(40);
+		(model.getColumn(2)).setPreferredWidth(30);
 		(model.getColumn(3)).setPreferredWidth(22);
 		(model.getColumn(4)).setPreferredWidth(22);
 		(model.getColumn(5)).setPreferredWidth(30);
@@ -816,11 +817,12 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		this.tableAffectation.setModel(new ModelAffichageTableau(this.ctrl, this.lstAffectation));
 
 		TableColumnModel model = this.tableAffectation.getColumnModel();
+		(model.getColumn(0)).setPreferredWidth(50);
 		(model.getColumn(1)).setPreferredWidth(22);
-		(model.getColumn(2)).setPreferredWidth(40);
+		(model.getColumn(2)).setPreferredWidth(30);
 		(model.getColumn(3)).setPreferredWidth(22);
 		(model.getColumn(4)).setPreferredWidth(22);
-		(model.getColumn(5)).setPreferredWidth(30);
+		(model.getColumn(5)).setPreferredWidth(30);;
 	}
 
 	private void recalculeTotalAffecte()
