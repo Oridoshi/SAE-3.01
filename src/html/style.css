@@ -1,0 +1,120 @@
+/* ------------------------------------ */
+/* ------------------------------------ */
+/*             STYLE GENERAL            */
+/* ------------------------------------ */
+/* ------------------------------------ */
+
+
+body {
+    padding : 0;
+    margin : 0;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    margin-left : 4%;
+}
+
+
+td, th {
+    padding : 1%;
+}
+
+
+table {
+    margin-left : calc( (100% - 85%) /2);
+    width : 85%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+
+
+
+/* ------------------------------------ */
+/* ------------------------------------ */
+/*          FICHE INTERVENANTS          */
+/* ------------------------------------ */
+/* ------------------------------------ */
+
+
+table.infosIntervenants > tbody tr:nth-child(even) {
+    background : #FFDAB9;
+}
+
+table.infosIntervenants > tbody tr:nth-child(odd) {
+    background : #FFFAF0;
+}
+
+
+th.nomModule {
+    width : 30%;
+}
+
+table.infosIntervenants > thead tr {
+    background : #E9967A;
+    color      : black;
+}
+
+
+
+
+/* ------------------------------------ */
+/* ------------------------------------ */
+/*          FICHE INTERVENANTS          */
+/* ------------------------------------ */
+/* ------------------------------------ */
+
+table.infosIntervenants > tbody tr:nth-child(even) {
+    background : #FFDAB9;
+}
+
+table.infosIntervenants > tbody tr:nth-child(odd) {
+    background : #FFFAF0;
+}
+
+
+th.nomModule {
+    width : 30%;
+}
+
+table.infosIntervenants > thead tr {
+    background : #E9967A;
+    color      : black;
+}
+
+
+.autreSemestre {
+    border-top : 6px solid #E9967A;
+}
+
+
+
+
+
+/* ------------------------------------ */
+/* ------------------------------------ */
+/*             FICHE MODULES            */
+/* ------------------------------------ */
+/* ------------------------------------ */
+
+table.infosModule > tbody tr:nth-child(even) {
+    background : #8FBC8B;
+}
+
+table.infosModule > tbody tr:nth-child(odd) {
+    background : #F5FFFA;
+}
+
+
+th.nomModule {
+    width : 30%;
+}
+
+table.infosModule > thead tr {
+    background : #2E8B57;
+    color      : white;
+}
