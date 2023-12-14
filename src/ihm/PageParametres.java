@@ -9,16 +9,11 @@ import javax.swing.table.AbstractTableModel;
 import controleur.Controleur;
 import ihm.creationObjet.PageCreaCategorieHeure;
 import ihm.creationObjet.PageCreaCategorieIntervenant;
-import ihm.creationObjet.PageCreaRessource;
 import metier.model.CategorieHeure;
 import metier.model.CategorieIntervenant;
-import metier.model.Intervenant;
-import metier.model.Module;
-import metier.model.Semestre;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
