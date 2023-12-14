@@ -7,7 +7,6 @@
 
 body {
 	padding : 0% ;
-	padding-bottom : 2% ;
 	margin : 0%;
 }
 
@@ -31,6 +30,16 @@ table {
 	border-collapse: collapse;
 	text-align: center;
 	border  : 2px solid #E9967A;
+}
+
+
+hr {
+	margin : 3% 0 3% calc( (100% - 85%)/2 );
+
+	width : 85%;
+
+	border : none;
+	border-top : 1px solid #E9967A;
 }
 
 
@@ -78,24 +87,23 @@ table.statsIntervenants > thead tr, table.infosIntervenants > thead tr {
 }
 
 
-table.statsIntervenants  {
-	width : 40%;
+table.statsIntervenants {
+	width : 30%;
 	text-align: center;
+
+	float : left;
+
+	margin : 0%;
 }
 
-.statsS,    .statsTot  { width : 20%; }
-.statsSImp, .statsSPai { width : calc((100% - 20% * 2) / 2); }
+table.tab1 { margin : 0% 5% 2% 20%; }
+table.statsIntervenants td { width : 50%; }
 
-.statsTotal { border : 2px solid #E9967A; }
-.statsAutre { background : white; }
-.statsResTot {
-	background: #E9967A;
-	font-weight: bold;
+
+.statsTotal td {
+	border-top : 2px solid #E9967A;
+	background : white;
 }
-
-.statsTotalTd { border-left : 2px solid #E9967A; background: white; }
-
-
 
 
 /* ------------------------------------ */
