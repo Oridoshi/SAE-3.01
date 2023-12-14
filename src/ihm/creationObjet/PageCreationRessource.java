@@ -503,6 +503,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		panelTmpRepartition.add(lblhPonctu, gbcRepartition);
 
 		//troisieme ligne
+		gbcRepartition.anchor = GridBagConstraints.CENTER;
 		this.txtFNbSemCm = new JFormattedTextField(formatter);
 		this.txtFNbSemCm.setColumns(3);
 		this.txtFNbSemCm.setText("0");

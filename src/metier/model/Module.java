@@ -32,6 +32,32 @@ public class Module
 		this.libelleLong = libelleLong;
 	}
 
+	
+
+	public boolean setCode(String code) {
+		if ( ModuleDB.getParCode(code) != null ) return false;
+		this.code = code;
+		return true;
+	}
+
+	public boolean setCategorieModule(CategorieModule categorieModule) {
+		if ( !CategorieModuleDB.list().contains(categorieModule) ) return false;
+		this.categorieModule = categorieModule;
+		return true;
+	}
+
+	public void setValider(boolean valider) {
+		this.valider = valider;
+	}
+
+	public void setLibelleCourt(String libelleCourt) {
+		this.libelleCourt = libelleCourt;
+	}
+
+	public void setLibelleLong(String libelleLong) {
+		this.libelleLong = libelleLong;
+	}
+
 	public Programme getProgramme(){
 		Programme programme = new Programme();
 		if ( ProgrammeItemDB.listParCodeModule(this.code) == null ) return null;

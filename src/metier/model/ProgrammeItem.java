@@ -22,6 +22,18 @@ public class ProgrammeItem {
         this.module = module;
     }
 
+    public void setNbHPn(int i){
+        this.nbHPn = i;
+    }
+
+    public void setNbSemaine(Integer nbSemaine) {
+        this.nbSemaine = nbSemaine;
+    }
+
+    public void setNbHeure(Integer nbHeure) {
+        this.nbHeure = nbHeure;
+    }
+
     public CategorieModule getCategorieModule() {
         return categorieModule;
     }

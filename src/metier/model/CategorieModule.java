@@ -17,8 +17,10 @@ public class CategorieModule {
         return nom;
     }
 
-    public void setNom(String nom) {
+    public boolean setNom(String nom) {
+        if ( CategorieModuleDB.getParNom(nom) != null ) return false;
         this.nom = nom;
+        return true;
     }
 
     public List<PatternCategorieModuleItem> getCategorieHeures(){

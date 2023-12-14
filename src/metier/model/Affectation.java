@@ -63,6 +63,26 @@ public class Affectation
 		return this.categorieHeure;
 	}
 
+	public void setCategorieHeure(CategorieHeure categorieHeure) {
+		this.categorieHeure = categorieHeure;
+	}
+
+	public void setNbGroupe(int nbGroupe) {
+		this.nbGroupe = nbGroupe;
+	}
+
+	public void setNbSemaine(int nbSemaine) {
+		this.nbSemaine = nbSemaine;
+	}
+
+	public void setNbHeure(int nbHeure) {
+		this.nbHeure = nbHeure;
+	}
+
+	public void setCommentaire(String commentaire) {
+		this.commentaire = commentaire;
+	}
+
 	public Module getModule() {
 		return this.module;
 	}

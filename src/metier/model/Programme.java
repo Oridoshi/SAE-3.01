@@ -3,6 +3,8 @@ package metier.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import metier.repo.ProgrammeItemDB;
+
 public class Programme {
 
 	private Map<String, ProgrammeItem> programme;
@@ -16,9 +18,13 @@ public class Programme {
 	}
 
 	public void removeItem(String key){
+		ProgrammeItemDB.delete(this.programme.get(key));
 		this.programme.remove(key);
 	}
 
+	/*
+	 * Méthode inutile
+	 */
 	public void addItem(String key){
 		this.programme.put(key, new ProgrammeItem(null, null, null, null, null, null));
 	}

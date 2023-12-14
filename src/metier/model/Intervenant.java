@@ -46,8 +46,16 @@ public class Intervenant
 		}
 	}
 
-	public void setCategorie(CategorieIntervenant categorieIntervenant) { this.categorieIntervenant = categorieIntervenant; }
-	public void sethMax(Integer hMax)             { this.hMax = hMax;           }
+	public boolean setCategorie(CategorieIntervenant categorieIntervenant) {
+		if ( !CategorieIntervenantDB.list().contains(categorieIntervenant) ) return false;
+		this.categorieIntervenant = categorieIntervenant;
+		return true;
+	}
+	public boolean sethMax(Integer hMax)             {
+		if ( this.categorieIntervenant.getMinH() > hMax ) return false;
+		this.hMax = hMax;
+		return true;
+	}
 
 
 	public float getHParSemestre(int i){

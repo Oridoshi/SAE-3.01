@@ -34,6 +34,22 @@ public class Semestre
 	public int getNbEtu()                  {return nbEtu;}
 	public int getNbSemaine()              {return nbSemaine;}
 
+	public void setNbGroupeTd(int nbGroupeTd) {
+		this.nbGroupeTd = nbGroupeTd;
+	}
+
+	public void setNbGroupeTp(int nbGroupeTp) {
+		this.nbGroupeTp = nbGroupeTp;
+	}
+
+	public void setNbEtu(int nbEtu) {
+		this.nbEtu = nbEtu;
+	}
+
+	public void setNbSemaine(int nbSemaine) {
+		this.nbSemaine = nbSemaine;
+	}
+
 	public List<Module> getlstModules()
 	{
 		return ModuleDB.getParIdSemestre(this.id);
