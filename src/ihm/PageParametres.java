@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PageParametres extends JPanel implements ActionListener
 {
@@ -87,7 +88,7 @@ public class PageParametres extends JPanel implements ActionListener
 	{
 		private Controleur ctrl;
 		private FrameIhm mere;
-		private ArrayList<CategorieIntervenant> lstCategorieIntervenant;
+		private List<CategorieIntervenant> lstCategorieIntervenant;
 
 		private JPanel panelBoutonsTableau;
 		private JButton btnAjouter;
@@ -97,7 +98,7 @@ public class PageParametres extends JPanel implements ActionListener
 		private JScrollPane spTableauCategorieIntervenant;
 		private ListSelectionModel selectionModel;
 
-		public PanelCategoriesIntervenant(Controleur ctrl, FrameIhm mere, ArrayList<CategorieIntervenant> lstCategorieIntervenant)
+		public PanelCategoriesIntervenant(Controleur ctrl, FrameIhm mere, List<CategorieIntervenant> lstCategorieIntervenant)
 		{
 			this.ctrl = ctrl;
 			this.lstCategorieIntervenant = lstCategorieIntervenant;
@@ -166,7 +167,7 @@ public class PageParametres extends JPanel implements ActionListener
 	{
 		private Controleur ctrl;
 		private FrameIhm mere;
-		private ArrayList<CategorieHeure> lstCategorieHeure;
+		private List<CategorieHeure> lstCategorieHeure;
 
 		private JPanel panelBoutonsTableau;
 		private JButton btnAjouter;
@@ -176,7 +177,7 @@ public class PageParametres extends JPanel implements ActionListener
 		private JScrollPane spTableauCategorieHeure;
 		private ListSelectionModel selectionModel;
 
-		public PanelCategoriesHeure(Controleur ctrl, FrameIhm mere, ArrayList<CategorieHeure> lstCategorieHeure)
+		public PanelCategoriesHeure(Controleur ctrl, FrameIhm mere, List<CategorieHeure> lstCategorieHeure)
 		{
 			this.ctrl = ctrl;
 			this.mere = mere;
@@ -250,7 +251,7 @@ public class PageParametres extends JPanel implements ActionListener
 
 		private Object[][] tabDonnees;
 
-		public ModelAffichageTableauIntervenant(Controleur ctrl, ArrayList<CategorieIntervenant> lstCategorieIntervenant)
+		public ModelAffichageTableauIntervenant(Controleur ctrl, List<CategorieIntervenant> lstCategorieIntervenant)
 		{
 			this.ctrl = ctrl;
 
@@ -300,7 +301,7 @@ public class PageParametres extends JPanel implements ActionListener
 
 		private Object[][] tabDonnees;
 
-		public ModelAffichageTableauHeure(Controleur ctrl, ArrayList<CategorieHeure> lstCategorieHeure)
+		public ModelAffichageTableauHeure(Controleur ctrl, List<CategorieHeure> lstCategorieHeure)
 		{
 			this.ctrl = ctrl;
 

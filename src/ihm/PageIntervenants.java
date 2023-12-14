@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Flow;
 
 
@@ -104,7 +105,7 @@ public class PageIntervenants extends JPanel
 
 		private Object[][] tabDonnees;
 
-		public ModelAffichageTableau(Controleur ctrl, ArrayList<Intervenant> lstIntervenants)
+		public ModelAffichageTableau(Controleur ctrl, List<Intervenant> lstIntervenants)
 		{
 			this.ctrl = ctrl;
 

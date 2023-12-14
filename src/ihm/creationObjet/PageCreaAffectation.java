@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -51,24 +52,32 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 	private JButton btnValider;
 	private JButton btnAnnuler;
 	private Module module;
+	private String typeModule;
 	
 	public PageCreaAffectation(Controleur ctrl, JFrame mere, List<Affectation> lstAffectation, JTable tableRessource, Module module)
-	{
-		this.creationPage(ctrl, mere, lstAffectation, tableRessource, module);
-	}
-
-	public PageCreaAffectation(Controleur ctrl, JFrame mere, List<Affectation> lstAffectation, JTable tableRessource)
-	{
-		this.creationPage(ctrl, mere, lstAffectation, tableRessource, null);
-	}
-
-	private void creationPage(Controleur ctrl, JFrame mere, List<Affectation> lstAffectation, JTable tableRessource, Module module)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
 		this.lstAffectation = lstAffectation;
 		this.tableRessource = tableRessource;
 		this.module = module;
+		this.creationPage();
+	}
+
+	public PageCreaAffectation(Controleur ctrl, JFrame mere, List<Affectation> lstAffectation, JTable tableRessource, String typeModule)
+	{
+		this.ctrl = ctrl;
+		this.mere = mere;
+		this.lstAffectation = lstAffectation;
+		this.tableRessource = tableRessource;
+		this.module = null;
+		this.typeModule = typeModule;
+		this.creationPage();
+	}
+
+	private void creationPage()
+	{
+		
 
 		this.dial = new JDialog(mere, "Création D'une Afféctation", true);
 		this.dial.setLayout(new BorderLayout());
@@ -100,7 +109,7 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 
 		// Categorie Heure \\
 		JLabel lblCategorieHeure = new JLabel("Categorie Heure : ");
-		this.cbCategorieHeure = new JComboBox<CategorieHeure>((new Vector<>(this.ctrl.getLstCategorieHeure())));
+		this.cbCategorieHeure = new JComboBox<CategorieHeure>((new Vector<>(module == null ?this.ctrl.getLstCategorieParTypeModule(this.typeModule):this.ctrl.getLstCategorieParTypeModule(module.getCategorieModule().getNom()))));
 		this.cbCategorieHeure.setRenderer(new Renderer());
 
 		gbc.gridx = 0;

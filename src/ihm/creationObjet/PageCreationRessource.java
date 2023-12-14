@@ -91,6 +91,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 	private JTextField txtFTotTp3;
 	private JTextField txtFHPonctu3;
 	private JTextField txtFTotSom3;
+	private JTextField txtFTyMo;
 
 	private List<Affectation> lstAffectation;
 	private JTable tableAffectation;
@@ -158,7 +159,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		this.panelNord.add(lblLibelCour, gbcNord);
 
 		//deuxieme ligne
-		JTextField txtFTyMo = new JTextField(8);
+		this.txtFTyMo = new JTextField(8);
 		txtFTyMo.setText("Ressource");
 		txtFTyMo.setEditable(false);
 		this.txtFSeme = new JTextField(4);
@@ -603,7 +604,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		this.txtFHPonctu2.setEditable(false);
 		this.txtFTotSom2 = new JFormattedTextField(formatter);
 		this.txtFTotSom2.setColumns(3);
-		this.txtFTotSom2.setText("" + (int) (Integer.parseInt(this.txtFSom1.getText()) * this.ctrl.getCoefH("CM")));
+		this.txtFTotSom2.setText("" + (int) (Integer.parseInt(txtFTotCm2.getText()) + Integer.parseInt(txtFTotTd2.getText()) + Integer.parseInt(txtFTotTp2.getText()) + Integer.parseInt(txtFHPonctu2.getText())));
 		this.txtFTotSom2.setEditable(false);
 
 		gbcRepartition.gridy = 3;
@@ -784,7 +785,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 	{
 		if(e.getSource() == this.btnAjouterAffectation)
 		{
-			new PageCreaAffectation(this.ctrl, this.mere, this.lstAffectation, this.tableAffectation);
+			new PageCreaAffectation(this.ctrl, this.mere, this.lstAffectation, this.tableAffectation, this.txtFTyMo.getText());
 
 			this.recalcule();
 		}
