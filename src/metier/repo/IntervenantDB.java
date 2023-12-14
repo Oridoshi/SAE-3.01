@@ -2,92 +2,114 @@ package metier.repo;
 
 import metier.DB;
 import metier.DBResult;
+import metier.model.Affectation;
+import metier.model.CategorieHeure;
+import metier.model.CategorieModule;
 import metier.model.Intervenant;
+import metier.model.Module;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class IntervenantDB {
 
-	private Connection db = DB.getInstance();
+	private static Connection db = DB.getInstance();
 
-	private CategorieIntervenantDB categorieIntervenantDB;
+	private static List<Intervenant> intervenants;
 
-	private PreparedStatement psGetIntervenants;
-	private PreparedStatement psGetIntervenantParId;
-	private PreparedStatement psAjouterIntervenant;
-	private PreparedStatement psSuppIntervenant;
+	private static PreparedStatement psGetAll;
+	private static PreparedStatement psDelete;
+	private static PreparedStatement psUpdate;
+	private static PreparedStatement psCreate;
 
-
-
-	public IntervenantDB(){
-		this.categorieIntervenantDB = new CategorieIntervenantDB();
+	static{
+		intervenants = new ArrayList<>();
 		try{
-			this.psGetIntervenants = db.prepareStatement("SELECT * FROM CategorieIntervenant");
-			this.psGetIntervenantParId = db.prepareStatement("SELECT * FROM CategorieIntervenant WHERE idIntervenant = ?");
-			this.psAjouterIntervenant = db.prepareStatement("INSERT INTO Intervenant (id, codeCatIntervenant, nom, prenom, hmax) VALUES (?, ?, ?, ?, ?)");
-			this.psSuppIntervenant = db.prepareStatement("DELETE FROM Intervenant WHERE id = ?");
-
+			psGetAll = db.prepareStatement("SELECT * FROM Intervenant");
+			psDelete = db.prepareStatement("DELETE FROM Intervenant WHERE id = ?");
+			psUpdate = db.prepareStatement("UPDATE Intervenant SET codeCatIntervenant = ?, nom = ?, prenom = ?, hMax = ? WHERE id = ?");
+			psCreate = db.prepareStatement("INSERT INTO Intervenant (codeCatIntervenant, nom, prenom, hMax) VALUES (?, ?, ?, ?)");
+			DBResult result = new DBResult(psGetAll.executeQuery());
+			for ( Map<String, String> ligne : result.getLignes() ){
+				intervenants.add(new Intervenant(
+					Integer.parseInt(ligne.get("id")), 
+					CategorieIntervenantDB.getParCode(ligne.get("codecatintervenant")),
+					ligne.get("nom"), 
+					ligne.get("prenom"), 
+					Integer.parseInt(ligne.get("hmax"))));
+			}
+			init();
 		} catch ( Exception e ){
 			e.printStackTrace();
 		}
 	}
 
-	public List<Intervenant> getIntervenants(){
-		DBResult result = DB.query(this.psGetIntervenants);
-		List<Intervenant> intervenants = new ArrayList<>();
-		for ( Map<String, String> ligne : result.getLignes() ){
-			intervenants.add(ligneToIntervenant(ligne));
-		}
+	public static List<Intervenant> list(){
 		return intervenants;
 	}
 
-	public Intervenant getIntervenantParId(String id){
+	public static Intervenant getParId(int id){
+		for ( Intervenant intervenant : intervenants )
+			if ( intervenant.getId() == id ) return intervenant;
+		return null;
+	}
+
+	public static boolean delete(Intervenant intervenant){
 		try{
-			this.psGetIntervenantParId.setString(1, id);
-			DBResult result = DB.query(this.psGetIntervenantParId);
-			Map<String, String> ligne = result.getLignes().get(0);
-			return ligneToIntervenant(ligne);
-		} catch ( Exception e ){
-			return null;
+			psDelete.setInt(1, intervenant.getId());
+			if ( DB.update(psDelete) == 1){
+				intervenants.remove(intervenant);
+				return true;
+			} else {
+				return false;
+			}
+		} catch ( SQLException e ){
+			return false;
 		}
 	}
 
-	private Intervenant ligneToIntervenant(Map<String, String> ligne){
-		return new Intervenant(
-				Integer.parseInt(ligne.get("id")),
-				categorieIntervenantDB.getCategorieParId(ligne.get("codeCatIntervenant")),
-				ligne.get("nom"),
-				ligne.get("prenom"),
-				Integer.parseInt(ligne.get("hMax"))
-		);
+	public static boolean save(Intervenant intervenant){
+		if ( intervenants.contains(intervenant) ){
+			try{
+				psUpdate.setString(1, intervenant.getCategorie().getCode());
+				psUpdate.setString(2, intervenant.getNom());
+				psUpdate.setString(3, intervenant.getPrenom());
+				// getHMax va poser problème
+				psUpdate.setInt(4, intervenant.gethMax());
+				psUpdate.setInt(5, intervenant.getId());
+				return DB.update(psUpdate) == 1;
+			} catch ( SQLException e){
+				return false;
+			}
+		} else {
+			try{
+				psCreate.setString(1, intervenant.getCategorie().getCode());
+				psCreate.setString(2, intervenant.getNom());
+				psCreate.setString(3, intervenant.getPrenom());
+				// getHMax va poser problème
+				psCreate.setInt(4, intervenant.gethMax());
+				if ( DB.update(psCreate) == 1 ){
+					intervenants.add(intervenant);
+					return true;
+				} else {
+					return false;
+				}
+			} catch ( SQLException e ){
+				return false;
+			}
+		}
+
 	}
 
-	public void ajouterIntervenant(Intervenant i){
-		try{
-			psAjouterIntervenant.setInt(1, i.getId());
-			psAjouterIntervenant.setString(2, i.getCategorie().getCode());
-			psAjouterIntervenant.setString(3, i.getNom());
-			psAjouterIntervenant.setString(4, i.getPrenom());
-			psAjouterIntervenant.setInt(5, i.gethMax());
-			psAjouterIntervenant.executeUpdate();
-		} catch ( Exception e ){
-			e.printStackTrace();
+	private static void init(){
+		for ( Intervenant intervenant : intervenants ){
+			// empty
 		}
 	}
-
-	public void suppIntervenant(Intervenant i){
-		try{
-			psSuppIntervenant.setInt(1, i.getId());
-			psSuppIntervenant.executeUpdate();
-		} catch ( Exception e ){
-			e.printStackTrace();
-		}
-	}
-
-
-
+	
 }

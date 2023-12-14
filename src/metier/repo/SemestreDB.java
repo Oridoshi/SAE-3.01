@@ -2,59 +2,114 @@ package metier.repo;
 
 import metier.DB;
 import metier.DBResult;
+import metier.model.Affectation;
+import metier.model.CategorieHeure;
+import metier.model.CategorieModule;
+import metier.model.Intervenant;
 import metier.model.Semestre;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SemestreDB{
+public class SemestreDB {
 
-	private Connection db = DB.getInstance();
+	private static Connection db = DB.getInstance();
 
-	private PreparedStatement psGetSemestres;
-	private PreparedStatement psGetSemestreParId;
+	private static List<Semestre> semestres;
 
-	public SemestreDB(){
+	private static PreparedStatement psGetAll;
+	private static PreparedStatement psDelete;
+	private static PreparedStatement psUpdate;
+	private static PreparedStatement psCreate;
+
+	static{
+		semestres = new ArrayList<>();
 		try{
-			this.psGetSemestres = db.prepareStatement("SELECT * FROM Semestre");
-			this.psGetSemestreParId = db.prepareStatement("SELECT * FROM Semestre WHERE id = ?");
+			psGetAll = db.prepareStatement("SELECT * FROM Semestre");
+			psDelete = db.prepareStatement("DELETE FROM Semestre WHERE id = ?");
+			psUpdate = db.prepareStatement("UPDATE Semestre SET id = ?, nbGrpTd = ?, nbGrpTp = ?, nbEtd = ?, nbSemaines = ?  WHERE id = ?");
+			psCreate = db.prepareStatement("INSERT INTO Semestre VALUES (?, ?, ?, ?, ?)");
+			DBResult result = new DBResult(psGetAll.executeQuery());
+			for ( Map<String, String> ligne : result.getLignes() ){
+				semestres.add(new Semestre(
+					Integer.parseInt(ligne.get("id")),
+					Integer.parseInt(ligne.get("nbgrptd")),
+					Integer.parseInt(ligne.get("nbgrptp")),
+					Integer.parseInt(ligne.get("nbetd")),
+					Integer.parseInt(ligne.get("nbsemaines"))));
+			}
+			init();
 		} catch ( Exception e ){
 			e.printStackTrace();
 		}
 	}
 
-	public List<Semestre> getSemestres(){
-		DBResult result = DB.query(this.psGetSemestres);
-		List<Semestre> semestres = new ArrayList<>();
-		for ( Map<String, String> ligne : result.getLignes() ){
-			semestres.add(ligneToSemestre(ligne));
-		}
+	public static List<Semestre> list(){
 		return semestres;
 	}
 
-	public Semestre getSemestreParId(int id){
+	public static Semestre getParId(int id){
+		for ( Semestre semestre : semestres )
+			if ( semestre.getId() == id ) return semestre;
+		return null;
+	}
+
+	public static boolean delete(Semestre semestre){
 		try{
-			this.psGetSemestreParId.setInt(1, id);
-		} catch ( Exception e ){
-			return null;
+			psDelete.setInt(1, semestre.getId());
+			if ( DB.update(psDelete) == 1){
+				semestres.remove(semestre);
+				return true;
+			} else {
+				return false;
+			}
+		} catch ( SQLException e ){
+			return false;
 		}
-		DBResult result = DB.query(this.psGetSemestreParId);
-		Map<String, String> ligne = result.getLignes().get(0);
-		return ligneToSemestre(ligne);
 	}
 
-	private Semestre ligneToSemestre(Map<String, String> ligne){
-		return new Semestre(
-			Integer.parseInt(ligne.get("id")),
-			Integer.parseInt(ligne.get("nbGrpTd")),
-			Integer.parseInt(ligne.get("nbGrpTp")),
-			Integer.parseInt(ligne.get("nbEtd")),
-			Integer.parseInt(ligne.get("nbSemaines"))
-		);
+	public static boolean save(Semestre semestre){
+		if ( semestres.contains(semestre) ){
+			try{
+				psUpdate.setInt(1, semestre.getId());
+				psUpdate.setInt(2, semestre.getNbGroupeTd());
+				psUpdate.setInt(3, semestre.getNbGroupeTp());
+				psUpdate.setInt(4, semestre.getNbEtu());
+				psUpdate.setInt(5, semestre.getNbSemaine());
+				psUpdate.setInt(6, semestre.getId());
+				return DB.update(psUpdate) == 1;
+			} catch ( SQLException e){
+				return false;
+			}
+		} else {
+			try{
+				psCreate.setInt(1, semestre.getId());
+				psCreate.setInt(2, semestre.getNbGroupeTd());
+				psCreate.setInt(3, semestre.getNbGroupeTp());
+				psCreate.setInt(4, semestre.getNbEtu());
+				psCreate.setInt(5, semestre.getNbSemaine());
+				if ( DB.update(psCreate) == 1 ){
+					semestres.add(semestre);
+					return true;
+				} else {
+					return false;
+				}
+			} catch ( SQLException e ){
+				return false;
+			}
+		}
+
 	}
 
-
-
+	private static void init(){
+		for ( Semestre semestre : semestres ){
+			// empty
+		}
+	}
+	
 }

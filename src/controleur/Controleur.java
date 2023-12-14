@@ -33,7 +33,7 @@ public class Controleur
 
 	public Semestre getSemestre(int s)
 	{
-		return new Semestre(1, 50, 60, 92, 14);
+		return SemestreDB.getParId(s);
 	}
 
 	public ArrayList<Intervenant> getLstIntervenants()

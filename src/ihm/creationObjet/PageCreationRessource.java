@@ -167,7 +167,6 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		this.txtFCode = new JTextField(4);
 		this.txtFCode.setText("R" + this.semestre.getId() + ".XX");
 		this.txtFCode.addFocusListener(this);
-		this.txtFCode.addActionListener(this);
 		this.txtFLibelLong = new JTextField(30);
 		this.txtFLibelCour = new JTextField(15);
 
@@ -582,7 +581,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		gbcRepartition.gridx = 11;
 		panelTmpRepartition.add(this.txtFSom1, gbcRepartition);
 
-		//quatrieme ligne
+		//quatrieme ligne DDFEFDD
 		JLabel lblTotPromo = new JLabel("Total promo (eqtd)");
 		lblTotPromo.setForeground(PageCreationRessource.COULEUR_LABEL);
 		lblTotPromo.setFont(PageCreationRessource.FONT_LABEL);
@@ -622,7 +621,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		panelTmpRepartition.add(txtFTotSom2, gbcRepartition);
 
 		//cinquieme ligne
-		JLabel lblTotAffect = new JLabel("Total affectaté (eqtd)");
+		JLabel lblTotAffect = new JLabel("Total affecté (eqtd)");
 		lblTotAffect.setForeground(PageCreationRessource.COULEUR_LABEL);
 		lblTotAffect.setFont(PageCreationRessource.FONT_LABEL);
 		this.txtFTotCm3 = new JFormattedTextField(formatter);
@@ -767,7 +766,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(this.mere, "Le code doit être sous la format RX.XX !", "ERREUR ENTRER CODE", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this.mere, "Le code doit être sous la format [RSP][1-6].[1-99] !", "ERREUR ENTRER CODE", JOptionPane.ERROR_MESSAGE);
 				this.txtFCode.setText("RX.XX");
 			}
 		}
@@ -800,16 +799,6 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 			else
 			{
 				JOptionPane.showMessageDialog(this.mere, this.lstAffectation.size() > 0?"Vous devez sélectionner une affectation !":"Il n'y a aucune affectation !", "ERREUR SELECTION AFFECTATION", JOptionPane.ERROR_MESSAGE);
-			}
-		}
-		else if (e.getSource() == this.txtFCode)
-		{
-			String regex = "^[RSP]" + this.semestre.getId() + "\\.\\d{2}$";
-			Pattern pattern = Pattern.compile(regex);
-			Matcher matcher = pattern.matcher(this.txtFCode.getText());
-			if(matcher.matches())
-			{
-				this.txtFSeme.setText("S" + this.txtFCode.getText().charAt(1));
 			}
 		}
 		else

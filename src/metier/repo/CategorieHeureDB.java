@@ -2,72 +2,101 @@ package metier.repo;
 
 import metier.DB;
 import metier.DBResult;
+import metier.model.Affectation;
 import metier.model.CategorieHeure;
-import metier.model.CategorieModule;
+import metier.model.CategorieIntervenant;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CategorieHeureDB {
 
-	private Connection db = DB.getInstance();
+	private static Connection db = DB.getInstance();
 
-	private PreparedStatement psGetCategoriesHeure;
-	private PreparedStatement psGetCategorieHeureParId;
-	private PreparedStatement psGetCategorieHeureParCategorieModule;
+	private static List<CategorieHeure> categorieHeures;
 
-	public CategorieHeureDB(){
+	private static PreparedStatement psGetAll;
+	private static PreparedStatement psDelete;
+	private static PreparedStatement psUpdate;
+	private static PreparedStatement psCreate;
+
+	static{
+		categorieHeures = new ArrayList<>();
 		try{
-			this.psGetCategoriesHeure = db.prepareStatement("SELECT * FROM CategorieHeure");
-			this.psGetCategorieHeureParId = db.prepareStatement("SELECT * FROM CategorieHeure WHERE nom = ?");
+			psGetAll = db.prepareStatement("SELECT * FROM CategorieHeure");
+			psDelete = db.prepareStatement("DELETE FROM CategorieHeure WHERE nom = ?");
+			psUpdate = db.prepareStatement("UPDATE CategorieHeure SET nom = ?, coeffCat = ? WHERE nom = ?");
+			psCreate = db.prepareStatement("INSERT INTO CategorieHeure VALUES (?, ?)");
+			DBResult result = new DBResult(psGetAll.executeQuery());
+			for ( Map<String, String> ligne : result.getLignes() ){
+				categorieHeures.add(new CategorieHeure(ligne.get("nom"), Double.parseDouble(ligne.get("coeffcat"))));
+			}
+			init();
 		} catch ( Exception e ){
 			e.printStackTrace();
 		}
 	}
 
-	public List<CategorieHeure> getCategoriesHeure(){
-		DBResult result = DB.query(this.psGetCategoriesHeure);
-		List<CategorieHeure> categoriesHeure = new ArrayList<>();
-		for ( Map<String, String> ligne : result.getLignes() ){
-			categoriesHeure.add(ligneToHeures(ligne));
-		}
-		return categoriesHeure;
+	public static List<CategorieHeure> list(){
+		return categorieHeures;
 	}
 
-	public CategorieHeure getCategorieHeureParId(String nom){
-		try{
-			this.psGetCategorieHeureParId.setString(1, nom);
-			DBResult result = DB.query(this.psGetCategorieHeureParId);
-			Map<String, String> ligne = result.getLignes().get(0);
-			return ligneToHeures(ligne);
-		} catch ( Exception e ){
-			return null;
-		}
+	public static CategorieHeure getParNom(String nom){
+		for ( CategorieHeure categorieHeure : categorieHeures )
+			if ( categorieHeure.getNom().equals(nom) ) return categorieHeure;
+		return null;
 	}
 
-	public List<CategorieHeure> getCategorieHeureParCategorieModuleName(String name){
+	public static boolean delete(CategorieHeure categorieHeure){
 		try{
-			this.psGetCategorieHeureParCategorieModule.setString(1, name);
-			DBResult result = DB.query(this.psGetCategorieHeureParCategorieModule);
-			List<CategorieHeure> categoriesHeure = new ArrayList<>();
-			for ( Map<String, String> ligne : result.getLignes() ){
-				categoriesHeure.add(ligneToHeures(ligne));
+			psDelete.setString(1, categorieHeure.getNom());
+			if ( DB.update(psDelete) == 1){
+				categorieHeures.remove(categorieHeure);
+				return true;
+			} else {
+				return false;
 			}
-			return categoriesHeure;
-		} catch ( Exception e ){
-			return null;
+		} catch ( SQLException e ){
+			return false;
 		}
 	}
 
-	private CategorieHeure ligneToHeures(Map<String, String> ligne)
-	{
-		return new CategorieHeure(
-				ligne.get("nom"),
-				Double.parseDouble(ligne.get("coeffCat"))
-		);
+	public static boolean save(CategorieHeure categorieHeure){
+		if ( categorieHeures.contains(categorieHeure) ){
+			try{
+				psUpdate.setString(1, categorieHeure.getNom());
+				psUpdate.setDouble(2, categorieHeure.getCoef());
+				psUpdate.setString(3, categorieHeure.getNom());
+				return DB.update(psUpdate) == 1;
+			} catch ( SQLException e){
+				return false;
+			}
+		} else {
+			try{
+				psCreate.setString(1, categorieHeure.getNom());
+				psCreate.setDouble(2, categorieHeure.getCoef());
+				if ( DB.update(psCreate) == 1 ){
+					categorieHeures.add(categorieHeure);
+					return true;
+				} else {
+					return false;
+				}
+			} catch ( SQLException e ){
+				return false;
+			}
+		}
+
 	}
 
+	private static void init(){
+		for ( CategorieHeure categorieHeure : categorieHeures ){
+			// empty
+		}
+	}
+	
 }

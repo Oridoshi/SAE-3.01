@@ -8,6 +8,7 @@ import metier.repo.IntervenantDB;
  */
 
 import metier.repo.AffectationDB;
+import metier.repo.CategorieIntervenantDB;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,6 @@ public class Intervenant
 	private String nom;
 	private String prenom;
 	private Integer hMax;
-	private Map<Integer, Float> hParSemestre;
 
 	public Intervenant(int id, CategorieIntervenant categorieIntervenant, String nom, String prenom, int hServ)
 	{
@@ -30,60 +30,67 @@ public class Intervenant
 		this.nom = nom;
 		this.prenom = prenom;
 		this.hMax = hServ;
-		// initHParSemestre();
 	}
 
 	public int getId() {return id;}
-	public CategorieIntervenant getCategorie() { return categorieIntervenant; }
+	public CategorieIntervenant getCategorie() {
+		return this.categorieIntervenant;
+	}
 	public String getNom()    { return nom;    }
 	public String getPrenom() { return prenom; }
-	public int    gethMax()   { return hMax;   }
+	public Integer gethMax(){
+		if ( this.hMax > 0 ){
+			return this.hMax;
+		} else {
+			return getCategorie().getMaxH();
+		}
+	}
 
 	public void setCategorie(CategorieIntervenant categorieIntervenant) { this.categorieIntervenant = categorieIntervenant; }
 	public void sethMax(Integer hMax)             { this.hMax = hMax;           }
 
-	private float initHParSemestre(){
-		Map<Integer, Float> hParSemestre = new HashMap<>();
-		List<Affectation> affectations = new AffectationDB().getAffectationsParIntervenantId(this.id);
-		float totalHeure = 0;
-		for ( Affectation affectation : affectations ){
-			hParSemestre.put(affectation.getModule().getSemestre().getId(), affectation.getNbEqTd());
-		}
-		return totalHeure;
-	}
 
 	public float getHParSemestre(int i){
-		return this.hParSemestre.get(i);
+		int h = 0;
+		if ( AffectationDB.getAffectationsParIntervenant(this.id) == null ) return 0;
+		for ( Affectation affectation : AffectationDB.getAffectationsParIntervenant(this.id)){
+			if ( i == affectation.getModule().getSemestre().getId() ){
+				h += affectation.getNbEqTd();
+			}
+		}
+		return h;
 	}
 
 	public float getTotalParPair(){
-		float totalHPair = 0F;
-		for ( Float i : this.hParSemestre.values() ){
-			if ( i % 2 == 0 ){
-				totalHPair += this.hParSemestre.get(i);
+		int h = 0;
+		if ( AffectationDB.getAffectationsParIntervenant(this.id) == null ) return 0;
+		for ( Affectation affectation : AffectationDB.getAffectationsParIntervenant(this.id)){
+			if ( affectation.getModule().getSemestre().getId() % 2 == 0){
+				h += affectation.getNbEqTd();
 			}
 		}
-		return totalHPair;
+		return h;
 	}
 
 	public float getTotalParImpair(){
-		float totalHImpair = 0F;
-		for ( Float i : this.hParSemestre.values() ){
-			if ( i % 2 != 0 ){
-				totalHImpair += this.hParSemestre.get(i);
+		int h = 0;
+		if ( AffectationDB.getAffectationsParIntervenant(this.id) == null ) return 0;
+		for ( Affectation affectation : AffectationDB.getAffectationsParIntervenant(this.id)){
+			if ( affectation.getModule().getSemestre().getId() % 2 != 0){
+				h += affectation.getNbEqTd();
 			}
 		}
-		return totalHImpair;
+		return h;
 	}
 
-	public int getHMin()
+	public Integer getHMin()
 	{
-		return this.categorieIntervenant.getMinH();
+		return this.getCategorie().getMinH();
 	}
 
 	public double getCoefTP()
 	{
-		return this.categorieIntervenant.getCoefTp();
+		return this.getCategorie().getCoefTp();
 	}
 
 	public double getTotal()
@@ -99,14 +106,13 @@ public class Intervenant
 		this.prenom = prenom;
 	}
 
-
-	public void ajouterIntervenantToBd()
+	public boolean sauvegarder()
 	{
-		new IntervenantDB().ajouterIntervenant(this);
+		return IntervenantDB.save(this);
 	}
 
-	public void suppIntervenantFromBd()
+	public boolean supprimer()
 	{
-		new IntervenantDB().suppIntervenant(this);
+		return IntervenantDB.delete(this);
 	}
 }

@@ -2,7 +2,10 @@ package metier.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import metier.repo.IntervenantDB;
 import metier.repo.ModuleDB;
+import metier.repo.SemestreDB;
+
 
 /**
  * Semestre
@@ -33,12 +36,17 @@ public class Semestre
 
 	public List<Module> getlstModules()
 	{
-		ArrayList<Module> dd = new ArrayList<Module>();
-		dd.add(new Module("R1.03", this, null, false, "Dev", "Developpement efficace", null));
-		dd.add(new Module("R1.01", this, null, false, "Int Dev", "Iniciation Developpement", null));
-		dd.add(new Module("R1.02", this, null, false, "Web", "Developpement Web", null));
-
-		return dd;
+		return ModuleDB.getParIdSemestre(this.id);
 	}
 
+	public boolean sauvegarder()
+	{
+		return SemestreDB.save(this);
+	}
+
+	public boolean supprimer()
+	{
+		return SemestreDB.delete(this);
+	}
+	
 }

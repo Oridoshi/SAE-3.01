@@ -6,6 +6,7 @@ import javax.swing.table.AbstractTableModel;
 
 import controleur.Controleur;
 import ihm.creationObjet.PageCreationRessource;
+import metier.model.Affectation;
 import metier.model.Module;
 import metier.model.Semestre;
 
@@ -13,7 +14,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class PagePrevisionnel extends JPanel implements ActionListener
@@ -183,7 +184,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 				{
 					tabDonnees[ligne][0] = lstRessource.get(ligne).getCode();
 					tabDonnees[ligne][1] = lstRessource.get(ligne).getLibelleLong();
-					tabDonnees[ligne][2] = lstRessource.get(ligne).getTotalAffecteEqTd() + "/" + lstRessource.get(ligne).getTotalPromoEqTd();
+					tabDonnees[ligne][2] = calcul(lstRessource.get(ligne));
 					tabDonnees[ligne][3] = lstRessource.get(ligne).getValider();
 				}
 			}
@@ -208,6 +209,54 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 				default:
 					return Object.class;
 			}
+		}
+
+		private String calcul(Module m)
+		{
+			int nbTotAffHCm = 0;
+			int nbTotAffHTd = 0;
+			int nbTotAffHTp = 0;
+			int nbTotAffHPonctu = 0;
+
+			List<Affectation> lstAff = m.getLstAffectation();
+
+			if(lstAff == null) return "0/TOT";
+
+
+			for (Affectation aff : m.getLstAffectation())
+			{
+				if (aff.getCategorieHeure().getNom().equals("CM"))
+				{
+					if(aff.getNbHeure() != null)
+						nbTotAffHCm += aff.getNbHeure();
+					else
+						nbTotAffHCm += aff.getNbGroupe() * aff.getNbSemaine();
+				}
+				else if (aff.getCategorieHeure().getNom().equals("TD"))
+				{
+					if(aff.getNbHeure() != null)
+						nbTotAffHTd += aff.getNbHeure();
+					else
+						nbTotAffHTd += aff.getNbGroupe() * aff.getNbSemaine();
+				}
+				else if (aff.getCategorieHeure().getNom().equals("TP"))
+				{
+					if(aff.getNbHeure() != null)
+						nbTotAffHTp += aff.getNbHeure();
+					else
+						nbTotAffHTp += aff.getNbGroupe() * aff.getNbSemaine();
+				}
+				else
+				{
+					if(aff.getNbHeure() != null)
+						nbTotAffHPonctu += aff.getNbHeure();
+					else
+						nbTotAffHPonctu += aff.getNbGroupe() * aff.getNbSemaine();
+				}
+			}
+
+
+			return (nbTotAffHCm + nbTotAffHTd + nbTotAffHTp + nbTotAffHPonctu) + "/" + "TOT";
 		}
 
 		public int getRowCount()                                {return this.tabDonnees.length;}

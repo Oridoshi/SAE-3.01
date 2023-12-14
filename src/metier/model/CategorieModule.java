@@ -2,14 +2,15 @@ package metier.model;
 
 import java.util.List;
 
+import metier.repo.CategorieModuleDB;
+import metier.repo.PatternCategorieModuleItemDB;
+
 public class CategorieModule {
 
     private String nom;
-    private List<CategorieHeure> lstCategorieHeure;
 
-    public CategorieModule(String nom, List<CategorieHeure> lstCategorieHeure) {
+    public CategorieModule(String nom) {
         this.nom = nom;
-        this.lstCategorieHeure = lstCategorieHeure;
     }
 
     public String getNom() {
@@ -18,5 +19,17 @@ public class CategorieModule {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public List<PatternCategorieModuleItem> getCategorieHeures(){
+        return PatternCategorieModuleItemDB.listParNomCatModule(this.nom);
+    }
+
+    public boolean sauvegarder(){
+        return CategorieModuleDB.save(this);
+    }
+
+    public boolean supprimer(){
+        return CategorieModuleDB.delete(this);
     }
 }

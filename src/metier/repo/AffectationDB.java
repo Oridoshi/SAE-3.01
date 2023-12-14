@@ -8,132 +8,133 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class AffectationDB {
 
-	private Connection db = DB.getInstance();
+	private static Connection db = DB.getInstance();
 
-	private IntervenantDB intervenantDB;
-	private CategorieHeureDB categorieHeureDB;
-	private CategorieModuleDB categorieModuleDB;
-	private ModuleDB moduleDB;
+	private static List<Affectation> affectations;
+	private static Map<Integer, List<Affectation>> affectationsParIntervenant;
+	private static Map<String, List<Affectation>> affectationsParModule;
 
-	private PreparedStatement psGetAffectations;
-	private PreparedStatement psGetAffectationsParIdIntervenant;
-	private PreparedStatement psGetAffectationsParCodeModule;
-	private PreparedStatement psAjouterAffectation;
-	private PreparedStatement psSuppAffectation;
+	private static PreparedStatement psGetAffectations;
+	private static PreparedStatement psUpdateAffectation;
+	private static PreparedStatement psCreateAffectation;
+	private static PreparedStatement psDeleteAffectation;
 
-	public AffectationDB(){
-		this.moduleDB = new ModuleDB();
-		this.intervenantDB = new IntervenantDB();
-		this.categorieHeureDB = new CategorieHeureDB();
-		this.categorieModuleDB = new CategorieModuleDB();
+	static{
+		affectations = new ArrayList<>();
+		affectationsParIntervenant = new HashMap<>();
+		affectationsParModule = new HashMap<>();
 		try{
-			db.prepareStatement("SELECT * FROM Affectation");
-			db.prepareStatement("SELECT * FROM Affectation WHERE idIntervenant = ?");
-			db.prepareStatement("SELECT * FROM Affectation WHERE codeModule = ?");
-			db.prepareStatement("INSERT INTO Affectation VALUES(?,?,?,?,?,?,?)");
-			db.prepareStatement("DELETE FROM Affectation WHERE idIntervenant = ? AND nomCatHeure = ? AND codeModule = ?");
-		}catch ( SQLException e ){
+			psGetAffectations = db.prepareStatement("SELECT * FROM Affectation");
+			psDeleteAffectation = db.prepareStatement("DELETE FROM Affectation WHERE idIntervenant = ? AND nomCatHeure = ? AND codeModule = ?");
+			psUpdateAffectation = db.prepareStatement("UPDATE Affectation SET nbGrp = ?, nbSemaine = ?, nbH = ?, commentaire = ? WHERE idIntervenant = ? AND nomCatHeure = ? AND codeModule = ?");
+			psCreateAffectation = db.prepareStatement("INSERT INTO Affectation VALUES (?, ?, ?, ?, ?, ?, ?)");
+			DBResult result = new DBResult(psGetAffectations.executeQuery());
+			for ( Map<String, String> ligne : result.getLignes() ){
+				affectations.add(new Affectation(
+					IntervenantDB.getParId(Integer.parseInt(ligne.get("idintervenant"))),
+					CategorieHeureDB.getParNom(ligne.get("nomcatheure")),
+					Integer.parseInt(ligne.get("nbgrp")),
+					Integer.parseInt(ligne.get("nbsemaine")),
+					Integer.parseInt(ligne.get("nbh")),
+					ligne.get("commentaire"),
+					ModuleDB.getParCode(ligne.get("codemodule"))
+				));
+			}
+			init();
+		} catch ( Exception e ){
 			e.printStackTrace();
 		}
 	}
 
-	public List<Affectation> getAffectations(){
-		DBResult result = DB.query(this.psGetAffectations);
-		List<Affectation> affectations = new ArrayList<>();
-		for ( Map<String, String> ligne : result.getLignes() ){
-			affectations.add(ligneToAffectation(ligne));
-		}
-		return null;
+	public static List<Affectation> list(){
+		return affectations;
 	}
 
-	public List<Affectation> getAffectationsParCodeModule(String codeModule){
+	public static List<Affectation> getAffectationsParModule(String code){
+		return affectationsParModule.get(code);
+	}
+
+	public static List<Affectation> getAffectationsParIntervenant(int id){
+		return affectationsParIntervenant.get(id);
+	}
+
+	public static boolean delete(Affectation affectation){
 		try{
-			this.psGetAffectationsParCodeModule.setString(1, codeModule);
+			psDeleteAffectation.setInt(1, affectation.getIntervenant().getId());
+			psDeleteAffectation.setString(2, affectation.getCategorieHeure().getNom());
+			psDeleteAffectation.setString(3, affectation.getModule().getCode());
+			if ( DB.update(psDeleteAffectation) == 1){
+				affectations.remove(affectation);
+				affectationsParIntervenant.get(affectation.getIntervenant().getId()).remove(affectation);
+				affectationsParModule.get(affectation.getModule().getCode()).remove(affectation);
+				return true;
+			} else {
+				return false;
+			}
 		} catch ( SQLException e ){
-			e.printStackTrace();
-		}
-		DBResult result = DB.query(this.psGetAffectationsParCodeModule);
-		List<Affectation> affectations = new ArrayList<>();
-		for ( Map<String, String> ligne : result.getLignes() ){
-			affectations.add(ligneToAffectation(ligne));
-		}
-		return null;
-	}
-
-	public List<Affectation> getAffectationsParIntervenantId(int idIntervenant){
-		try{
-			this.psGetAffectationsParIdIntervenant.setInt(1, idIntervenant);
-		} catch ( SQLException e ){
-			e.printStackTrace();
-		}
-		DBResult result = DB.query(this.psGetAffectationsParIdIntervenant);
-		List<Affectation> affectations = new ArrayList<>();
-		for ( Map<String, String> ligne : result.getLignes() ){
-			affectations.add(ligneToAffectation(ligne));
-		}
-		return null;
-	}
-
-	private Affectation ligneToAffectation(Map<String, String> ligne){
-		return new Affectation(
-				intervenantDB.getIntervenantParId(ligne.get("idIntervenant")),
-				categorieHeureDB.getCategorieHeureParId(ligne.get("nomCatHeure")),
-				new Integer(ligne.get("nbGrp")),
-				new Integer(ligne.get("nbSemaine")),
-				new Integer(ligne.get("nbH")),
-				ligne.get("commentaire"),
-				moduleDB.getModuleParCode("codeModule")
-		);
-	}
-
-	public void ajouterAffectation(Affectation a)
-	{
-		try{
-			this.psAjouterAffectation.setInt(1, a.getIntervenant().getId());
-			this.psAjouterAffectation.setString(2, a.getCategorieHeure().getNom());
-			this.psAjouterAffectation.setInt(3, a.getNbHeure());
-			this.psAjouterAffectation.setInt(4, a.getNbGroupe());
-			this.psAjouterAffectation.setString(5, a.getModule().getCode());
-			this.psAjouterAffectation.setString(6, a.getCommentaire());
-			this.psAjouterAffectation.setInt(7, a.getNbSemaine());
-			this.psAjouterAffectation.executeUpdate();
-		}catch (Exception e){
-			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public void suppAffectation(Affectation a)
-	{
-		try
-		{
-			this.psSuppAffectation.setInt(1, a.getIntervenant().getId());
-			this.psSuppAffectation.setString(2, a.getCategorieHeure().getNom());
-			this.psSuppAffectation.setString(3, a.getModule().getCode());
+	public static boolean save(Affectation affectation){
+		if ( affectations.contains(affectation) ){
+			try{
+				psUpdateAffectation.setInt(1, affectation.getNbGroupe());
+				psUpdateAffectation.setInt(2, affectation.getNbSemaine());
+				psUpdateAffectation.setInt(3, affectation.getNbHeure());
+				psUpdateAffectation.setString(4, affectation.getCommentaire());
+				psUpdateAffectation.setInt(5, affectation.getIntervenant().getId());
+				psUpdateAffectation.setString(6, affectation.getCategorieHeure().getNom());
+				psUpdateAffectation.setString(7, affectation.getModule().getCode());
+				return DB.update(psGetAffectations) == 1;
+			} catch ( SQLException e){
+				return false;
+			}
+		} else {
+			try{
+				psCreateAffectation.setInt(1, affectation.getIntervenant().getId());
+				psCreateAffectation.setString(2, affectation.getCategorieHeure().getNom());
+				psCreateAffectation.setInt(3, affectation.getNbHeure());
+				psCreateAffectation.setInt(4, affectation.getNbGroupe());
+				psCreateAffectation.setString(5, affectation.getModule().getCode());
+				psCreateAffectation.setString(6, affectation.getCommentaire());
+				psCreateAffectation.setInt(7, affectation.getNbSemaine());
+				if ( DB.update(psCreateAffectation) == 1 ){
+					affectationsParIntervenant.putIfAbsent(affectation.getIntervenant().getId(), new ArrayList<>());
+					affectationsParIntervenant.get(affectation.getIntervenant().getId()).add(affectation);
+
+					// On place dans l'array AffectationParModule
+					affectationsParModule.putIfAbsent(affectation.getModule().getCode(), new ArrayList<>());
+					affectationsParModule.get(affectation.getModule().getCode()).add(affectation);
+					affectations.add(affectation);
+					return true;
+				} else {
+					return false;
+				}
+			} catch ( SQLException e ){
+				return false;
+			}
 		}
-		catch (Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
+
 	}
 
-		/*
-	idIntervenant INT NOT NULL,
-	nomCatHeure INT NOT NULL,
-	nbH INT default 0,
-	nbGrp INT default 0,
-	codeModule VARCHAR(50) NOT NULL,
-	commentaire TEXT,
-	nbSemaine INT,
-	FOREIGN KEY (idIntervenant) REFERENCES Intervenant(idIntervenant),
-	FOREIGN KEY (nomCatHeure) REFERENCES CategorieHeure(nom),
-	FOREIGN KEY (codeModule) REFERENCES Module(code),
-	PRIMARY KEY(idIntervenant, nomCatHeure, codeModule)
-	 */
+	private static void init(){
+		for ( Affectation affectation : affectations ){
 
+			// On place dans l'array AffectationParIntervenant
+			affectationsParIntervenant.putIfAbsent(affectation.getIntervenant().getId(), new ArrayList<>());
+			affectationsParIntervenant.get(affectation.getIntervenant().getId()).add(affectation);
 
+			// On place dans l'array AffectationParModule
+			affectationsParModule.putIfAbsent(affectation.getModule().getCode(), new ArrayList<>());
+			affectationsParModule.get(affectation.getModule().getCode()).add(affectation);
+		}
+	}
+	
 }

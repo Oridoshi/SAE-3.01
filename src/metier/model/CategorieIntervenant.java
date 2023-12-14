@@ -1,6 +1,8 @@
 package metier.model;
 
 import metier.DB;
+import metier.repo.CategorieIntervenantDB;
+import metier.repo.CategorieModuleDB;
 
 /**
  * Categorie
@@ -35,5 +37,13 @@ public class CategorieIntervenant
 	public void setMinH  ( int minH      ) { this.minH   = minH;   }
 	public void setMaxH  ( int maxH      ) { this.maxH   = maxH;   }
 	public void setCoefTp( double coefTp ) { this.coefTp = coefTp; }
+
+	public boolean sauvegarder(){
+        return CategorieIntervenantDB.save(this);
+    }
+
+    public boolean supprimer(){
+        return CategorieIntervenantDB.delete(this);
+    }
 
 }
