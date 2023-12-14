@@ -2,7 +2,10 @@ package ihm;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumnModel;
 
 import controleur.Controleur;
 import metier.model.Intervenant;
@@ -10,6 +13,7 @@ import metier.model.Intervenant;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,7 +22,7 @@ import java.util.List;
 import java.util.concurrent.Flow;
 
 
-public class PageIntervenants extends JPanel
+public class PageIntervenants extends JPanel implements ActionListener, ListSelectionListener
 {
 	private Controleur ctrl;
 
@@ -27,13 +31,16 @@ public class PageIntervenants extends JPanel
 	private JButton btnAnnuler;
 
 	private JPanel panelTableau;
+
 	private JTable tableIntervenants;
+	private ListSelectionModel selectionModel;
+
 	private JScrollPane spTableauIntervenants;
 	private JPanel panelBoutonsTableau;
 	private JButton btnAjouter;
 	private JButton btnSupprimer;
 
-	private JFrame mere;
+	private FrameIhm mere;
 
 
 	public PageIntervenants(Controleur ctrl, FrameIhm mere)
@@ -49,11 +56,9 @@ public class PageIntervenants extends JPanel
 
 
 		this.panelBoutons = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+		this.panelBoutons.setBorder(new EmptyBorder(30, 0, 0, 0));
 		this.btnEnregistrer = new JButton("Enregistrer");
 		this.btnAnnuler = new JButton("Annuler");
-
-		// Ajout du titre
-		this.add(new JLabel("Liste des intervenants"), BorderLayout.NORTH);
 
 
 
@@ -61,24 +66,30 @@ public class PageIntervenants extends JPanel
 		//   panelTableau   //
 		/*------------------*/
 		this.panelTableau = new JPanel(new BorderLayout());
+		this.panelTableau.setBorder(new EmptyBorder(0, 0, 15, 0));
 
 		// Ajout de la table
 		this.tableIntervenants = new JTable( new ModelAffichageTableau(this.ctrl, this.ctrl.getLstIntervenants()) );
-			this.tableIntervenants.setFillsViewportHeight(true);
-			this.tableIntervenants.setRowHeight(25);
-			this.tableIntervenants.setShowVerticalLines(false); // pour ne pas afficher les lignes verticales dans le tableau
-			this.tableIntervenants.setTableHeader(null); // pour être sur qu'il n'y ait pas d'entête
+		this.tableIntervenants.setFillsViewportHeight(true);
+		this.tableIntervenants.setRowHeight(25);
+		TableColumnModel model = this.tableIntervenants.getColumnModel();
 
-			spTableauIntervenants = new JScrollPane(this.tableIntervenants);
+		for (int i = 3; i <= 14; i++)
+		{
+			(model.getColumn(i)).setPreferredWidth(5);
+		}
+
+		spTableauIntervenants = new JScrollPane(this.tableIntervenants);
 
 
 
 
 		this.panelBoutonsTableau = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-		this.setBorder(new EmptyBorder(0, 0, 30, 0));
+		this.panelBoutonsTableau.setBorder(new EmptyBorder(15, 0, 0, 0));
 
 		this.btnAjouter = new JButton("ajouter");
-		this.btnAjouter = new JButton("supprimer");
+		this.btnSupprimer = new JButton("supprimer");
+		this.btnSupprimer.setEnabled(false); // Désactiver le bouton au démarrage
 
 		this.panelBoutonsTableau.add(this.btnAjouter);
 		this.panelBoutonsTableau.add(this.btnSupprimer);
@@ -88,6 +99,10 @@ public class PageIntervenants extends JPanel
 		this.panelTableau.add(this.spTableauIntervenants, BorderLayout.CENTER);
 		this.panelTableau.add(this.panelBoutonsTableau, BorderLayout.SOUTH);
 		this.add(this.panelTableau, BorderLayout.CENTER);
+
+		this.selectionModel = this.tableIntervenants.getSelectionModel();
+		this.selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.selectionModel.addListSelectionListener(this);
 		/*------------------*/
 
 
@@ -95,6 +110,9 @@ public class PageIntervenants extends JPanel
 		this.add(panelBoutons, BorderLayout.SOUTH);
 		this.panelBoutons.add(this.btnEnregistrer);
 		this.panelBoutons.add(this.btnAnnuler);
+
+
+		this.btnAnnuler.addActionListener(this);
 	}
 
 
@@ -104,6 +122,7 @@ public class PageIntervenants extends JPanel
 		private Controleur ctrl;
 
 		private Object[][] tabDonnees;
+		private String[] tabEntetes;
 
 		public ModelAffichageTableau(Controleur ctrl, List<Intervenant> lstIntervenants)
 		{
@@ -116,7 +135,7 @@ public class PageIntervenants extends JPanel
 
 			for (int ligne = 0; ligne < nbLig; ligne++)
 			{
-				tabDonnees[ligne][0] = lstIntervenants.get(ligne).getCategorie();
+				tabDonnees[ligne][0] = lstIntervenants.get(ligne).getCategorie().getNom();
 				tabDonnees[ligne][1] = lstIntervenants.get(ligne).getNom();
 				tabDonnees[ligne][2] = lstIntervenants.get(ligne).getPrenom();
 				tabDonnees[ligne][3] = lstIntervenants.get(ligne).getHMin();
@@ -132,7 +151,7 @@ public class PageIntervenants extends JPanel
 				tabDonnees[ligne][13] = lstIntervenants.get(ligne).getTotalParPair();
 				tabDonnees[ligne][14] = lstIntervenants.get(ligne).getTotal();
 				
-				
+				this.tabEntetes = new String[]{"Catégorie", "Nom", "Prénom", "hServ", "hMax", "Coef TP", "S1", "S3", "S5", "sTot", "S2", "S4", "S6", "sTot", "sTotal"};
 			}
 		}
 
@@ -154,10 +173,34 @@ public class PageIntervenants extends JPanel
 					return Double.class;
 			}
 		}
+		
 
 		public int getRowCount()                                {return this.tabDonnees.length;}
 		public int getColumnCount()                             {return this.tabDonnees[0].length;}
+		public String getColumnName (int col)                  {return this.tabEntetes[col];}
 		public Object getValueAt(int rowIndex, int columnIndex) {return this.tabDonnees[rowIndex][columnIndex];}
+	}
+
+
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting() && this.tableIntervenants.getSelectedRow() != -1) {
+			this.btnSupprimer.setEnabled(true); // Activer le bouton
+		} else {
+			this.btnSupprimer.setEnabled(false); // Désactiver le bouton si aucune ligne n'est sélectionnée
+		}
+	}
+
+
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == this.btnAnnuler)
+		{
+			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
+		}
 	}
 }
 

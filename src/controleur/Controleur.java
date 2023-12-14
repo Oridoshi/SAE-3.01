@@ -18,7 +18,7 @@ public class Controleur
 	public Controleur()
 	{
 		this.intervenantDB = new IntervenantDB();
-		this.version = "v0.0.1";
+		this.version = "v0.1.4";
 
 		new FrameIhm(this);
 	}
