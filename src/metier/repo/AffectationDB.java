@@ -24,6 +24,7 @@ public class AffectationDB {
 	private static Map<Integer, List<Affectation>> affectationsParIntervenant;
 	private static Map<String, List<Affectation>> affectationsParModule;
 	private static Map<Intervenant, Set<Module>> modulesParIntervenant;
+	private static Map<String, List<Affectation>> affectationsParSemestreEtIntervenant;
 
 	private static PreparedStatement psGetAffectations;
 	private static PreparedStatement psUpdateAffectation;
@@ -35,6 +36,7 @@ public class AffectationDB {
 		affectationsParIntervenant = new HashMap<>();
 		affectationsParModule = new HashMap<>();
 		modulesParIntervenant = new HashMap<>();
+		affectationsParSemestreEtIntervenant = new HashMap<>();
 		try{
 			psGetAffectations = db.prepareStatement("SELECT * FROM Affectation");
 			psDeleteAffectation = db.prepareStatement("DELETE FROM Affectation WHERE idIntervenant = ? AND nomCatHeure = ? AND codeModule = ?");
@@ -72,6 +74,11 @@ public class AffectationDB {
 
 	public static Set<Module> getModulesParIntervenant(Intervenant intervenant){
 		return modulesParIntervenant.get(intervenant);
+	}
+
+	public static List<Affectation> getAffectationsParIntervenantParSemestre(Intervenant intervenant, int idSemestre){
+		String s = intervenant.getId() + idSemestre + "";
+		return affectationsParSemestreEtIntervenant.get(s);
 	}
 
 	public static boolean delete(Affectation affectation){
@@ -142,7 +149,11 @@ public class AffectationDB {
 			// On place dans ModulesParIntervenants
 			modulesParIntervenant.putIfAbsent(affectation.getIntervenant(), new HashSet<>());
 			modulesParIntervenant.get(affectation.getIntervenant()).add(affectation.getModule());
+
+			// On place dans affectationsParSemestreEtIntervenant
+			String c = affectation.getIntervenant().getId() + affectation.getModule().getSemestre().getId() + "";
+			affectationsParSemestreEtIntervenant.putIfAbsent(c, new ArrayList<>());
+			affectationsParSemestreEtIntervenant.get(c).add(affectation);
 		}
 	}
-	
 }

@@ -116,8 +116,8 @@ public class Intervenant implements IModifiable
 		this.prenom = prenom;
 	}
 
-	public Set<Module> getModulesOuIntervient(){
-		return AffectationDB.getModulesParIntervenant(this);
+	public List<Affectation> getAffectationsParSemestre(int idSemestre){
+		return AffectationDB.getAffectationsParIntervenantParSemestre(this, idSemestre);
 	}
 
 	public boolean sauvegarder()
