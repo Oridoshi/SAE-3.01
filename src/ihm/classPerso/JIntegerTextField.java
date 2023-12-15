@@ -22,7 +22,7 @@ import javax.swing.JTextField;
  * 
  * @see JTextField
  */
-public class IntegerTextField extends JTextField implements KeyListener, FocusListener {
+public class JIntegerTextField extends JTextField implements KeyListener, FocusListener {
 
 	private boolean bloquerCaractereNonValide;
 
@@ -30,7 +30,7 @@ public class IntegerTextField extends JTextField implements KeyListener, FocusLi
 	 * Constructeur par défaut. Initialise un champ de texte sans limite de caractères
 	 * et autorise les caractères non valides.
 	 */
-	public IntegerTextField() {
+	public JIntegerTextField() {
 		super();
 		this.bloquerCaractereNonValide = false;
 
@@ -44,7 +44,7 @@ public class IntegerTextField extends JTextField implements KeyListener, FocusLi
 	 * 
 	 * @param nbCaractere La limite de caractères du champ de texte.
 	 */
-	public IntegerTextField(int nbCaractere) {
+	public JIntegerTextField(int nbCaractere) {
 		super(nbCaractere);
 		this.bloquerCaractereNonValide = false;
 
@@ -61,7 +61,7 @@ public class IntegerTextField extends JTextField implements KeyListener, FocusLi
 	 * @param nbCaractere La limite de caractères du champ de texte.
 	 * @param valeurDefaut La valeur par défaut à afficher dans le champ.
 	 */
-	public IntegerTextField(int nbCaractere, int valeurDefaut) {
+	public JIntegerTextField(int nbCaractere, int valeurDefaut) {
 		super(nbCaractere);
 		this.bloquerCaractereNonValide = false;
 		this.setText("" + valeurDefaut);
