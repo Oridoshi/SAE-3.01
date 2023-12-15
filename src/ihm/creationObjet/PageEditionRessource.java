@@ -34,6 +34,7 @@ import javax.swing.text.NumberFormatter;
 
 import controleur.Controleur;
 import ihm.FrameIhm;
+import metier.model.Module;
 import ihm.PagePrevisionnel;
 import metier.model.Affectation;
 import metier.model.Semestre;
@@ -41,10 +42,12 @@ import metier.model.Semestre;
 /**
  * PageEditionModule
  */
-public class PageCreationRessource extends JPanel implements ActionListener, FocusListener
+public class PageEditionRessource extends JPanel implements ActionListener, FocusListener
 {
 	private static final Color COULEUR_LABEL = new Color(158,158,158);
 	private static final Font FONT_LABEL = new Font("Arial", 0, 8);
+
+	private final Module MODULE;
 
 	private JPanel panelNord;
 	private JPanel panelCentre;
@@ -52,7 +55,6 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 
 	private FrameIhm mere;
 	private Controleur ctrl;
-	private Semestre semestre;
 
 	private int nbTotAffHCm;
 	private int nbTotAffHTd;
@@ -61,38 +63,38 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 	private JTextField txtFCode;
 	private JTextField txtFLibelLong;
 	private JTextField txtFLibelCour;
-
+	private JTextField txtFTyMo;
 	private JTextField txtFSeme;
+
 	private JIntegerTextField txtFHProCm;
 	private JIntegerTextField txtFHProTd;
 	private JIntegerTextField txtFHProTp;
-	private JTextField txtFHProSomme;
-	private JTextField txtFTotEqTdHProCm;
-	private JTextField txtFTotEqTdHProTd;
-	private JTextField txtFTotEqTdHProTp;
-	private JTextField txtFTotEqTdHProSomme;
+	private JIntegerTextField txtFHProSomme;
+	private JIntegerTextField txtFTotEqTdHProCm;
+	private JIntegerTextField txtFTotEqTdHProTd;
+	private JIntegerTextField txtFTotEqTdHProTp;
+	private JIntegerTextField txtFTotEqTdHProSomme;
 	private JIntegerTextField txtFNbSemCm;
 	private JIntegerTextField txtFNbHCmSem;
 	private JIntegerTextField txtFNbSemTd;
 	private JIntegerTextField txtFNbHTdSem;
 	private JIntegerTextField txtFNbSemTp;
 	private JIntegerTextField txtFNbHTpSem;
-	private JTextField txtFTotCm1;
-	private JTextField txtFTotTd1;
-	private JTextField txtFTotTp1;
-	private JTextField txtFSom1;
+	private JIntegerTextField txtFTotCm1;
+	private JIntegerTextField txtFTotTd1;
+	private JIntegerTextField txtFTotTp1;
+	private JIntegerTextField txtFSom1;
 	private JIntegerTextField txtFHPonctu1;
-	private JTextField txtFTotCm2;
-	private JTextField txtFTotTd2;
-	private JTextField txtFTotTp2;
-	private JTextField txtFHPonctu2;
-	private JTextField txtFTotSom2;
-	private JTextField txtFTotCm3;
-	private JTextField txtFTotTd3;
-	private JTextField txtFTotTp3;
-	private JTextField txtFHPonctu3;
-	private JTextField txtFTotSom3;
-	private JTextField txtFTyMo;
+	private JIntegerTextField txtFTotCm2;
+	private JIntegerTextField txtFTotTd2;
+	private JIntegerTextField txtFTotTp2;
+	private JIntegerTextField txtFHPonctu2;
+	private JIntegerTextField txtFTotSom2;
+	private JIntegerTextField txtFTotCm3;
+	private JIntegerTextField txtFTotTd3;
+	private JIntegerTextField txtFTotTp3;
+	private JIntegerTextField txtFHPonctu3;
+	private JIntegerTextField txtFTotSom3;
 
 	private List<Affectation> lstAffectation;
 	private JTable tableAffectation;
@@ -103,13 +105,25 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 	private JButton btnAnnuler;
 	private JCheckBox chkValider;
 
-	public PageCreationRessource(Controleur ctrl, FrameIhm mere, Semestre semestre)
+	public static PageEditionRessource factorieCreationRessource(Controleur ctrl, FrameIhm mere, Semestre semestre)
+	{
+		PageEditionRessource page = new PageEditionRessource(ctrl, mere, semestre, new Module("RX.XX", semestre, ctrl.getCategorieModule("Ressource"), false, "", ""), new ArrayList<Affectation>());
+		return page;
+	}
+
+	public static PageEditionRessource factorieEditionRessource(Controleur ctrl, FrameIhm mere, Module module)
+	{
+		PageEditionRessource page = new PageEditionRessource(ctrl, mere, module.getSemestre(), module, module.getLstAffectation());
+		return page;
+	}
+
+	private PageEditionRessource(Controleur ctrl, FrameIhm mere, Semestre semestre, Module module, List<Affectation> lstAffectation)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
+		this.MODULE = module;
 
-		this.semestre = semestre;
-		this.lstAffectation = new ArrayList<Affectation>();
+		this.lstAffectation = lstAffectation;
 
 		this.panelCentre = new JPanel();
 
@@ -132,20 +146,20 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 
 		//premier ligne
 		JLabel lblTyMo = new JLabel("Type Module");
-		lblTyMo.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblTyMo.setFont(PageCreationRessource.FONT_LABEL);
+		lblTyMo.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblTyMo.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblSeme = new JLabel("Semestre");
-		lblSeme.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblSeme.setFont(PageCreationRessource.FONT_LABEL);
+		lblSeme.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblSeme.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblCode = new JLabel("Code");
-		lblCode.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblCode.setFont(PageCreationRessource.FONT_LABEL);
+		lblCode.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblCode.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblLibelLong = new JLabel("Libellé Long");
-		lblLibelLong.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblLibelLong.setFont(PageCreationRessource.FONT_LABEL);
+		lblLibelLong.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblLibelLong.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblLibelCour = new JLabel("Libellé Court");
-		lblLibelCour.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblLibelCour.setFont(PageCreationRessource.FONT_LABEL);
+		lblLibelCour.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblLibelCour.setFont(PageEditionRessource.FONT_LABEL);
 
 		gbcNord.gridx = 0;
 		gbcNord.gridy = 0;
@@ -161,16 +175,18 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 
 		//deuxieme ligne
 		this.txtFTyMo = new JTextField(8);
-		txtFTyMo.setText("Ressource");
+		txtFTyMo.setText(this.MODULE.getCategorieModule().getNom());
 		txtFTyMo.setEditable(false);
 		this.txtFSeme = new JTextField(4);
-		txtFSeme.setText("S" + this.semestre.getId());
+		txtFSeme.setText("S" + this.MODULE.getSemestre().getId());
 		txtFSeme.setEditable(false);
 		this.txtFCode = new JTextField(4);
-		this.txtFCode.setText("RX.XX");
+		this.txtFCode.setText(this.MODULE.getCode());
 		this.txtFCode.addFocusListener(this);
 		this.txtFLibelLong = new JTextField(30);
+		this.txtFLibelLong.setText(this.MODULE.getLibelleLong());
 		this.txtFLibelCour = new JTextField(15);
+		this.txtFLibelCour.setText(this.MODULE.getLibelleCourt());
 
 		gbcNord.gridx = 0;
 		gbcNord.gridy = 1;
@@ -191,14 +207,14 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		gbcNord.anchor = GridBagConstraints.CENTER;
 
 		JLabel lblNbEtd = new JLabel("Nb Etd");
-		lblNbEtd.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblNbEtd.setFont(PageCreationRessource.FONT_LABEL);
+		lblNbEtd.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblNbEtd.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblNbGrpTd = new JLabel("Nb Grp TD");
-		lblNbGrpTd.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblNbGrpTd.setFont(PageCreationRessource.FONT_LABEL);
+		lblNbGrpTd.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblNbGrpTd.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblNbGrpTp = new JLabel("Nb Grp TP");
-		lblNbGrpTp.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblNbGrpTp.setFont(PageCreationRessource.FONT_LABEL);
+		lblNbGrpTp.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblNbGrpTp.setFont(PageEditionRessource.FONT_LABEL);
 
 		gbcNord.gridx = 0;
 		gbcNord.gridy = 2;
@@ -213,15 +229,15 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 
 		JTextField txtFNbEtd   = new JTextField(2);
 		txtFNbEtd.setHorizontalAlignment(JTextField.CENTER);
-		txtFNbEtd.setText("" + this.semestre.getNbEtu());
+		txtFNbEtd.setText("" + this.MODULE.getSemestre().getNbEtu());
 		txtFNbEtd.setEditable(false);
 		JTextField txtFNbGrpTd = new JTextField(2);
 		txtFNbGrpTd.setHorizontalAlignment(JTextField.CENTER);
-		txtFNbGrpTd.setText("" + this.semestre.getNbGroupeTd());
+		txtFNbGrpTd.setText("" + this.MODULE.getSemestre().getNbGroupeTd());
 		txtFNbGrpTd.setEditable(false);
 		JTextField txtFNbGrpTp = new JTextField(2);
 		txtFNbGrpTp.setHorizontalAlignment(JTextField.CENTER);
-		txtFNbGrpTp.setText("" + this.semestre.getNbGroupeTp());
+		txtFNbGrpTp.setText("" + this.MODULE.getSemestre().getNbGroupeTp());
 		txtFNbGrpTp.setEditable(false);
 
 		gbcNord.gridy = 3;
@@ -254,17 +270,17 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		gbcTemp.insets = new Insets(0, 1, 1, 0); // Marge autour des composants
 
 		JLabel lblHProCm = new JLabel("CM");
-		lblHProCm.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblHProCm.setFont(PageCreationRessource.FONT_LABEL);
+		lblHProCm.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblHProCm.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblHProTd = new JLabel("TD");
-		lblHProTd.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblHProTd.setFont(PageCreationRessource.FONT_LABEL);
+		lblHProTd.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblHProTd.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblHProTp = new JLabel("TP");
-		lblHProTp.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblHProTp.setFont(PageCreationRessource.FONT_LABEL);
+		lblHProTp.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblHProTp.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblHProSomme = new JLabel("∑");
-		lblHProSomme.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblHProSomme.setFont(PageCreationRessource.FONT_LABEL);
+		lblHProSomme.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblHProSomme.setFont(PageEditionRessource.FONT_LABEL);
 
 		gbcTemp.gridy = 0;
 		gbcTemp.gridx = 1;
@@ -280,22 +296,22 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		//deuxieme ligne
 		gbcTemp.insets = new Insets(0, 1, 1, 0); // Marge autour des composants
 
-		this.txtFHProCm = new JIntegerTextField(3, 0);
+		this.txtFHProCm = new JIntegerTextField(3, module.getNbHeureProgramme("CM"));
 		this.txtFHProCm.bloquerCaractereNonValide(true);
 		this.txtFHProCm.addFocusListener(this);
 		this.txtFHProCm.addActionListener(this);
-		this.txtFHProTd = new JIntegerTextField(3, 0);
+		this.txtFHProTd = new JIntegerTextField(3, module.getNbHeureProgramme("TD"));
 		this.txtFHProTd.bloquerCaractereNonValide(true);
 		this.txtFHProTd.addFocusListener(this);
 		this.txtFHProTd.addActionListener(this);
-		this.txtFHProTp = new JIntegerTextField(3, 0);
+		this.txtFHProTp = new JIntegerTextField(3, module.getNbHeureProgramme("TP"));
 		this.txtFHProTp.bloquerCaractereNonValide(true);
 		this.txtFHProTp.addFocusListener(this);
 		this.txtFHProTp.addActionListener(this);
 		this.txtFHProTp.setColumns(3);
 		this.txtFHProTp.setText("0");
 		this.txtFHProSomme = new JIntegerTextField(3);
-		this.txtFHProSomme.setText("" + (Integer.parseInt(this.txtFHProCm.getText()) + Integer.parseInt(this.txtFHProTd.getText()) + Integer.parseInt(this.txtFHProTp.getText())));
+		this.txtFHProSomme.setValue(this.txtFHProCm.getValue() + this.txtFHProTd.getValue() + this.txtFHProTp.getValue());
 		this.txtFHProSomme.setEditable(false);
 
 		gbcTemp.gridy = 1;
@@ -313,21 +329,21 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		gbcTemp.insets = new Insets(10, 5, 1, 10); // Marge autour des composants
 
 		JLabel lblTotal = new JLabel("Total(eqtd)");
-		lblTotal.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblTotal.setFont(PageCreationRessource.FONT_LABEL);
+		lblTotal.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblTotal.setFont(PageEditionRessource.FONT_LABEL);
 
 		this.txtFTotEqTdHProCm = new JIntegerTextField(3);
 		this.txtFTotEqTdHProCm.setEditable(false);
-		this.txtFTotEqTdHProCm.setText("" + (int) (Integer.parseInt(this.txtFHProCm.getText()) * this.ctrl.getCoefH("CM")));
+		this.txtFTotEqTdHProCm.setValue((int) (this.txtFHProCm.getValue() * this.ctrl.getCoefH("CM")));
 		this.txtFTotEqTdHProTd = new JIntegerTextField(3);
 		this.txtFTotEqTdHProTd.setEditable(false);
-		this.txtFTotEqTdHProTd.setText("" + (int) (Integer.parseInt(this.txtFHProTd.getText()) * this.semestre.getNbGroupeTd() * this.ctrl.getCoefH("TD")));
+		this.txtFTotEqTdHProTd.setValue((int) (this.txtFHProTd.getValue() * this.MODULE.getSemestre().getNbGroupeTd() * this.ctrl.getCoefH("TD")));
 		this.txtFTotEqTdHProTp = new JIntegerTextField(3);
 		this.txtFTotEqTdHProTp.setEditable(false);
-		this.txtFTotEqTdHProTp.setText("" + (int) (Integer.parseInt(this.txtFHProTp.getText()) * this.semestre.getNbGroupeTp() * this.ctrl.getCoefH("TP")));
+		this.txtFTotEqTdHProTp.setValue((int) (this.txtFHProTp.getValue() * this.MODULE.getSemestre().getNbGroupeTp() * this.ctrl.getCoefH("TP")));
 		this.txtFTotEqTdHProSomme = new JIntegerTextField(3);
 		this.txtFTotEqTdHProSomme.setEditable(false);
-		this.txtFTotEqTdHProSomme.setText("" + (int) (Integer.parseInt(this.txtFTotEqTdHProCm.getText()) + Integer.parseInt(this.txtFTotEqTdHProTd.getText()) + Integer.parseInt(this.txtFTotEqTdHProTp.getText())));
+		this.txtFTotEqTdHProSomme.setValue(this.txtFTotEqTdHProCm.getValue() + this.txtFTotEqTdHProTd.getValue() + this.txtFTotEqTdHProTp.getValue());
 		
 		gbcTemp.gridx = 0;
 		gbcTemp.gridy = 2;
@@ -347,8 +363,8 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		gbcTemp.insets = new Insets(0, 5, 10, 0); // Marge autour des composants
 
 		JLabel lblPromo = new JLabel("promo");
-		lblPromo.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblPromo.setFont(PageCreationRessource.FONT_LABEL);
+		lblPromo.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblPromo.setFont(PageEditionRessource.FONT_LABEL);
 
 		gbcTemp.gridx = 0;
 		gbcTemp.gridy = 3;
@@ -362,8 +378,8 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		panelValider.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		JLabel lblValider = new JLabel("Validation");
-		lblValider.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblValider.setFont(PageCreationRessource.FONT_LABEL);
+		lblValider.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblValider.setFont(PageEditionRessource.FONT_LABEL);
 		this.chkValider = new JCheckBox();
 		this.chkValider.setSelected(false);
 
@@ -376,8 +392,8 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		JPanel panelTmpLabel1 = new JPanel();
 
 		JLabel lblPnLocal = new JLabel("PN local (nb h tot/etd)");
-		lblPnLocal.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblPnLocal.setFont(PageCreationRessource.FONT_LABEL);
+		lblPnLocal.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblPnLocal.setFont(PageEditionRessource.FONT_LABEL);
 
 		panelTmpLabel1.add(lblPnLocal);
 
@@ -408,20 +424,20 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		gbcRepartition.insets = new Insets(0, 1, 1, 0); // Marge autour des composants
 
 		JLabel lblCmSem = new JLabel("CM");
-		lblCmSem.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblCmSem.setFont(PageCreationRessource.FONT_LABEL);
+		lblCmSem.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblCmSem.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblTdSem = new JLabel("TD");
-		lblTdSem.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblTdSem.setFont(PageCreationRessource.FONT_LABEL);
+		lblTdSem.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblTdSem.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblTpSem = new JLabel("TP");
-		lblTpSem.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblTpSem.setFont(PageCreationRessource.FONT_LABEL);
+		lblTpSem.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblTpSem.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblHponctu = new JLabel("Heures");
-		lblHponctu.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblHponctu.setFont(PageCreationRessource.FONT_LABEL);
+		lblHponctu.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblHponctu.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblSommeSem = new JLabel("∑");
-		lblSommeSem.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblSommeSem.setFont(PageCreationRessource.FONT_LABEL);
+		lblSommeSem.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblSommeSem.setFont(PageEditionRessource.FONT_LABEL);
 
 		gbcRepartition.gridy = 0;
 		gbcRepartition.gridx = 0;
@@ -443,37 +459,37 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		gbcRepartition.anchor = GridBagConstraints.WEST;
 
 		JLabel lblNbSem1 = new JLabel("Nb sem");
-		lblNbSem1.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblNbSem1.setFont(PageCreationRessource.FONT_LABEL);
+		lblNbSem1.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblNbSem1.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblNbHSem1 = new JLabel("Nb h/sem");
-		lblNbHSem1.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblNbHSem1.setFont(PageCreationRessource.FONT_LABEL);
+		lblNbHSem1.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblNbHSem1.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblNbSem2 = new JLabel("Nb sem");
-		lblNbSem2.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblNbSem2.setFont(PageCreationRessource.FONT_LABEL);
+		lblNbSem2.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblNbSem2.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblNbHSem2 = new JLabel("Nb h/sem");
-		lblNbHSem2.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblNbHSem2.setFont(PageCreationRessource.FONT_LABEL);
+		lblNbHSem2.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblNbHSem2.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblNbSem3 = new JLabel("Nb sem");
-		lblNbSem3.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblNbSem3.setFont(PageCreationRessource.FONT_LABEL);
+		lblNbSem3.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblNbSem3.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblNbHSem3 = new JLabel("Nb h/sem");
-		lblNbHSem3.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblNbHSem3.setFont(PageCreationRessource.FONT_LABEL);
+		lblNbHSem3.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblNbHSem3.setFont(PageEditionRessource.FONT_LABEL);
 
 		JLabel lblCmRepar = new JLabel("CM");
-		lblCmRepar.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblCmRepar.setFont(PageCreationRessource.FONT_LABEL);
+		lblCmRepar.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblCmRepar.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblTdRepar = new JLabel("TD");
-		lblTdRepar.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblTdRepar.setFont(PageCreationRessource.FONT_LABEL);
+		lblTdRepar.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblTdRepar.setFont(PageEditionRessource.FONT_LABEL);
 		JLabel lblTpRepar = new JLabel("TP");
-		lblTpRepar.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblTpRepar.setFont(PageCreationRessource.FONT_LABEL);
+		lblTpRepar.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblTpRepar.setFont(PageEditionRessource.FONT_LABEL);
 
 		JLabel lblhPonctu = new JLabel("ponctuelles");
-		lblhPonctu.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblhPonctu.setFont(PageCreationRessource.FONT_LABEL);
+		lblhPonctu.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblhPonctu.setFont(PageEditionRessource.FONT_LABEL);
 
 		gbcRepartition.gridy = 1;
 		gbcRepartition.gridx = 0;
@@ -499,48 +515,48 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 
 		//troisieme ligne
 		gbcRepartition.anchor = GridBagConstraints.CENTER;
-		this.txtFNbSemCm = new JIntegerTextField(3, 0);
+		this.txtFNbSemCm = new JIntegerTextField(3, module.getNbSemaine("CM"));
 		this.txtFNbSemCm.bloquerCaractereNonValide(true);
 		this.txtFNbSemCm.addFocusListener(this);
 		this.txtFNbSemCm.addActionListener(this);
-		this.txtFNbHCmSem = new JIntegerTextField(3, 0);
+		this.txtFNbHCmSem = new JIntegerTextField(3, module.getNbHeureSemaine("CM"));
 		this.txtFNbHCmSem.bloquerCaractereNonValide(true);
 		this.txtFNbHCmSem.addFocusListener(this);
 		this.txtFNbHCmSem.addActionListener(this);
 
-		this.txtFNbSemTd = new JIntegerTextField(3, 0);
+		this.txtFNbSemTd = new JIntegerTextField(3, module.getNbSemaine("TD"));
 		this.txtFNbSemTd.bloquerCaractereNonValide(true);
 		this.txtFNbSemTd.addFocusListener(this);
 		this.txtFNbSemTd.addActionListener(this);
-		this.txtFNbHTdSem = new JIntegerTextField(3, 0);
+		this.txtFNbHTdSem = new JIntegerTextField(3, module.getNbHeureSemaine("CM"));
 		this.txtFNbHTdSem.bloquerCaractereNonValide(true);
 		this.txtFNbHTdSem.addFocusListener(this);
 		this.txtFNbHTdSem.addActionListener(this);
 
-		this.txtFNbSemTp = new JIntegerTextField(3, 0);
+		this.txtFNbSemTp = new JIntegerTextField(3, module.getNbSemaine("TP"));
 		this.txtFNbSemTp.bloquerCaractereNonValide(true);
 		this.txtFNbSemTp.addFocusListener(this);
 		this.txtFNbSemTp.addActionListener(this);
-		this.txtFNbHTpSem = new JIntegerTextField(3, 0);
+		this.txtFNbHTpSem = new JIntegerTextField(3, module.getNbHeureSemaine("CM"));
 		this.txtFNbHTpSem.bloquerCaractereNonValide(true);
 		this.txtFNbHTpSem.addFocusListener(this);
 		this.txtFNbHTpSem.addActionListener(this);
 
 		this.txtFTotCm1 = new JIntegerTextField(3);
-		this.txtFTotCm1.setText("" + (Integer.parseInt(this.txtFNbSemCm.getText()) * Integer.parseInt(this.txtFNbHCmSem.getText())));
+		this.txtFTotCm1.setValue(this.txtFNbSemCm.getValue() * this.txtFNbHCmSem.getValue());
 		this.txtFTotCm1.setEditable(false);
 		this.txtFTotTd1 = new JIntegerTextField(3);
-		this.txtFTotTd1.setText("" + (Integer.parseInt(this.txtFNbSemTd.getText()) * Integer.parseInt(this.txtFNbHTdSem.getText())));
+		this.txtFTotTd1.setValue(this.txtFNbSemTd.getValue() * this.txtFNbHTdSem.getValue());
 		this.txtFTotTd1.setEditable(false);
 		this.txtFTotTp1 = new JIntegerTextField(3);
-		this.txtFTotTp1.setText("" + (Integer.parseInt(this.txtFNbSemTp.getText()) * Integer.parseInt(this.txtFNbHTpSem.getText())));
+		this.txtFTotTp1.setValue(this.txtFNbSemTp.getValue() * this.txtFNbHTpSem.getValue());
 		this.txtFTotTp1.setEditable(false);
 		this.txtFHPonctu1 = new JIntegerTextField(3, 0);
 		this.txtFHPonctu1.bloquerCaractereNonValide(true);
 		this.txtFHPonctu1.addFocusListener(this);
 		this.txtFHPonctu1.addActionListener(this);
 		this.txtFSom1 = new JIntegerTextField(3);
-		this.txtFSom1.setText("" + (Integer.parseInt(this.txtFTotCm1.getText()) + Integer.parseInt(this.txtFTotTd1.getText()) + Integer.parseInt(this.txtFTotTp1.getText()) + Integer.parseInt(this.txtFHPonctu1.getText())));
+		this.txtFSom1.setValue(this.txtFTotCm1.getValue() + this.txtFTotTd1.getValue() + this.txtFTotTp1.getValue() + this.txtFHPonctu1.getValue());
 		this.txtFSom1.setEditable(false);
 
 		gbcRepartition.gridy = 2;
@@ -569,22 +585,22 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 
 		//quatrieme ligne DDFEFDD
 		JLabel lblTotPromo = new JLabel("Total promo (eqtd)");
-		lblTotPromo.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblTotPromo.setFont(PageCreationRessource.FONT_LABEL);
+		lblTotPromo.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblTotPromo.setFont(PageEditionRessource.FONT_LABEL);
 		this.txtFTotCm2 = new JIntegerTextField(3);
-		this.txtFTotCm2.setText("" + (int) (Integer.parseInt(this.txtFTotCm1.getText()) * this.ctrl.getCoefH("CM")));
+		this.txtFTotCm2.setValue((int) (this.txtFTotCm1.getValue() * this.ctrl.getCoefH("CM")));
 		this.txtFTotCm2.setEditable(false);
 		this.txtFTotTd2 = new JIntegerTextField(3);
-		this.txtFTotTd2.setText("" + (int) (Integer.parseInt(this.txtFTotTd1.getText()) * this.semestre.getNbGroupeTd() * this.ctrl.getCoefH("TD")));
+		this.txtFTotTd2.setValue((int) (this.txtFTotTd1.getValue() * this.MODULE.getSemestre().getNbGroupeTd() * this.ctrl.getCoefH("TD")));
 		this.txtFTotTd2.setEditable(false);
 		this.txtFTotTp2 = new JIntegerTextField(3);
-		this.txtFTotTp2.setText("" + (int) (Integer.parseInt(this.txtFTotTp1.getText()) * this.semestre.getNbGroupeTp() * this.ctrl.getCoefH("TP")));
+		this.txtFTotTp2.setValue((int) (this.txtFTotTp1.getValue() * this.MODULE.getSemestre().getNbGroupeTp() * this.ctrl.getCoefH("TP")));
 		this.txtFTotTp2.setEditable(false);
 		this.txtFHPonctu2 = new JIntegerTextField(3);
-		this.txtFHPonctu2.setText("" + (int) (Integer.parseInt(this.txtFHPonctu1.getText()) * this.semestre.getNbGroupeTd()));
+		this.txtFHPonctu2.setValue((int) (this.txtFHPonctu1.getValue() * this.MODULE.getSemestre().getNbGroupeTd()));
 		this.txtFHPonctu2.setEditable(false);
 		this.txtFTotSom2 = new JIntegerTextField(3);
-		this.txtFTotSom2.setText("" + (int) (Integer.parseInt(txtFTotCm2.getText()) + Integer.parseInt(txtFTotTd2.getText()) + Integer.parseInt(txtFTotTp2.getText()) + Integer.parseInt(txtFHPonctu2.getText())));
+		this.txtFTotSom2.setValue(txtFTotCm2.getValue() + txtFTotTd2.getValue() + txtFTotTp2.getValue() + txtFHPonctu2.getValue());
 		this.txtFTotSom2.setEditable(false);
 
 		gbcRepartition.gridy = 3;
@@ -603,8 +619,8 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 
 		//cinquieme ligne
 		JLabel lblTotAffect = new JLabel("Total affecté (eqtd)");
-		lblTotAffect.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblTotAffect.setFont(PageCreationRessource.FONT_LABEL);
+		lblTotAffect.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblTotAffect.setFont(PageEditionRessource.FONT_LABEL);
 		this.txtFTotCm3 = new JIntegerTextField(3);
 		this.txtFTotCm3.setText("" + this.nbTotAffHCm);
 		this.txtFTotCm3.setEditable(false);
@@ -658,8 +674,8 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		JScrollPane spDonneAffectation = new JScrollPane(this.tableAffectation);
 
 		JLabel lblListeAffectation = new JLabel("Affectation");
-		lblListeAffectation.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblListeAffectation.setFont(PageCreationRessource.FONT_LABEL);
+		lblListeAffectation.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblListeAffectation.setFont(PageEditionRessource.FONT_LABEL);
 
 		panelTab.add(lblListeAffectation, BorderLayout.NORTH);
 		panelTab.add(spDonneAffectation, BorderLayout.CENTER);
@@ -682,8 +698,8 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		JPanel panelTmpLabel2 = new JPanel();
 
 		JLabel lblRepartition = new JLabel("Répartition");
-		lblRepartition.setForeground(PageCreationRessource.COULEUR_LABEL);
-		lblRepartition.setFont(PageCreationRessource.FONT_LABEL);
+		lblRepartition.setForeground(PageEditionRessource.COULEUR_LABEL);
+		lblRepartition.setFont(PageEditionRessource.FONT_LABEL);
 
 		panelTmpLabel2.add(lblRepartition);
 
@@ -732,7 +748,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 			Matcher matcher = pattern.matcher(this.txtFCode.getText());
 			if(matcher.matches())
 			{
-				regex   = "^[RSP][" + this.semestre.getId() + "]\\.\\d{2}$";
+				regex   = "^[RSP][" + this.MODULE.getSemestre().getId() + "]\\.\\d{2}$";
 				pattern = Pattern.compile(regex);
 				matcher = pattern.matcher(this.txtFCode.getText());
 				if(!matcher.matches())
@@ -829,7 +845,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 
 			if(this.chkValider.isSelected())
 			{
-				this.ctrl.ajouterModule();
+				this.majModule();
 			}
 			else
 			{
@@ -865,28 +881,50 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		}
 	}
 
+	private void majModule()
+	{
+		//Definition des informations du module
+		this.MODULE.setCode(this.txtFCode.getText());
+		this.MODULE.setLibelleLong(this.txtFLibelLong.getText());
+		this.MODULE.setLibelleCourt(this.txtFLibelCour.getText());
+
+		//Definition des heures du module
+		this.MODULE.getProgramme().getItem("CM").setNbHPn(this.txtFHProCm.getValue());
+		this.MODULE.getProgramme().getItem("TD").setNbHPn(this.txtFHProTd.getValue());
+		this.MODULE.getProgramme().getItem("TP").setNbHPn(this.txtFHProTp.getValue());
+		this.MODULE.getProgramme().getItem("CM").setNbHeure(this.txtFNbHCmSem.getValue());
+		this.MODULE.getProgramme().getItem("TD").setNbHeure(this.txtFNbHTdSem.getValue());
+		this.MODULE.getProgramme().getItem("TP").setNbHeure(this.txtFNbHTpSem.getValue());
+		this.MODULE.getProgramme().getItem("CM").setNbSemaine(this.txtFNbSemCm.getValue());
+		this.MODULE.getProgramme().getItem("TD").setNbSemaine(this.txtFNbSemTd.getValue());
+		this.MODULE.getProgramme().getItem("TP").setNbSemaine(this.txtFNbSemTp.getValue());
+
+		//Definition des affectations du module
+
+	}
+
 	private void recalcule()
 	{
-		this.txtFHProSomme.setText("" + (Integer.parseInt(this.txtFHProCm.getText()) + Integer.parseInt(this.txtFHProTd.getText()) + Integer.parseInt(this.txtFHProTp.getText())));
-		this.txtFTotEqTdHProCm.setText("" + (int) (Integer.parseInt(this.txtFHProCm.getText()) * this.ctrl.getCoefH("CM")));
-		this.txtFTotEqTdHProTd.setText("" + (int) (Integer.parseInt(this.txtFHProTd.getText()) * this.semestre.getNbGroupeTd() * this.ctrl.getCoefH("TD")));
-		this.txtFTotEqTdHProTp.setText("" + (int) (Integer.parseInt(this.txtFHProTp.getText()) * this.semestre.getNbGroupeTp() * this.ctrl.getCoefH("TP")));
-		this.txtFTotEqTdHProSomme.setText("" + (int) (Integer.parseInt(this.txtFTotEqTdHProCm.getText()) + Integer.parseInt(this.txtFTotEqTdHProTd.getText()) + Integer.parseInt(this.txtFTotEqTdHProTp.getText())));
-		this.txtFTotCm1.setText("" + (Integer.parseInt(this.txtFNbSemCm.getText()) * Integer.parseInt(this.txtFNbHCmSem.getText())));
-		this.txtFTotTd1.setText("" + (Integer.parseInt(this.txtFNbSemTd.getText()) * Integer.parseInt(this.txtFNbHTdSem.getText())));
-		this.txtFTotTp1.setText("" + (Integer.parseInt(this.txtFNbSemTp.getText()) * Integer.parseInt(this.txtFNbHTpSem.getText())));
-		this.txtFSom1.setText("" + (Integer.parseInt(this.txtFTotCm1.getText()) + Integer.parseInt(this.txtFTotTd1.getText()) + Integer.parseInt(this.txtFTotTp1.getText()) + Integer.parseInt(this.txtFHPonctu1.getText())));
-		this.txtFTotCm2.setText("" + (int) (Integer.parseInt(this.txtFTotCm1.getText()) * this.ctrl.getCoefH("CM")));
-		this.txtFTotTd2.setText("" + (int) (Integer.parseInt(this.txtFTotTd1.getText()) * this.semestre.getNbGroupeTd() * this.ctrl.getCoefH("TD")));
-		this.txtFTotTp2.setText("" + (int) (Integer.parseInt(this.txtFTotTp1.getText()) * this.semestre.getNbGroupeTp() * this.ctrl.getCoefH("TP")));
-		this.txtFTotSom2.setText("" + (int) (Integer.parseInt(this.txtFSom1.getText()) * this.ctrl.getCoefH("CM")));
-		this.txtFHPonctu2.setText("" + (int) (Integer.parseInt(this.txtFHPonctu1.getText()) * this.semestre.getNbGroupeTd()));
+		this.txtFHProSomme.setValue(this.txtFHProCm.getValue() + this.txtFHProTd.getValue() + this.txtFHProTp.getValue());
+		this.txtFTotEqTdHProCm.setValue((int) (this.txtFHProCm.getValue() * this.ctrl.getCoefH("CM")));
+		this.txtFTotEqTdHProTd.setValue((int) (this.txtFHProTd.getValue() * this.MODULE.getSemestre().getNbGroupeTd() * this.ctrl.getCoefH("TD")));
+		this.txtFTotEqTdHProTp.setValue((int) (this.txtFHProTp.getValue() * this.MODULE.getSemestre().getNbGroupeTp() * this.ctrl.getCoefH("TP")));
+		this.txtFTotEqTdHProSomme.setValue((int) (this.txtFTotEqTdHProCm.getValue() + this.txtFTotEqTdHProTd.getValue() + this.txtFTotEqTdHProTp.getValue()));
+		this.txtFTotCm1.setValue(this.txtFNbSemCm.getValue() * this.txtFNbHCmSem.getValue());
+		this.txtFTotTd1.setValue(this.txtFNbSemTd.getValue() * this.txtFNbHTdSem.getValue());
+		this.txtFTotTp1.setValue(this.txtFNbSemTp.getValue() * this.txtFNbHTpSem.getValue());
+		this.txtFSom1.setValue(this.txtFTotCm1.getValue() + this.txtFTotTd1.getValue() + this.txtFTotTp1.getValue() + this.txtFHPonctu1.getValue());
+		this.txtFTotCm2.setValue((int) (this.txtFTotCm1.getValue() * this.ctrl.getCoefH("CM")));
+		this.txtFTotTd2.setValue((int) (this.txtFTotTd1.getValue() * this.MODULE.getSemestre().getNbGroupeTd() * this.ctrl.getCoefH("TD")));
+		this.txtFTotTp2.setValue((int) (this.txtFTotTp1.getValue() * this.MODULE.getSemestre().getNbGroupeTp() * this.ctrl.getCoefH("TP")));
+		this.txtFTotSom2.setValue((int) (this.txtFSom1.getValue() * this.ctrl.getCoefH("CM")));
+		this.txtFHPonctu2.setValue((int) (this.txtFHPonctu1.getValue() * this.MODULE.getSemestre().getNbGroupeTd()));
 		this.recalculeTotalAffecte();
-		this.txtFTotCm3.setText("" + this.nbTotAffHCm);
-		this.txtFTotTd3.setText("" + this.nbTotAffHTd);
-		this.txtFTotTp3.setText("" + this.nbTotAffHTp);
-		this.txtFHPonctu3.setText("" + this.nbTotAffHPonctu);
-		this.txtFTotSom3.setText("" + (this.nbTotAffHCm + this.nbTotAffHTd + this.nbTotAffHTp + this.nbTotAffHPonctu));
+		this.txtFTotCm3.setValue(this.nbTotAffHCm);
+		this.txtFTotTd3.setValue(this.nbTotAffHTd);
+		this.txtFTotTp3.setValue(this.nbTotAffHTp);
+		this.txtFHPonctu3.setValue(this.nbTotAffHPonctu);
+		this.txtFTotSom3.setValue(this.nbTotAffHCm + this.nbTotAffHTd + this.nbTotAffHTp + this.nbTotAffHPonctu);
 
 
 		this.updateTable();
@@ -950,11 +988,11 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 	public Integer getHSemaine(String nom)
 	{
 		if(nom.equals("CM"))
-			return this.semestre.getNbGroupeTd();
+			return this.MODULE.getSemestre().getNbGroupeTd();
 		else if(nom.equals("TD"))
-			return this.semestre.getNbGroupeTd();
+			return this.MODULE.getSemestre().getNbGroupeTd();
 		else if(nom.equals("TP"))
-			return this.semestre.getNbGroupeTp();
+			return this.MODULE.getSemestre().getNbGroupeTp();
 		else
 			return 0;
 	}

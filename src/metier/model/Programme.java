@@ -1,5 +1,6 @@
 package metier.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,10 @@ public class Programme {
 	public void removeItem(String key){
 		ProgrammeItemDB.delete(this.programme.get(key));
 		this.programme.remove(key);
+	}
+
+	public Collection<ProgrammeItem> listProgrammeItems(){
+		return programme.values();
 	}
 
 	/*

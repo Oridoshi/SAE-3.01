@@ -22,6 +22,7 @@ public class Module
 	private boolean  valider;
 	private String libelleCourt;
 	private String libelleLong;
+	private Programme programme;
 
 	public Module(String code, Semestre semestre, CategorieModule categorieModule, boolean valider, String libelleCourt, String libelleLong) {
 		this.code = code;
@@ -30,6 +31,17 @@ public class Module
 		this.valider = valider;
 		this.libelleCourt = libelleCourt;
 		this.libelleLong = libelleLong;
+		Programme programme = new Programme();
+		if ( ProgrammeItemDB.listParCodeModule(this.code) == null ) {
+			for ( PatternCategorieModuleItem pattern : this.categorieModule.getCategorieHeures() ){
+				programme.addItem(new ProgrammeItem(this.categorieModule, pattern.getCategorieHeure(), this.code, 0, 0, 0));
+			}
+		} else {
+			for ( ProgrammeItem item : ProgrammeItemDB.listParCodeModule(this.code)){
+				programme.addItem(item);
+			}
+		}
+		this.programme = programme;
 	}
 
 	
@@ -59,11 +71,6 @@ public class Module
 	}
 
 	public Programme getProgramme(){
-		Programme programme = new Programme();
-		if ( ProgrammeItemDB.listParCodeModule(this.code) == null ) return null;
-		for ( ProgrammeItem item : ProgrammeItemDB.listParCodeModule(this.code)){
-			programme.addItem(item);
-		}
 		return programme;
 	}
 
@@ -84,16 +91,6 @@ public class Module
 		return libelleLong;
 	}
 
-	public Integer getTotalAffecteEqTd()
-	{
-		int h = 0;
-		if ( AffectationDB.getAffectationsParModule(this.code) == null ) return null;
-		for ( Affectation affectation : AffectationDB.getAffectationsParModule(this.code)){
-			h+= affectation.getNbEqTd();
-		}
-		return h;
-	}
-
 	public Integer getTotalPromoEqTd()
 	{
 		int h = 0;
@@ -106,6 +103,9 @@ public class Module
 
 	public boolean sauvegarder()
 	{
+		for ( ProgrammeItem item : programme.listProgrammeItems() ){
+			item.sauvegarder();
+		}
 		return ModuleDB.save(this);
 	}
 
@@ -117,5 +117,25 @@ public class Module
 	public List<Affectation> getLstAffectation()
 	{
 		return AffectationDB.getAffectationsParModule(code);
+	}
+
+
+	public int getNbHeureProgramme(String string)
+	{
+		return this.getProgramme().getItem(string).getNbHPn();
+	}
+
+
+
+	public int getNbHeureSemaine(String string)
+	{
+		return this.getProgramme().getItem(string).getNbHeure();
+	}
+
+
+
+	public int getNbSemaine(String string) 
+	{
+		return this.getProgramme().getItem(string).getNbSemaine();
 	}
 }

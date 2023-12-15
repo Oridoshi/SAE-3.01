@@ -42,7 +42,7 @@ public class ProgrammeItemDB {
 				programmeItems.add(new ProgrammeItem(
 					CategorieModuleDB.getParNom(ligne.get("nomcatmodule")),
 					CategorieHeureDB.getParNom(ligne.get("nomcath")),
-					ModuleDB.getParCode(ligne.get("codemodule")),
+					ligne.get("codemodule"),
 					Integer.parseInt(ligne.get("nbhprogramme")),
 					Integer.parseInt(ligne.get("nbhpromo")),
 					Integer.parseInt(ligne.get("nbsemaine"))
@@ -66,7 +66,7 @@ public class ProgrammeItemDB {
 		try{
 			psDelete.setString(1, programmeItem.getCategorieModule().getNom());
 			psDelete.setString(2, programmeItem.getCategorieHeure().getNom());
-			psDelete.setString(3, programmeItem.getModule().getCode());
+			psDelete.setString(3, programmeItem.getCodeModule());
 			if ( DB.update(psDelete) == 1){
 				programmeItems.remove(programmeItem);
 				init();
@@ -87,7 +87,7 @@ public class ProgrammeItemDB {
 				psUpdate.setInt(3, programmeItem.getNbSemaine());
 				psUpdate.setString(4, programmeItem.getCategorieModule().getNom());
 				psUpdate.setString(5, programmeItem.getCategorieHeure().getNom());
-				psUpdate.setString(6, programmeItem.getModule().getCode());
+				psUpdate.setString(6, programmeItem.getCodeModule());
 				return DB.update(psUpdate) == 1;
 			} catch ( SQLException e){
 				return false;
@@ -96,7 +96,7 @@ public class ProgrammeItemDB {
 			try{
 				psCreate.setString(1, programmeItem.getCategorieModule().getNom());
 				psCreate.setString(2, programmeItem.getCategorieHeure().getNom());
-				psCreate.setString(3, programmeItem.getModule().getCode());
+				psCreate.setString(3, programmeItem.getCodeModule());
 				psCreate.setInt(4, programmeItem.getNbHPn());
 				psCreate.setInt(5, programmeItem.getNbHeure());
 				psCreate.setInt(6, programmeItem.getNbSemaine());
@@ -115,8 +115,8 @@ public class ProgrammeItemDB {
 
 	private static void init(){
 		for ( ProgrammeItem programmeItem : programmeItems ){
-			programmeItemsParCodeModule.putIfAbsent(programmeItem.getModule().getCode(), new ArrayList<>());
-			programmeItemsParCodeModule.get(programmeItem.getModule().getCode()).add(programmeItem);
+			programmeItemsParCodeModule.putIfAbsent(programmeItem.getCodeModule(), new ArrayList<>());
+			programmeItemsParCodeModule.get(programmeItem.getCodeModule()).add(programmeItem);
 		}
 	}
 	

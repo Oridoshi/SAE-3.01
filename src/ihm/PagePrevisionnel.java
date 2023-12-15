@@ -5,7 +5,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import controleur.Controleur;
-import ihm.creationObjet.PageCreationRessource;
+import ihm.classPerso.JIntegerTextField;
+import ihm.creationObjet.PageEditionRessource;
 import metier.model.Affectation;
 import metier.model.Module;
 import metier.model.Semestre;
@@ -30,6 +31,8 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 	private FrameIhm mere;
 	private JTabbedPane tabbedPane;
 
+	private List<PanelInfoSemestre> lstPanelInfoSemestre;
+
 	public PagePrevisionnel(Controleur ctrl, FrameIhm mere)
 	{
 		this.ctrl = ctrl;
@@ -41,9 +44,11 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 
 		this.tabbedPane = new JTabbedPane();
 
+		this.lstPanelInfoSemestre = new ArrayList<PanelInfoSemestre>();
 		for (int s = 1; s <= 6; s++)
 		{
-			this.tabbedPane.addTab("S" + s, new PanelInfoSemestre(ctrl, s));
+			this.lstPanelInfoSemestre.add(new PanelInfoSemestre(this.ctrl, s));
+			this.tabbedPane.addTab("S" + s, this.lstPanelInfoSemestre.get(s - 1));
 		}
 
 		this.add(this.tabbedPane);
@@ -79,7 +84,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 	{
 		if (e.getSource() == this.btnCreaRessource)
 		{
-			this.mere.changerPage(new PageCreationRessource(this.ctrl, this.mere, this.ctrl.getSemestre(this.tabbedPane.getSelectedIndex() + 1)));
+			this.mere.changerPage(PageEditionRessource.factorieCreationRessource(this.ctrl, this.mere, this.ctrl.getSemestre(this.tabbedPane.getSelectedIndex() + 1)));
 		}
 		else if (e.getSource() == this.btnCreaSae)
 		{
@@ -91,7 +96,10 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 		}
 		else if (e.getSource() == this.btnModif)
 		{
-
+			if(this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).hasRowSelect())
+			{
+				this.mere.changerPage(PageEditionRessource.factorieEditionRessource(this.ctrl, this.mere, this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getModuleSelectedRow()));
+			}
 		}
 		else if (e.getSource() == this.btnSupp)
 		{
@@ -101,10 +109,10 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 
 	private class PanelInfoSemestre extends JPanel
 	{
-		private JTextField txtFNbGpTd; //Nombre de groupe TD
-		private JTextField txtFNbGpTp; //Nombre de groupe TP
-		private JTextField txtFNbEtud; //Nombre d'etudiant
-		private JTextField txtFNbSeme; //Nombre de semaine
+		private JIntegerTextField txtFNbGpTd; //Nombre de groupe TD
+		private JIntegerTextField txtFNbGpTp; //Nombre de groupe TP
+		private JIntegerTextField txtFNbEtud; //Nombre d'etudiant
+		private JIntegerTextField txtFNbSeme; //Nombre de semaine
 
 		private JTable     tableRessource;
 
@@ -130,13 +138,17 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			panelInfoSemestre.setLayout(new GridLayout(1, 8));
 
 			panelInfoSemestre.add(new JLabel("nb gp TD"));
-			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
+			panelInfoSemestre.add((this.txtFNbGpTd = new JIntegerTextField(3, this.semestreActu.getNbGroupeTd())));
+			this.txtFNbGpTd.bloquerCaractereNonValide(true);
 			panelInfoSemestre.add(new JLabel("nb gp TP"));
-			panelInfoSemestre.add((this.txtFNbGpTp = new JTextField("" + this.semestreActu.getNbGroupeTp())));
+			panelInfoSemestre.add((this.txtFNbGpTp = new JIntegerTextField(3, this.semestreActu.getNbGroupeTp())));
+			this.txtFNbGpTp.bloquerCaractereNonValide(true);
 			panelInfoSemestre.add(new JLabel("nb Etd"));
-			panelInfoSemestre.add((this.txtFNbEtud = new JTextField("" + this.semestreActu.getNbEtu())));
+			panelInfoSemestre.add((this.txtFNbEtud = new JIntegerTextField(3, this.semestreActu.getNbEtu())));
+			this.txtFNbEtud.bloquerCaractereNonValide(true);
 			panelInfoSemestre.add(new JLabel("nb semaine"));
-			panelInfoSemestre.add((this.txtFNbSeme = new JTextField("" + this.semestreActu.getNbSemaine())));
+			panelInfoSemestre.add((this.txtFNbSeme = new JIntegerTextField(3, this.semestreActu.getNbSemaine())));
+			this.txtFNbSeme.bloquerCaractereNonValide(true);
 
 
 			/*----------PanelInfo----------*/
@@ -160,6 +172,16 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			/*----------PanelTab----------*/
 
 			this.add(panelTab, BorderLayout.CENTER);
+		}
+
+		public Module getModuleSelectedRow()
+		{
+			return this.semestreActu.getlstModules().get(this.tableRessource.getSelectedRow());
+		}
+
+		public boolean hasRowSelect()
+		{
+			return this.tableRessource.getSelectedRow() != -1;
 		}
 	}
 
@@ -190,7 +212,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			}
 			else
 			{
-				this.tabDonnees = new Object[1][nbCol];
+				this.tabDonnees = new Object[0][nbCol];
 			}
 		}
 
@@ -260,7 +282,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 		}
 
 		public int getRowCount()                                {return this.tabDonnees.length;}
-		public int getColumnCount()                             {return this.tabDonnees[0].length;}
+		public int getColumnCount()                             {return 4;}
 		public Object getValueAt(int rowIndex, int columnIndex) {return this.tabDonnees[rowIndex][columnIndex];}
 	}
 }

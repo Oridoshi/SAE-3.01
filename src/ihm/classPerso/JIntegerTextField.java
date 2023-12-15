@@ -77,7 +77,13 @@ public class JIntegerTextField extends JTextField implements KeyListener, FocusL
 	 */
 	public int getValue() {
 		if (this.getText().equals("")) return 0;
-		return Integer.parseInt(this.getText().replace(" ", ""));
+		return Integer.parseInt(this.getText().replace(" ", ""));
+	}
+
+	public void setValue(int value){
+		NumberFormat numberFormat = NumberFormat.getInstance();
+		String nombreAvecEspace = numberFormat.format(value);
+		this.setText(nombreAvecEspace);
 	}
 
 	/**
