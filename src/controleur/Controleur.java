@@ -53,6 +53,9 @@ public class Controleur
 			i.sauvegarder();
 		for ( IModifiable i : listSuppression )
 			i.supprimer();
+
+		this.listSauvegarder = new ArrayList<>();
+		this.listSuppression = new ArrayList<>();
 	}
 
 	public static void main(String[] args)

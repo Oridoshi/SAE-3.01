@@ -103,7 +103,12 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 		}
 		else if (e.getSource() == this.btnSupp)
 		{
-
+			if(this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).hasRowSelect())
+			{
+				this.ctrl.ajouterSuppAttente(this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getModuleSelectedRow());
+				this.ctrl.sauvegarder();
+				this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).updateTable();
+			}
 		}
 	}
 
@@ -159,6 +164,13 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			JPanel panelTab = new JPanel();
 			panelTab.setLayout(new BorderLayout());
 
+			System.out.println("--------------------");
+			for (Module mm : this.ctrl.getSemestre(1).getlstModules())
+			{
+				System.out.println(mm.getLibelleLong());
+			}
+			System.out.println("--------------------");
+
 			this.tableRessource = new JTable( new ModelAffichageTableau(this.ctrl, this.semestreActu.getlstModules()) );
 			this.tableRessource.setFillsViewportHeight(true);
 			this.tableRessource.setRowHeight(25);
@@ -172,6 +184,11 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			/*----------PanelTab----------*/
 
 			this.add(panelTab, BorderLayout.CENTER);
+		}
+
+		public void updateTable()
+		{
+			this.tableRessource.setModel(new ModelAffichageTableau(this.ctrl, this.semestreActu.getlstModules()));
 		}
 
 		public Module getModuleSelectedRow()

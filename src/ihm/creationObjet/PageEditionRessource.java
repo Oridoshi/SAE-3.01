@@ -584,7 +584,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		gbcRepartition.gridx = 11;
 		panelTmpRepartition.add(this.txtFSom1, gbcRepartition);
 
-		//quatrieme ligne DDFEFDD
+		//quatrieme ligne
 		JLabel lblTotPromo = new JLabel("Total promo (eqtd)");
 		lblTotPromo.setForeground(PageEditionRessource.COULEUR_LABEL);
 		lblTotPromo.setFont(PageEditionRessource.FONT_LABEL);
@@ -756,6 +756,8 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 				{
 					JOptionPane.showMessageDialog(this.mere, "Vous avez un semestre différent pour votre code que celui de votre module.", "Information Module entrer différente", JOptionPane.INFORMATION_MESSAGE);
 				}
+				
+				this.MODULE.setCode(this.txtFCode.getText());
 			}
 			else
 			{
@@ -794,14 +796,21 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 			{
 				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un libellé court !", "ERREUR ENTRER LIBELLE", JOptionPane.ERROR_MESSAGE);
 			}
-
-			if(this.chkValider.isSelected())
+			else if(this.MODULE.estDispo())
 			{
-				System.out.println("test");
-				this.majModule();
-				this.ctrl.ajouterSauvAttente(MODULE);
-				this.ctrl.sauvegarder();
-				this.mere.changerPage(new PagePrevisionnel(ctrl, mere));
+				JOptionPane.showMessageDialog(this.mere, "Le code que vous avez entrée est déjà utilisé !", "ERREUR CODE", JOptionPane.ERROR_MESSAGE);
+			}
+			else
+			{
+				if(this.chkValider.isSelected())
+				{
+					System.out.println("test");
+					this.majModule();
+					this.ctrl.ajouterSauvAttente(MODULE);
+					this.ctrl.sauvegarder();
+					this.mere.changerPage(new PagePrevisionnel(ctrl, mere));
+				}
+
 			}
 		}
 		else if(e.getSource() == this.chkValider)

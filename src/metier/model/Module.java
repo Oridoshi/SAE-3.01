@@ -122,6 +122,11 @@ public class Module implements IModifiable
 		return ModuleDB.save(this);
 	}
 
+	public boolean estDispo()
+	{
+		return !(ModuleDB.getParCode(this.code) == null || ModuleDB.getParCode(this.code) == this);
+	}
+
 	public boolean supprimer()
 	{
 		for ( ProgrammeItem item : programme.listProgrammeItems() ){
