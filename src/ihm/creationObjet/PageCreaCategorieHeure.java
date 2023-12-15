@@ -7,6 +7,8 @@ import javax.swing.text.NumberFormatter;
 
 import controleur.Controleur;
 import ihm.FrameIhm;
+import metier.model.Affectation;
+import metier.model.CategorieHeure;
 import metier.model.Module;
 import metier.model.Semestre;
 
@@ -20,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.NumberFormat;
+import java.util.List;
 
 public class PageCreaCategorieHeure implements ActionListener, KeyListener
 {
@@ -27,13 +30,19 @@ public class PageCreaCategorieHeure implements ActionListener, KeyListener
 	private Controleur ctrl;
 	private FrameIhm   mere;
 
+	private List<CategorieHeure> lstCategorieHeure;
+	private JTable tableCategorieHeure;
+
 	private JTextField textFieldNom;
 	private JTextField textFieldCoefTP;
 
-	public PageCreaCategorieHeure(FrameIhm mere, Controleur ctrl)
+	public PageCreaCategorieHeure(FrameIhm mere, Controleur ctrl, List<CategorieHeure> lstCategorieHeure, JTable tableCategorieHeure)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
+
+		this.lstCategorieHeure = lstCategorieHeure;
+		this.tableCategorieHeure = tableCategorieHeure;
 
 		this.dial = new JDialog(mere, "Création d'une catégorie d'heure", true);
 		this.dial.setLayout(new BorderLayout());
@@ -94,6 +103,12 @@ public class PageCreaCategorieHeure implements ActionListener, KeyListener
 	{
 		// this.ctrl.ajouterModule(new Module(null, null, null, false, null, null, null));
 		// this.mere.majTable();
+
+		CategorieHeure categorieHeure = new CategorieHeure(this.textFieldNom.getText(), Integer.parseInt(this.textFieldCoefTP.getText()));
+		this.lstCategorieHeure.add(categorieHeure);
+		this.tableCategorieHeure.repaint();
+		this.ctrl.ajouterSauvAttente(categorieHeure);
+
 		this.dial.dispose();
 	}
 
