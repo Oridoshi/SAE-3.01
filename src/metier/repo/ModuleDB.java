@@ -5,6 +5,7 @@ import metier.DBResult;
 import metier.model.Affectation;
 import metier.model.CategorieHeure;
 import metier.model.CategorieModule;
+import metier.model.Intervenant;
 import metier.model.Module;
 import metier.model.Programme;
 
