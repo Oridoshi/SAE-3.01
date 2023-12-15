@@ -186,8 +186,7 @@ public class PageParametres extends JPanel implements ActionListener
 		private List<CategorieHeure> lstCategorieHeure;
 
 		private JPanel panelBoutonsTableau;
-		private JButton btnAjouter;
-		private JButton btnSupprimer;
+		private JButton btnModifier;
 
 		private JTable tableCategorieHeure;
 		private JScrollPane spTableauCategorieHeure;
@@ -219,19 +218,16 @@ public class PageParametres extends JPanel implements ActionListener
 			this.panelBoutonsTableau = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 			this.panelBoutonsTableau.setBorder(new EmptyBorder(5, 0, 5, 0));
 
-			this.btnAjouter = new JButton("ajouter");
-			this.btnSupprimer = new JButton("supprimer");
-			this.btnSupprimer.setEnabled(false);
+			this.btnModifier = new JButton("modifier");
+			this.btnModifier.setEnabled(false);
 
-			this.panelBoutonsTableau.add(this.btnAjouter);
-			this.panelBoutonsTableau.add(this.btnSupprimer);
+			this.panelBoutonsTableau.add(this.btnModifier);
 
 			this.add(this.panelBoutonsTableau, BorderLayout.SOUTH);
 
 
 			// Ajout des listeners
-			this.btnAjouter.addActionListener(this);
-			this.btnSupprimer.addActionListener(this);
+			this.btnModifier.addActionListener(this);
 		}
 
 		public void majTab()
@@ -242,14 +238,9 @@ public class PageParametres extends JPanel implements ActionListener
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			if (e.getSource() == this.btnAjouter)
+			if (e.getSource() == this.btnModifier)
 			{
 				new PageCreaCategorieHeure(this.mere, ctrl, this.lstCategorieHeure, this.tableCategorieHeure);
-			}
-
-			if (e.getSource() == this.btnSupprimer)
-			{
-				this.ctrl.ajouterSuppAttente(this.lstCategorieHeure.get(this.tableCategorieHeure.getSelectedRow()));
 			}
 
 			this.majTab();
@@ -260,9 +251,9 @@ public class PageParametres extends JPanel implements ActionListener
 		{
 			// Vérifier si une ligne est sélectionnée
 			if (!e.getValueIsAdjusting() && tableCategorieHeure.getSelectedRow() != -1) {
-				btnSupprimer.setEnabled(true); // Activer le bouton
+				btnModifier.setEnabled(true); // Activer le bouton
 			} else {
-				btnSupprimer.setEnabled(false); // Désactiver le bouton si aucune ligne n'est sélectionnée
+				btnModifier.setEnabled(false); // Désactiver le bouton si aucune ligne n'est sélectionnée
 			}
 		}
 	}
