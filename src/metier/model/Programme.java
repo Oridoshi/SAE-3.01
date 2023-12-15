@@ -1,5 +1,6 @@
 package metier.model;
 
+import java.util.Collection;
 import java.awt.List;
 import java.util.Collection;
 import java.util.HashMap;

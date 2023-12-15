@@ -35,14 +35,17 @@ public class Module implements IModifiable
 		Programme programme = new Programme();
 		if ( ProgrammeItemDB.listParCodeModule(this.code) == null ) {
 			for ( PatternCategorieModuleItem pattern : this.categorieModule.getCategorieHeures() ){
-				programme.addItem(new ProgrammeItem(this.categorieModule, pattern.getCategorieHeure(), this, 0, 0, 0));
+				programme.addItem(new ProgrammeItem(this.categorieModule, pattern.getCategorieHeure(), this.code, 0, 0, 0));
 			}
 		} else {
 			for ( ProgrammeItem item : ProgrammeItemDB.listParCodeModule(this.code)){
 				programme.addItem(item);
 			}
 		}
+		this.programme = programme;
 	}
+
+	
 
 	public boolean setCode(String code) {
 		if ( ModuleDB.getParCode(code) != null ) return false;
@@ -89,16 +92,6 @@ public class Module implements IModifiable
 		return libelleLong;
 	}
 
-	public Integer getTotalAffecteEqTd()
-	{
-		int h = 0;
-		if ( AffectationDB.getAffectationsParModule(this.code) == null ) return null;
-		for ( Affectation affectation : AffectationDB.getAffectationsParModule(this.code)){
-			h+= affectation.getNbEqTd();
-		}
-		return h;
-	}
-
 	public Integer getTotalPromoEqTd()
 	{
 		int h = 0;
@@ -111,6 +104,9 @@ public class Module implements IModifiable
 
 	public boolean sauvegarder()
 	{
+		for ( ProgrammeItem item : programme.listProgrammeItems() ){
+			item.sauvegarder();
+		}
 		return ModuleDB.save(this);
 	}
 
@@ -126,5 +122,23 @@ public class Module implements IModifiable
 	{
 		return AffectationDB.getAffectationsParModule(code);
 	}
+ 
+	public int getNbHeureProgramme(String string)
+	{
+		return this.getProgramme().getItem(string).getNbHPn();
+	}
 
+
+
+	public int getNbHeureSemaine(String string)
+	{
+		return this.getProgramme().getItem(string).getNbHeure();
+	}
+
+
+
+	public int getNbSemaine(String string) 
+	{
+		return this.getProgramme().getItem(string).getNbSemaine();
+	}
 }

@@ -12,15 +12,15 @@ public class ProgrammeItem implements IModifiable{
     private Integer nbHeure;
     private CategorieModule categorieModule;
     private CategorieHeure categorieHeure;
-    private Module module;
+    private String codeModule;
 
-    public ProgrammeItem(CategorieModule categorieModule, CategorieHeure categorieHeure, Module module, Integer nbHPn, Integer nbSemaine, Integer nbHeure) {
+    public ProgrammeItem(CategorieModule categorieModule, CategorieHeure categorieHeure, String codeModule, Integer nbHPn, Integer nbSemaine, Integer nbHeure) {
         this.nbHPn = nbHPn;
         this.nbHeure = nbHeure;
         this.nbSemaine = nbSemaine;
         this.categorieHeure = categorieHeure;
         this.categorieModule = categorieModule;
-        this.module = module;
+        this.codeModule = codeModule;
     }
 
     public void setNbHPn(int i){
@@ -43,8 +43,8 @@ public class ProgrammeItem implements IModifiable{
         return categorieHeure;
     }
 
-    public Module getModule() {
-        return module;
+    public String getCodeModule() {
+        return codeModule;
     }
 
     public Integer getNbHPn() {
@@ -64,7 +64,8 @@ public class ProgrammeItem implements IModifiable{
     }
 
     public Integer getPromoEqTd(){
-        int h = this.nbHeure;
+        return 0;
+        /* int h = this.nbHeure;
         if ( this.nbSemaine > 0 ) h = h * this.nbSemaine;
         h = (int) (getCategorieHeure().getCoef() * h);
         if ( this.getCategorieHeure().getNom().equals("TP") ){
@@ -73,7 +74,7 @@ public class ProgrammeItem implements IModifiable{
         if ( this.getCategorieHeure().getNom().equals("TD") ){
             h = h * module.getSemestre().getNbGroupeTd();
         }
-        return h;
+        return h; */
     }
 
     public boolean sauvegarder(){

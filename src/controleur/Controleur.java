@@ -1,5 +1,7 @@
 package controleur;
 import metier.repo.*;
+
+import java.lang.module.ModuleDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,5 +98,10 @@ public class Controleur
 	}
 
 	public void ajouterModule() {
+	}
+
+	public CategorieModule getCategorieModule(String string)
+	{
+		return CategorieModuleDB.getParNom(string);
 	}
 }
