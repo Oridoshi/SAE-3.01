@@ -257,6 +257,7 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 				String  commentaire = this.txtFCommentaire.getText();
 
 				Affectation affectation = new Affectation(inter, catHeure, nbGroupe, nbSemaine, nbHeure, commentaire, module);
+				this.ctrl.ajouterSauvAttente(affectation);
 				this.lstAffectation.add(affectation);
 				this.tableRessource.repaint();
 				this.dial.dispose();
@@ -271,7 +272,7 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 	@Override
 	public void focusGained(FocusEvent e)
 	{
-		if(e.getSource() == this.txtFNbHeure)	
+		if(e.getSource() == this.txtFNbHeure || ((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP"))
 		{
 			this.txtFNbSemaine.setEditable(false);
 			this.txtFNbGroupe.setEditable(false);
@@ -287,7 +288,7 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 	{
 		if(e.getSource() == this.txtFNbHeure)
 		{
-			if(this.txtFNbHeure.getText().equals(""))
+			if(this.txtFNbHeure.getText().equals("") && !((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP"))
 			{
 				this.txtFNbSemaine.setEditable(true);
 				this.txtFNbGroupe.setEditable(true);

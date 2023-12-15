@@ -35,6 +35,10 @@ public class ProgrammeItem implements IModifiable{
         this.nbHeure = nbHeure;
     }
 
+    void setCodeModule(String code){
+        this.codeModule = code;
+    } 
+
     public CategorieModule getCategorieModule() {
         return categorieModule;
     }

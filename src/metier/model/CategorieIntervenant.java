@@ -11,6 +11,7 @@ import metier.repo.CategorieModuleDB;
  */
 public class CategorieIntervenant implements IModifiable
 {
+	private String codeOrigine;
 	private String code;
 	private String nom;
 	private int    minH;
@@ -19,6 +20,7 @@ public class CategorieIntervenant implements IModifiable
 
 	public CategorieIntervenant(String code, String nom, int minH, int maxH, double coefTp )
 	{
+		this.codeOrigine = code;
 		this.code   = code;
 		this.nom    = nom;
 		this.minH   = minH;
@@ -31,6 +33,7 @@ public class CategorieIntervenant implements IModifiable
 	public int    getMinH  () { return minH;   }
 	public int    getMaxH  () { return maxH;   }
 	public double getCoefTp() { return coefTp; }
+	public String getCodeOrigine() { return this.codeOrigine; }
 
 
 	public boolean setCode  ( String code   ) { 
@@ -38,6 +41,7 @@ public class CategorieIntervenant implements IModifiable
 		this.code   = code;
 		return true;
 	}
+	public void setCodeOrigine(String code) { this.codeOrigine = code; }
 	public void setNom   ( String nom    ) {
 		this.nom    = nom;
 	}

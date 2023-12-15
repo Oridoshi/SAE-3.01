@@ -17,6 +17,7 @@ import metier.repo.SemestreDB;
  */
 public class Module implements IModifiable
 {
+	private String codeOrigine;
 	private String   code;
 	private Semestre semestre;
 	private CategorieModule categorieModule;
@@ -26,6 +27,7 @@ public class Module implements IModifiable
 	private Programme programme;
 
 	public Module(String code, Semestre semestre, CategorieModule categorieModule, boolean valider, String libelleCourt, String libelleLong) {
+		this.codeOrigine = code;
 		this.code = code;
 		this.semestre = semestre;
 		this.categorieModule = categorieModule;
@@ -46,10 +48,20 @@ public class Module implements IModifiable
 	}
 
 	
+	public String getCodeOrigine() {
+		return codeOrigine;
+	}
+
+	public void setCodeOrigine(String codeOrigine) {
+		this.codeOrigine = codeOrigine;
+	}
 
 	public boolean setCode(String code) {
 		if ( ModuleDB.getParCode(code) != null ) return false;
 		this.code = code;
+		for ( ProgrammeItem item : this.programme.listProgrammeItems()){
+			item.setCodeModule(code);
+		}
 		return true;
 	}
 

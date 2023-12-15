@@ -98,9 +98,9 @@ public class PageAccueil extends JPanel implements ActionListener
 		{
 			//this.mere.changerPage(new PageParametres(this.ctrl, this.mere));
 		}
-		else
-		{
-			this.mere.changerPage(new PageEditionModule(this.ctrl, this.mere));
-		}
+		// else
+		// {
+		// 	this.mere.changerPage(new PageEditionModule(this.ctrl, this.mere));
+		// }
 	}
 }

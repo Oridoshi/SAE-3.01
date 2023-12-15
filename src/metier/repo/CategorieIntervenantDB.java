@@ -79,8 +79,13 @@ public class CategorieIntervenantDB {
 				psUpdate.setInt(3, categorieIntervenant.getMinH());
 				psUpdate.setInt(4, categorieIntervenant.getMaxH());
 				psUpdate.setDouble(5, categorieIntervenant.getCoefTp());
-				psUpdate.setString(6, categorieIntervenant.getCode());
-				return DB.update(psUpdate) == 1;
+				psUpdate.setString(6, categorieIntervenant.getCodeOrigine());
+				if ( DB.update(psUpdate) == 1 ){
+					categorieIntervenant.setCodeOrigine(categorieIntervenant.getCode());
+					return true;
+				} else {
+					return false;
+				}
 			} catch ( SQLException e){
 				return false;
 			}

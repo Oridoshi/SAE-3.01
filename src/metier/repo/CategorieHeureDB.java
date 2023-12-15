@@ -71,8 +71,13 @@ public class CategorieHeureDB {
 			try{
 				psUpdate.setString(1, categorieHeure.getNom());
 				psUpdate.setDouble(2, categorieHeure.getCoef());
-				psUpdate.setString(3, categorieHeure.getNom());
-				return DB.update(psUpdate) == 1;
+				psUpdate.setString(3, categorieHeure.getNomOrigine());
+				if ( DB.update(psUpdate) == 1 ){
+					categorieHeure.setNomOrigine(categorieHeure.getNom());
+					return true;
+				} else {
+					return false;
+				}
 			} catch ( SQLException e){
 				return false;
 			}

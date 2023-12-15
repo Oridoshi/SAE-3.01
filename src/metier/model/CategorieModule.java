@@ -8,14 +8,24 @@ import metier.repo.PatternCategorieModuleItemDB;
 
 public class CategorieModule implements IModifiable {
 
+    private String nomOrigine;
     private String nom;
 
     public CategorieModule(String nom) {
+        nomOrigine = nom;
         this.nom = nom;
     }
 
     public String getNom() {
         return nom;
+    }
+
+    public String getNomOrigine() {
+        return nomOrigine;
+    }
+
+    public void setNomOrigine(String nom) {
+        this.nomOrigine = nom;
     }
 
     public boolean setNom(String nom) {

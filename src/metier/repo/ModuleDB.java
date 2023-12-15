@@ -35,7 +35,7 @@ public class ModuleDB {
 		try{
 			psGetAll = db.prepareStatement("SELECT * FROM Module");
 			psDelete = db.prepareStatement("DELETE FROM Module WHERE code = ?");
-			psUpdate = db.prepareStatement("UPDATE Module SET code = ?, idSemestre = ?, nomCatModule = ?, valider = ?, libelleCourt = ?, libelleLong = ? WHERE code = ?");
+			psUpdate = db.prepareStatement("UPDATE Module SET code = ?, idSemestre = ?, nomCatModule = ?, forceValider = ?, libcourt = ?, liblong = ? WHERE code = ?");
 			psCreate = db.prepareStatement("INSERT INTO Module VALUES (?, ?, ?, ?, ?, ?)");
 			DBResult result = new DBResult(psGetAll.executeQuery());			
 			for ( Map<String, String> ligne : result.getLignes() ){
@@ -43,7 +43,7 @@ public class ModuleDB {
 					ligne.get("code"), 
 					SemestreDB.getParId(Integer.parseInt(ligne.get("idsemestre"))),
 					CategorieModuleDB.getParNom(ligne.get("nomcatmodule")),
-					Boolean.parseBoolean(ligne.get("valider")),
+					Boolean.parseBoolean(ligne.get("forceValider")),
 					ligne.get("libcourt"),
 					ligne.get("liblong")));
 			}
@@ -91,8 +91,13 @@ public class ModuleDB {
 				psUpdate.setBoolean(4, module.getValider());
 				psUpdate.setString(5, module.getLibelleCourt());
 				psUpdate.setString(6, module.getLibelleLong());
-				psUpdate.setString(7, module.getCode());
-				return DB.update(psUpdate) == 1;
+				psUpdate.setString(7, module.getCodeOrigine());
+				if ( DB.update(psUpdate) == 1 ){
+					module.setCodeOrigine(module.getCode());
+					return true;
+				} else {
+					return false;
+				}
 			} catch ( SQLException e){
 				return false;
 			}

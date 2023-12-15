@@ -71,8 +71,13 @@ public class CategorieModuleDB {
 		if ( categoriesModule.contains(categorieModule) ){
 			try{
 				psUpdate.setString(1, categorieModule.getNom());
-				psUpdate.setString(2, categorieModule.getNom());
-				return DB.update(psUpdate) == 1;
+				psUpdate.setString(2, categorieModule.getNomOrigine());
+				if ( DB.update(psUpdate) == 1 ){
+					categorieModule.setNomOrigine(categorieModule.getNom());
+					return true;
+				} else {
+					return false;
+				}
 			} catch ( SQLException e){
 				return false;
 			}
