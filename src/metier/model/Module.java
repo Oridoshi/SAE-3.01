@@ -111,6 +111,9 @@ public class Module
 
 	public boolean supprimer()
 	{
+		for ( ProgrammeItem item : programme.listProgrammeItems() ){
+			item.sauvegarder();
+		}
 		return ModuleDB.delete(this);
 	}
 

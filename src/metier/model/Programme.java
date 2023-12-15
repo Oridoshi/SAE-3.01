@@ -1,8 +1,11 @@
 package metier.model;
 
 import java.util.Collection;
+import java.awt.List;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import metier.repo.ProgrammeItemDB;
 
@@ -16,6 +19,10 @@ public class Programme {
 
 	public ProgrammeItem getItem(String key){
 		return this.programme.get(key);
+	}
+
+	public Collection<ProgrammeItem> listProgrammeItems(){
+		return programme.values();
 	}
 
 	public void removeItem(String key){
