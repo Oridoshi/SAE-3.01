@@ -1,7 +1,11 @@
 package metier.model;
+import java.util.ArrayList;
 import java.util.List;
 
+import metier.repo.IntervenantDB;
 import metier.repo.ModuleDB;
+import metier.repo.SemestreDB;
+
 
 /**
  * Semestre
@@ -30,9 +34,35 @@ public class Semestre
 	public int getNbEtu()                  {return nbEtu;}
 	public int getNbSemaine()              {return nbSemaine;}
 
-	public List<Module> getlstRessource(int id)
+	public void setNbGroupeTd(int nbGroupeTd) {
+		this.nbGroupeTd = nbGroupeTd;
+	}
+
+	public void setNbGroupeTp(int nbGroupeTp) {
+		this.nbGroupeTp = nbGroupeTp;
+	}
+
+	public void setNbEtu(int nbEtu) {
+		this.nbEtu = nbEtu;
+	}
+
+	public void setNbSemaine(int nbSemaine) {
+		this.nbSemaine = nbSemaine;
+	}
+
+	public List<Module> getlstModules()
 	{
-		return new ModuleDB().getModulesParSemestre(id);
+		return ModuleDB.getParIdSemestre(this.id);
+	}
+
+	public boolean sauvegarder()
+	{
+		return SemestreDB.save(this);
+	}
+
+	public boolean supprimer()
+	{
+		return SemestreDB.delete(this);
 	}
 	
 }

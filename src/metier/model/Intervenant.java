@@ -1,9 +1,18 @@
 package metier.model;
 
+import metier.repo.IntervenantDB;
+
 /*
  * Intervenant
  * Classe qui permet de creer un intervenant
  */
+
+import metier.repo.AffectationDB;
+import metier.repo.CategorieIntervenantDB;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Intervenant
 {
@@ -24,13 +33,78 @@ public class Intervenant
 	}
 
 	public int getId() {return id;}
-	public CategorieIntervenant getCategorie() { return categorieIntervenant; }
+	public CategorieIntervenant getCategorie() {
+		return this.categorieIntervenant;
+	}
 	public String getNom()    { return nom;    }
 	public String getPrenom() { return prenom; }
-	public int    gethMax()   { return hMax;   }
+	public Integer gethMax(){
+		if ( this.hMax > 0 ){
+			return this.hMax;
+		} else {
+			return getCategorie().getMaxH();
+		}
+	}
 
-	public void setCategorie(CategorieIntervenant categorieIntervenant) { this.categorieIntervenant = categorieIntervenant; }
-	public void sethMax(Integer hMax)             { this.hMax = hMax;           }
+	public boolean setCategorie(CategorieIntervenant categorieIntervenant) {
+		if ( !CategorieIntervenantDB.list().contains(categorieIntervenant) ) return false;
+		this.categorieIntervenant = categorieIntervenant;
+		return true;
+	}
+	public boolean sethMax(Integer hMax)             {
+		if ( this.categorieIntervenant.getMinH() > hMax ) return false;
+		this.hMax = hMax;
+		return true;
+	}
+
+
+	public float getHParSemestre(int i){
+		int h = 0;
+		if ( AffectationDB.getAffectationsParIntervenant(this.id) == null ) return 0;
+		for ( Affectation affectation : AffectationDB.getAffectationsParIntervenant(this.id)){
+			if ( i == affectation.getModule().getSemestre().getId() ){
+				h += affectation.getNbEqTd();
+			}
+		}
+		return h;
+	}
+
+	public float getTotalParPair(){
+		int h = 0;
+		if ( AffectationDB.getAffectationsParIntervenant(this.id) == null ) return 0;
+		for ( Affectation affectation : AffectationDB.getAffectationsParIntervenant(this.id)){
+			if ( affectation.getModule().getSemestre().getId() % 2 == 0){
+				h += affectation.getNbEqTd();
+			}
+		}
+		return h;
+	}
+
+	public float getTotalParImpair(){
+		int h = 0;
+		if ( AffectationDB.getAffectationsParIntervenant(this.id) == null ) return 0;
+		for ( Affectation affectation : AffectationDB.getAffectationsParIntervenant(this.id)){
+			if ( affectation.getModule().getSemestre().getId() % 2 != 0){
+				h += affectation.getNbEqTd();
+			}
+		}
+		return h;
+	}
+
+	public Integer getHMin()
+	{
+		return this.getCategorie().getMinH();
+	}
+
+	public double getCoefTP()
+	{
+		return this.getCategorie().getCoefTp();
+	}
+
+	public double getTotal()
+	{
+		return this.getTotalParImpair() + this.getTotalParPair();
+	}
 
 	public void setNom(String nom) {
 		this.nom = nom;
@@ -38,5 +112,15 @@ public class Intervenant
 
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
+	}
+
+	public boolean sauvegarder()
+	{
+		return IntervenantDB.save(this);
+	}
+
+	public boolean supprimer()
+	{
+		return IntervenantDB.delete(this);
 	}
 }

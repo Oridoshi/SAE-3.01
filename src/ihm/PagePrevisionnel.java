@@ -5,6 +5,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import controleur.Controleur;
+import ihm.creationObjet.PageCreationRessource;
+import metier.model.Affectation;
 import metier.model.Module;
 import metier.model.Semestre;
 
@@ -12,8 +14,8 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public class PagePrevisionnel extends JPanel implements ActionListener
 {
@@ -25,16 +27,16 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 	private JButton btnModif;
 	private JButton btnSupp;
 
-	private JFrame mere;
+	private FrameIhm mere;
 	private JTabbedPane tabbedPane;
 
-	public PagePrevisionnel(Controleur ctrl, JFrame mere)
+	public PagePrevisionnel(Controleur ctrl, FrameIhm mere)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
 
 		this.setLayout(new BorderLayout());
-		this.mere.setTitle("Acceuil - Prévisionnel");
+		this.mere.setTitle("Accueil - Prévisionnel");
 		this.setBorder(new EmptyBorder(15, 30, 15, 30));
 
 		this.tabbedPane = new JTabbedPane();
@@ -75,13 +77,32 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		this.add(new JLabel(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex())), BorderLayout.SOUTH);
+		if (e.getSource() == this.btnCreaRessource)
+		{
+			this.mere.changerPage(new PageCreationRessource(this.ctrl, this.mere, this.ctrl.getSemestre(this.tabbedPane.getSelectedIndex() + 1)));
+		}
+		else if (e.getSource() == this.btnCreaSae)
+		{
+
+		}
+		else if (e.getSource() == this.btnCreaStage)
+		{
+
+		}
+		else if (e.getSource() == this.btnModif)
+		{
+
+		}
+		else if (e.getSource() == this.btnSupp)
+		{
+
+		}
 	}
 
 	private class PanelInfoSemestre extends JPanel
 	{
 		private JTextField txtFNbGpTd; //Nombre de groupe TD
-		private JTextField txtFNbGpTP; //Nombre de groupe TP
+		private JTextField txtFNbGpTp; //Nombre de groupe TP
 		private JTextField txtFNbEtud; //Nombre d'etudiant
 		private JTextField txtFNbSeme; //Nombre de semaine
 
@@ -111,11 +132,11 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			panelInfoSemestre.add(new JLabel("nb gp TD"));
 			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
 			panelInfoSemestre.add(new JLabel("nb gp TP"));
-			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
+			panelInfoSemestre.add((this.txtFNbGpTp = new JTextField("" + this.semestreActu.getNbGroupeTp())));
 			panelInfoSemestre.add(new JLabel("nb Etd"));
-			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
+			panelInfoSemestre.add((this.txtFNbEtud = new JTextField("" + this.semestreActu.getNbEtu())));
 			panelInfoSemestre.add(new JLabel("nb semaine"));
-			panelInfoSemestre.add((this.txtFNbGpTd = new JTextField("" + this.semestreActu.getNbGroupeTd())));
+			panelInfoSemestre.add((this.txtFNbSeme = new JTextField("" + this.semestreActu.getNbSemaine())));
 
 
 			/*----------PanelInfo----------*/
@@ -126,7 +147,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			JPanel panelTab = new JPanel();
 			panelTab.setLayout(new BorderLayout());
 
-			this.tableRessource = new JTable( new ModelAffichageTableau(this.ctrl, this.semestreActu.getlstRessource()) );
+			this.tableRessource = new JTable( new ModelAffichageTableau(this.ctrl, this.semestreActu.getlstModules()) );
 			this.tableRessource.setFillsViewportHeight(true);
 			this.tableRessource.setRowHeight(25);
 			this.tableRessource.setShowVerticalLines(false); // pour ne pas afficher les lignes verticales dans le tableau
@@ -148,21 +169,28 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 
 		private Object[][] tabDonnees;
 
-		public ModelAffichageTableau(Controleur ctrl, ArrayList<Module> lstRessource)
+		public ModelAffichageTableau(Controleur ctrl, List<Module> lstRessource)
 		{
 			this.ctrl = ctrl;
 
 			int nbCol = 4;
-			int nbLig = lstRessource.size();
-
-			this.tabDonnees = new Object[nbLig][nbCol];
-
-			for (int ligne = 0; ligne < nbLig; ligne++)
+			if(lstRessource != null && lstRessource.size() > 0)
 			{
-				tabDonnees[ligne][0] = lstRessource.get(ligne).getCode();
-				tabDonnees[ligne][1] = lstRessource.get(ligne).getLibelleLong();
-				tabDonnees[ligne][2] = lstRessource.get(ligne).getTotalAffecteEqTd() + "/" + lstRessource.get(ligne).getTotalPromoEqTd();
-				tabDonnees[ligne][3] = lstRessource.get(ligne).getValider();
+				int nbLig = lstRessource.size();
+
+				this.tabDonnees = new Object[nbLig][nbCol];
+
+				for (int ligne = 0; ligne < nbLig; ligne++)
+				{
+					tabDonnees[ligne][0] = lstRessource.get(ligne).getCode();
+					tabDonnees[ligne][1] = lstRessource.get(ligne).getLibelleLong();
+					tabDonnees[ligne][2] = calcul(lstRessource.get(ligne));
+					tabDonnees[ligne][3] = lstRessource.get(ligne).getValider();
+				}
+			}
+			else
+			{
+				this.tabDonnees = new Object[1][nbCol];
 			}
 		}
 
@@ -181,6 +209,54 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 				default:
 					return Object.class;
 			}
+		}
+
+		private String calcul(Module m)
+		{
+			int nbTotAffHCm = 0;
+			int nbTotAffHTd = 0;
+			int nbTotAffHTp = 0;
+			int nbTotAffHPonctu = 0;
+
+			List<Affectation> lstAff = m.getLstAffectation();
+
+			if(lstAff == null) return "0/TOT";
+
+
+			for (Affectation aff : m.getLstAffectation())
+			{
+				if (aff.getCategorieHeure().getNom().equals("CM"))
+				{
+					if(aff.getNbHeure() != null)
+						nbTotAffHCm += aff.getNbHeure();
+					else
+						nbTotAffHCm += aff.getNbGroupe() * aff.getNbSemaine();
+				}
+				else if (aff.getCategorieHeure().getNom().equals("TD"))
+				{
+					if(aff.getNbHeure() != null)
+						nbTotAffHTd += aff.getNbHeure();
+					else
+						nbTotAffHTd += aff.getNbGroupe() * aff.getNbSemaine();
+				}
+				else if (aff.getCategorieHeure().getNom().equals("TP"))
+				{
+					if(aff.getNbHeure() != null)
+						nbTotAffHTp += aff.getNbHeure();
+					else
+						nbTotAffHTp += aff.getNbGroupe() * aff.getNbSemaine();
+				}
+				else
+				{
+					if(aff.getNbHeure() != null)
+						nbTotAffHPonctu += aff.getNbHeure();
+					else
+						nbTotAffHPonctu += aff.getNbGroupe() * aff.getNbSemaine();
+				}
+			}
+
+
+			return (nbTotAffHCm + nbTotAffHTd + nbTotAffHTp + nbTotAffHPonctu) + "/" + "TOT";
 		}
 
 		public int getRowCount()                                {return this.tabDonnees.length;}

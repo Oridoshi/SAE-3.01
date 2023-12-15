@@ -1,12 +1,12 @@
--- DROP TABLE if exists Module cascade;
--- DROP TABLE if exists RemplirProgramme cascade;
--- DROP TABLE if exists Semestre cascade;
--- DROP TABLE if exists Intervenant cascade;
--- DROP TABLE if exists CategorieIntervenant cascade;
--- DROP TABLE if exists CategorieHeure cascade;
--- DROP TABLE if exists CategorieModule cascade;
--- DROP TABLE if exists Affectation cascade;
--- DROP TABLE if exists RemplirCategorieModule cascade;
+DROP TABLE if exists Module cascade;
+DROP TABLE if exists RemplirProgramme cascade;
+DROP TABLE if exists Semestre cascade;
+DROP TABLE if exists Intervenant cascade;
+DROP TABLE if exists CategorieIntervenant cascade;
+DROP TABLE if exists CategorieHeure cascade;
+DROP TABLE if exists CategorieModule cascade;
+DROP TABLE if exists Affectation cascade;
+DROP TABLE if exists RemplirCategorieModule cascade;
 
 CREATE TABLE Semestre (
 	id SERIAL PRIMARY KEY,
@@ -41,7 +41,7 @@ CREATE TABLE Module (
 	libLong VARCHAR(255) NOT NULL,
 	libCourt VARCHAR(50) NOT NULL,
 	FOREIGN KEY (idSemestre) REFERENCES Semestre(id),
-	FOREIGN KEY (nomCatModule) REFERENCES CategorieModule(name)
+	FOREIGN KEY (nomCatModule) REFERENCES CategorieModule(nom)
 );
 
 CREATE TABLE RemplirProgramme(
@@ -49,8 +49,8 @@ CREATE TABLE RemplirProgramme(
 	nomCatH VARCHAR(50) NOT NULL,
 	codeModule VARCHAR(50) NOT NULL,
 	nbHProgramme INT NOT NULL,
-	nbHPromo INT default 0,
-	nbSemaine INT default 0,
+	nbHPromo INT default 0 NOT NULL,
+	nbSemaine INT default 0 NOT NULL,
 	FOREIGN KEY (nomCatModule) REFERENCES CategorieModule(nom),
 	FOREIGN KEY (nomCatH) REFERENCES CategorieHeure(nom),
 	FOREIGN KEY (codeModule) REFERENCES Module(code),
@@ -70,19 +70,19 @@ CREATE TABLE Intervenant (
 	codeCatIntervenant VARCHAR(50) NOT NULL,
 	nom VARCHAR(255) NOT NULL,
 	prenom VARCHAR(255) NOT NULL,
-	hMax INT,
+	hMax INT default 0 NOT NULL,
 	FOREIGN KEY (codeCatIntervenant) REFERENCES CategorieIntervenant(code)
 );
 
 CREATE TABLE Affectation (
 	idIntervenant INT NOT NULL,
-	nomCatHeure INT NOT NULL,
-	nbH INT default 0,
-	nbGrp INT default 0,
+	nomCatHeure VARCHAR(50) NOT NULL,
+	nbH INT default 0 NOT NULL,
+	nbGrp INT default 0 NOT NULL,
 	codeModule VARCHAR(50) NOT NULL,
 	commentaire TEXT,
-	nbSemaine INT,
-	FOREIGN KEY (idIntervenant) REFERENCES Intervenant(idIntervenant),
+	nbSemaine INT default 0 NOT NULL,
+	FOREIGN KEY (idIntervenant) REFERENCES Intervenant(id),
 	FOREIGN KEY (nomCatHeure) REFERENCES CategorieHeure(nom),
 	FOREIGN KEY (codeModule) REFERENCES Module(code),
 	PRIMARY KEY(idIntervenant, nomCatHeure, codeModule)

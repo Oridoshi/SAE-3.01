@@ -2,96 +2,126 @@ package metier.repo;
 
 import metier.DB;
 import metier.DBResult;
+import metier.model.Affectation;
+import metier.model.CategorieHeure;
+import metier.model.CategorieModule;
 import metier.model.Module;
-import metier.model.ProgrammeItem;
+import metier.model.Programme;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ModuleDB {
 
-	private Connection db = DB.getInstance();
+	private static Connection db = DB.getInstance();
 
-	private SemestreDB semestreDB;
-	private CategorieModuleDB categorieModuleDB;
+	private static List<Module> modules;
+	private static Map<Integer, List<Module>> modulesParIdSemestre;
 
-	private PreparedStatement psGetModules;
-	private PreparedStatement psGetModuleParCode;
-	private PreparedStatement psGetProgrammeItem;
-	private PreparedStatement psGetModuleParSemestre;
+	private static PreparedStatement psGetAll;
+	private static PreparedStatement psDelete;
+	private static PreparedStatement psUpdate;
+	private static PreparedStatement psCreate;
 
-	public ModuleDB(){
-		this.semestreDB = new SemestreDB();
-		this.categorieModuleDB = new CategorieModuleDB();
+	static{
+		modules = new ArrayList<>();
+		modulesParIdSemestre = new HashMap<>();
 		try{
-			this.psGetModules = db.prepareStatement("SELECT * FROM Module");
-			this.psGetModuleParCode = db.prepareStatement("SELECT * FROM Module WHERE code = ?");
-			this.psGetProgrammeItem = db.prepareStatement("SELECT * FROM ProgrammeItem WHERE codeModule = ?");
-			this.psGetModuleParSemestre = db.prepareStatement("SELECT * FROM Module WHERE idSemestre = ?");
+			psGetAll = db.prepareStatement("SELECT * FROM Module");
+			psDelete = db.prepareStatement("DELETE FROM Module WHERE code = ?");
+			psUpdate = db.prepareStatement("UPDATE Module SET code = ?, idSemestre = ?, nomCatModule = ?, valider = ?, libelleCourt = ?, libelleLong = ? WHERE code = ?");
+			psCreate = db.prepareStatement("INSERT INTO Module VALUES (?, ?, ?, ?, ?, ?)");
+			DBResult result = new DBResult(psGetAll.executeQuery());			
+			for ( Map<String, String> ligne : result.getLignes() ){
+				modules.add(new Module(
+					ligne.get("code"), 
+					SemestreDB.getParId(Integer.parseInt(ligne.get("idsemestre"))),
+					CategorieModuleDB.getParNom(ligne.get("nomcatmodule")),
+					Boolean.parseBoolean(ligne.get("valider")),
+					ligne.get("libcourt"),
+					ligne.get("liblong")));
+			}
+			init();
 		} catch ( Exception e ){
 			e.printStackTrace();
 		}
 	}
 
-	public List<Module> getModules(){
-		DBResult result = DB.query(this.psGetModules);
-		List<Module> modules = new ArrayList<>();
-		for ( Map<String, String> ligne : result.getLignes() )
-			modules.add(ligneToModule(ligne));
+	public static List<Module> list(){
 		return modules;
 	}
 
-	public Module getModuleParCode(String code){
-		try{ this.psGetModuleParCode.setString(1, code); }
-		catch ( Exception e ) { e.printStackTrace(); }
-		DBResult result = DB.query(this.psGetModuleParCode);
-		return ligneToModule(result.getLignes().get(0));
+	public static Module getParCode(String code){
+		for ( Module module : modules )
+			if ( module.getCode().equals(code) ) return module;
+		return null;
 	}
 
-	public List<Module> getModulesParSemestre(int idSemestre){
-		try{ this.psGetModuleParSemestre.setInt(1, idSemestre); }
-		catch ( Exception e ) { e.printStackTrace(); }
-		DBResult result = DB.query(this.psGetModuleParSemestre);
-		List<Module> modules = new ArrayList<>();
-		for ( Map<String, String> ligne : result.getLignes() )
-			modules.add(ligneToModule(ligne));
-		return modules;
+	public static List<Module> getParIdSemestre(int id){
+		return modulesParIdSemestre.get(id);
 	}
 
-	private Module ligneToModule(Map<String, String> ligne){
-		return new Module(
-				ligne.get("code"),
-				semestreDB.getSemestreParId(Integer.parseInt(ligne.get("idSemestre"))),
-				categorieModuleDB.getCategorieModuleParId(ligne.get("nomCatModule")),
-				Boolean.getBoolean(ligne.get("forceValider")),
-				ligne.get("libLong"),
-				ligne.get("libCourt"),
-				null
-		);
+	public static boolean delete(Module module){
+		try{
+			psDelete.setString(1, module.getCode());
+			if ( DB.update(psDelete) == 1){
+				modules.remove(module);
+				init();
+				return true;
+			} else {
+				return false;
+			}
+		} catch ( SQLException e ){
+			return false;
+		}
 	}
 
-
-	private ArrayList<ProgrammeItem> getListeProgrammeItem(String codeModule) {
-		ArrayList<ProgrammeItem> listeProgrammeItem = new ArrayList<>();
-		try {
-				this.psGetProgrammeItem.setString(1, codeModule);
-				DBResult result = DB.query(this.psGetProgrammeItem);
-				for (Map<String, String> ligne : result.getLignes()) {
-					listeProgrammeItem.add(new ProgrammeItem(
-							new Integer(ligne.get("nbHProgramme")),
-							new Integer(ligne.get("nbSemaine")),
-							new Integer(ligne.get("nbHPromo"))));
-					}
-
-		} catch (Exception e) {
-			// TODO: handle exception
+	public static boolean save(Module module){
+		if ( modules.contains(module) ){
+			try{
+				psUpdate.setString(1, module.getCode());
+				psUpdate.setInt(2, module.getSemestre().getId());
+				psUpdate.setString(3, module.getCategorieModule().getNom());
+				psUpdate.setBoolean(4, module.getValider());
+				psUpdate.setString(5, module.getLibelleCourt());
+				psUpdate.setString(6, module.getLibelleLong());
+				psUpdate.setString(7, module.getCode());
+				return DB.update(psUpdate) == 1;
+			} catch ( SQLException e){
+				return false;
+			}
+		} else {
+			try{
+				psCreate.setString(1, module.getCode());
+				psCreate.setInt(2, module.getSemestre().getId());
+				psCreate.setString(3, module.getCategorieModule().getNom());
+				psCreate.setBoolean(4, module.getValider());
+				psCreate.setString(5, module.getLibelleCourt());
+				psCreate.setString(6, module.getLibelleLong());
+				if ( DB.update(psCreate) == 1 ){
+					modules.add(module);
+					init();
+					return true;
+				} else {
+					return false;
+				}
+			} catch ( SQLException e ){
+				return false;
+			}
 		}
 
-
-		return listeProgrammeItem;
 	}
+
+	private static void init(){
+		for ( Module module : modules ){
+			modulesParIdSemestre.putIfAbsent(module.getSemestre().getId(), new ArrayList<>());
+			modulesParIdSemestre.get(module.getSemestre().getId()).add(module);
+		}
+	}
+	
 }

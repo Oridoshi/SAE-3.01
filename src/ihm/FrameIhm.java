@@ -20,6 +20,7 @@ public class FrameIhm extends JFrame
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.add(new PageAccueil(this.ctrl, this));
+		this.setResizable(false);
 		this.setVisible(true);
 	}
 
