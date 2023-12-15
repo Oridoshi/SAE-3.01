@@ -43,7 +43,7 @@ public class ModuleDB {
 					ligne.get("code"), 
 					SemestreDB.getParId(Integer.parseInt(ligne.get("idsemestre"))),
 					CategorieModuleDB.getParNom(ligne.get("nomcatmodule")),
-					Boolean.parseBoolean(ligne.get("forceValider")),
+					!ligne.get("forcevalider").equals("f"),
 					ligne.get("libcourt"),
 					ligne.get("liblong")));
 			}
@@ -104,9 +104,9 @@ public class ModuleDB {
 		} else {
 			try{
 				psCreate.setString(1, module.getCode());
-				psCreate.setInt(2, module.getSemestre().getId());
-				psCreate.setString(3, module.getCategorieModule().getNom());
-				psCreate.setBoolean(4, module.getValider());
+				psCreate.setBoolean(2, module.getValider());
+				psCreate.setInt(3, module.getSemestre().getId());
+				psCreate.setString(4, module.getCategorieModule().getNom());
 				psCreate.setString(5, module.getLibelleCourt());
 				psCreate.setString(6, module.getLibelleLong());
 				if ( DB.update(psCreate) == 1 ){

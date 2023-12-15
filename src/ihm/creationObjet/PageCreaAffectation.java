@@ -111,6 +111,7 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 		JLabel lblCategorieHeure = new JLabel("Categorie Heure : ");
 		this.cbCategorieHeure = new JComboBox<CategorieHeure>((new Vector<>(module == null ?this.ctrl.getLstCategorieParTypeModule(this.typeModule):this.ctrl.getLstCategorieParTypeModule(module.getCategorieModule().getNom()))));
 		this.cbCategorieHeure.setRenderer(new Renderer());
+		this.cbCategorieHeure.addActionListener(this);
 
 		gbc.gridx = 0;
 		gbc.gridy = 1;
