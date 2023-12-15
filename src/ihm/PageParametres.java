@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumnModel;
 
 import controleur.Controleur;
 import ihm.creationObjet.PageCreaCategorieHeure;
@@ -139,6 +140,11 @@ public class PageParametres extends JPanel implements ActionListener
 			this.btnSupprimer.addActionListener(this);
 		}
 
+		public void majTab()
+		{
+			this.tableCategorieIntervenant.setModel(new ModelAffichageTableauIntervenant(this.ctrl, this.lstCategorieIntervenant));
+		}
+
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
@@ -146,6 +152,13 @@ public class PageParametres extends JPanel implements ActionListener
 			{
 				new PageCreaCategorieIntervenant(this.mere, ctrl, this.lstCategorieIntervenant, this.tableCategorieIntervenant);
 			}
+			
+			if (e.getSource() == this.btnSupprimer)
+			{
+				this.ctrl.ajouterSuppAttente(this.lstCategorieIntervenant.get(this.tableCategorieIntervenant.getSelectedRow()));
+			}
+
+			this.majTab();
 		}
 
 		@Override
@@ -157,6 +170,7 @@ public class PageParametres extends JPanel implements ActionListener
 				this.btnSupprimer.setEnabled(false); // Désactiver le bouton si aucune ligne n'est sélectionnée
 			}
 		}
+
 	}
 
 
@@ -220,6 +234,11 @@ public class PageParametres extends JPanel implements ActionListener
 			this.btnSupprimer.addActionListener(this);
 		}
 
+		public void majTab()
+		{
+			this.tableCategorieHeure.setModel(new ModelAffichageTableauHeure(this.ctrl, this.lstCategorieHeure));
+		}
+
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
@@ -227,6 +246,13 @@ public class PageParametres extends JPanel implements ActionListener
 			{
 				new PageCreaCategorieHeure(this.mere, ctrl, this.lstCategorieHeure, this.tableCategorieHeure);
 			}
+
+			if (e.getSource() == this.btnSupprimer)
+			{
+				this.ctrl.ajouterSuppAttente(this.lstCategorieHeure.get(this.tableCategorieHeure.getSelectedRow()));
+			}
+
+			this.majTab();
 		}
 
 		@Override
@@ -240,12 +266,6 @@ public class PageParametres extends JPanel implements ActionListener
 			}
 		}
 	}
-
-
-
-
-
-
 
 	private class ModelAffichageTableauIntervenant extends AbstractTableModel
 	{

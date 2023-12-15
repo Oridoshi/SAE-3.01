@@ -73,12 +73,6 @@ public class PageCreaCategorieIntervenant implements ActionListener, KeyListener
         formatterInteger.setMinimum(0); // Valeur minimale autorisée
 		formatterInteger.setAllowsInvalid(false); // Empêcher les valeurs invalides
 
-        NumberFormatter formatter = new NumberFormatter(new DecimalFormat("#0.00"));
-        formatter.setValueClass(Double.class); // Définir la classe de valeur comme Double
-        formatter.setMinimum(0.0); // Valeur minimale autorisée
-        formatter.setMaximum(Double.MAX_VALUE); // Valeur maximale autorisée
-        formatter.setAllowsInvalid(false); // Empêcher les valeurs invalides
-
 		// Code \\
 		JLabel lblCode = new JLabel("Code de la catégorie : ");
 		this.textFieldCode = new JTextField(15);
@@ -119,7 +113,7 @@ public class PageCreaCategorieIntervenant implements ActionListener, KeyListener
 
 		// CoefTP \\
 		JLabel lblCoefTP = new JLabel("Coefficient TP : ");
-		this.textFieldCoefTP = new JFormattedTextField(formatter);
+		this.textFieldCoefTP = new JTextField();
 		this.textFieldCoefTP.setColumns(15);
 		gbc.gridx = 0;
 		gbc.gridy = 4;
