@@ -64,4 +64,7 @@ public class Controleur
 			lstCategorieHeure.add(item.getCategorieHeure());
 		return lstCategorieHeure;
 	}
+
+	public void ajouterModule() {
+	}
 }

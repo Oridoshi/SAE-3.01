@@ -19,8 +19,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
+import ihm.classPerso.JIntegerTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -62,26 +61,27 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 	private JTextField txtFCode;
 	private JTextField txtFLibelLong;
 	private JTextField txtFLibelCour;
+
 	private JTextField txtFSeme;
-	private JTextField txtFHProCm;
-	private JTextField txtFHProTd;
-	private JTextField txtFHProTp;
+	private JIntegerTextField txtFHProCm;
+	private JIntegerTextField txtFHProTd;
+	private JIntegerTextField txtFHProTp;
 	private JTextField txtFHProSomme;
 	private JTextField txtFTotEqTdHProCm;
 	private JTextField txtFTotEqTdHProTd;
 	private JTextField txtFTotEqTdHProTp;
 	private JTextField txtFTotEqTdHProSomme;
-	private JTextField txtFNbSemCm;
-	private JTextField txtFNbHCmSem;
-	private JTextField txtFNbSemTd;
-	private JTextField txtFNbHTdSem;
-	private JTextField txtFNbSemTp;
-	private JTextField txtFNbHTpSem;
+	private JIntegerTextField txtFNbSemCm;
+	private JIntegerTextField txtFNbHCmSem;
+	private JIntegerTextField txtFNbSemTd;
+	private JIntegerTextField txtFNbHTdSem;
+	private JIntegerTextField txtFNbSemTp;
+	private JIntegerTextField txtFNbHTpSem;
 	private JTextField txtFTotCm1;
 	private JTextField txtFTotTd1;
 	private JTextField txtFTotTp1;
 	private JTextField txtFSom1;
-	private JTextField txtFHPonctu1;
+	private JIntegerTextField txtFHPonctu1;
 	private JTextField txtFTotCm2;
 	private JTextField txtFTotTd2;
 	private JTextField txtFTotTp2;
@@ -167,7 +167,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		txtFSeme.setText("S" + this.semestre.getId());
 		txtFSeme.setEditable(false);
 		this.txtFCode = new JTextField(4);
-		this.txtFCode.setText("R" + this.semestre.getId() + ".XX");
+		this.txtFCode.setText("RX.XX");
 		this.txtFCode.addFocusListener(this);
 		this.txtFLibelLong = new JTextField(30);
 		this.txtFLibelCour = new JTextField(15);
@@ -280,23 +280,21 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		//deuxieme ligne
 		gbcTemp.insets = new Insets(0, 1, 1, 0); // Marge autour des composants
 
-		this.txtFHProCm = new JFormattedTextField(formatter);
+		this.txtFHProCm = new JIntegerTextField(3, 0);
+		this.txtFHProCm.bloquerCaractereNonValide(true);
 		this.txtFHProCm.addFocusListener(this);
 		this.txtFHProCm.addActionListener(this);
-		this.txtFHProCm.setColumns(3);
-		this.txtFHProCm.setText("0");
-		this.txtFHProTd = new JFormattedTextField(formatter);
+		this.txtFHProTd = new JIntegerTextField(3, 0);
+		this.txtFHProTd.bloquerCaractereNonValide(true);
 		this.txtFHProTd.addFocusListener(this);
 		this.txtFHProTd.addActionListener(this);
-		this.txtFHProTd.setColumns(3);
-		this.txtFHProTd.setText("0");
-		this.txtFHProTp = new JFormattedTextField(formatter);
+		this.txtFHProTp = new JIntegerTextField(3, 0);
+		this.txtFHProTp.bloquerCaractereNonValide(true);
 		this.txtFHProTp.addFocusListener(this);
 		this.txtFHProTp.addActionListener(this);
 		this.txtFHProTp.setColumns(3);
 		this.txtFHProTp.setText("0");
-		this.txtFHProSomme = new JFormattedTextField(formatter);
-		this.txtFHProSomme.setColumns(3);
+		this.txtFHProSomme = new JIntegerTextField(3);
 		this.txtFHProSomme.setText("" + (Integer.parseInt(this.txtFHProCm.getText()) + Integer.parseInt(this.txtFHProTd.getText()) + Integer.parseInt(this.txtFHProTp.getText())));
 		this.txtFHProSomme.setEditable(false);
 
@@ -318,20 +316,16 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		lblTotal.setForeground(PageCreationRessource.COULEUR_LABEL);
 		lblTotal.setFont(PageCreationRessource.FONT_LABEL);
 
-		this.txtFTotEqTdHProCm = new JFormattedTextField(formatter);
-		this.txtFTotEqTdHProCm.setColumns(3);
+		this.txtFTotEqTdHProCm = new JIntegerTextField(3);
 		this.txtFTotEqTdHProCm.setEditable(false);
 		this.txtFTotEqTdHProCm.setText("" + (int) (Integer.parseInt(this.txtFHProCm.getText()) * this.ctrl.getCoefH("CM")));
-		this.txtFTotEqTdHProTd = new JFormattedTextField(formatter);
-		this.txtFTotEqTdHProTd.setColumns(3);
+		this.txtFTotEqTdHProTd = new JIntegerTextField(3);
 		this.txtFTotEqTdHProTd.setEditable(false);
 		this.txtFTotEqTdHProTd.setText("" + (int) (Integer.parseInt(this.txtFHProTd.getText()) * this.semestre.getNbGroupeTd() * this.ctrl.getCoefH("TD")));
-		this.txtFTotEqTdHProTp = new JFormattedTextField(formatter);
-		this.txtFTotEqTdHProTp.setColumns(3);
+		this.txtFTotEqTdHProTp = new JIntegerTextField(3);
 		this.txtFTotEqTdHProTp.setEditable(false);
 		this.txtFTotEqTdHProTp.setText("" + (int) (Integer.parseInt(this.txtFHProTp.getText()) * this.semestre.getNbGroupeTp() * this.ctrl.getCoefH("TP")));
-		this.txtFTotEqTdHProSomme = new JFormattedTextField(formatter);
-		this.txtFTotEqTdHProSomme.setColumns(3);
+		this.txtFTotEqTdHProSomme = new JIntegerTextField(3);
 		this.txtFTotEqTdHProSomme.setEditable(false);
 		this.txtFTotEqTdHProSomme.setText("" + (int) (Integer.parseInt(this.txtFTotEqTdHProCm.getText()) + Integer.parseInt(this.txtFTotEqTdHProTd.getText()) + Integer.parseInt(this.txtFTotEqTdHProTp.getText())));
 		
@@ -505,58 +499,47 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 
 		//troisieme ligne
 		gbcRepartition.anchor = GridBagConstraints.CENTER;
-		this.txtFNbSemCm = new JFormattedTextField(formatter);
-		this.txtFNbSemCm.setColumns(3);
-		this.txtFNbSemCm.setText("0");
+		this.txtFNbSemCm = new JIntegerTextField(3, 0);
+		this.txtFNbSemCm.bloquerCaractereNonValide(true);
 		this.txtFNbSemCm.addFocusListener(this);
 		this.txtFNbSemCm.addActionListener(this);
-		this.txtFNbHCmSem = new JFormattedTextField(formatter);
-		this.txtFNbHCmSem.setColumns(3);
-		this.txtFNbHCmSem.setText("0");
+		this.txtFNbHCmSem = new JIntegerTextField(3, 0);
+		this.txtFNbHCmSem.bloquerCaractereNonValide(true);
 		this.txtFNbHCmSem.addFocusListener(this);
 		this.txtFNbHCmSem.addActionListener(this);
 
-		this.txtFNbSemTd = new JFormattedTextField(formatter);
-		this.txtFNbSemTd.setColumns(3);
-		this.txtFNbSemTd.setText("0");
+		this.txtFNbSemTd = new JIntegerTextField(3, 0);
+		this.txtFNbSemTd.bloquerCaractereNonValide(true);
 		this.txtFNbSemTd.addFocusListener(this);
 		this.txtFNbSemTd.addActionListener(this);
-		this.txtFNbHTdSem = new JFormattedTextField(formatter);
-		this.txtFNbHTdSem.setColumns(3);
-		this.txtFNbHTdSem.setText("0");
+		this.txtFNbHTdSem = new JIntegerTextField(3, 0);
+		this.txtFNbHTdSem.bloquerCaractereNonValide(true);
 		this.txtFNbHTdSem.addFocusListener(this);
 		this.txtFNbHTdSem.addActionListener(this);
 
-		this.txtFNbSemTp = new JFormattedTextField(formatter);
-		this.txtFNbSemTp.setColumns(3);
-		this.txtFNbSemTp.setText("0");
+		this.txtFNbSemTp = new JIntegerTextField(3, 0);
+		this.txtFNbSemTp.bloquerCaractereNonValide(true);
 		this.txtFNbSemTp.addFocusListener(this);
 		this.txtFNbSemTp.addActionListener(this);
-		this.txtFNbHTpSem = new JFormattedTextField(formatter);
-		this.txtFNbHTpSem.setColumns(3);
-		this.txtFNbHTpSem.setText("0");
+		this.txtFNbHTpSem = new JIntegerTextField(3, 0);
+		this.txtFNbHTpSem.bloquerCaractereNonValide(true);
 		this.txtFNbHTpSem.addFocusListener(this);
 		this.txtFNbHTpSem.addActionListener(this);
 
-		this.txtFTotCm1 = new JFormattedTextField(formatter);
-		this.txtFTotCm1.setColumns(3);
+		this.txtFTotCm1 = new JIntegerTextField(3);
 		this.txtFTotCm1.setText("" + (Integer.parseInt(this.txtFNbSemCm.getText()) * Integer.parseInt(this.txtFNbHCmSem.getText())));
 		this.txtFTotCm1.setEditable(false);
-		this.txtFTotTd1 = new JFormattedTextField(formatter);
-		this.txtFTotTd1.setColumns(3);
+		this.txtFTotTd1 = new JIntegerTextField(3);
 		this.txtFTotTd1.setText("" + (Integer.parseInt(this.txtFNbSemTd.getText()) * Integer.parseInt(this.txtFNbHTdSem.getText())));
 		this.txtFTotTd1.setEditable(false);
-		this.txtFTotTp1 = new JFormattedTextField(formatter);
-		this.txtFTotTp1.setColumns(3);
+		this.txtFTotTp1 = new JIntegerTextField(3);
 		this.txtFTotTp1.setText("" + (Integer.parseInt(this.txtFNbSemTp.getText()) * Integer.parseInt(this.txtFNbHTpSem.getText())));
 		this.txtFTotTp1.setEditable(false);
-		this.txtFHPonctu1 = new JFormattedTextField(formatter);
-		this.txtFHPonctu1.setColumns(3);
-		this.txtFHPonctu1.setText("0");
+		this.txtFHPonctu1 = new JIntegerTextField(3, 0);
+		this.txtFHPonctu1.bloquerCaractereNonValide(true);
 		this.txtFHPonctu1.addFocusListener(this);
 		this.txtFHPonctu1.addActionListener(this);
-		this.txtFSom1 = new JFormattedTextField(formatter);
-		this.txtFSom1.setColumns(3);
+		this.txtFSom1 = new JIntegerTextField(3);
 		this.txtFSom1.setText("" + (Integer.parseInt(this.txtFTotCm1.getText()) + Integer.parseInt(this.txtFTotTd1.getText()) + Integer.parseInt(this.txtFTotTp1.getText()) + Integer.parseInt(this.txtFHPonctu1.getText())));
 		this.txtFSom1.setEditable(false);
 
@@ -588,24 +571,19 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		JLabel lblTotPromo = new JLabel("Total promo (eqtd)");
 		lblTotPromo.setForeground(PageCreationRessource.COULEUR_LABEL);
 		lblTotPromo.setFont(PageCreationRessource.FONT_LABEL);
-		this.txtFTotCm2 = new JFormattedTextField(formatter);
-		this.txtFTotCm2.setColumns(3);
+		this.txtFTotCm2 = new JIntegerTextField(3);
 		this.txtFTotCm2.setText("" + (int) (Integer.parseInt(this.txtFTotCm1.getText()) * this.ctrl.getCoefH("CM")));
 		this.txtFTotCm2.setEditable(false);
-		this.txtFTotTd2 = new JFormattedTextField(formatter);
-		this.txtFTotTd2.setColumns(3);
+		this.txtFTotTd2 = new JIntegerTextField(3);
 		this.txtFTotTd2.setText("" + (int) (Integer.parseInt(this.txtFTotTd1.getText()) * this.semestre.getNbGroupeTd() * this.ctrl.getCoefH("TD")));
 		this.txtFTotTd2.setEditable(false);
-		this.txtFTotTp2 = new JFormattedTextField(formatter);
-		this.txtFTotTp2.setColumns(3);
+		this.txtFTotTp2 = new JIntegerTextField(3);
 		this.txtFTotTp2.setText("" + (int) (Integer.parseInt(this.txtFTotTp1.getText()) * this.semestre.getNbGroupeTp() * this.ctrl.getCoefH("TP")));
 		this.txtFTotTp2.setEditable(false);
-		this.txtFHPonctu2 = new JFormattedTextField(formatter);
-		this.txtFHPonctu2.setColumns(3);
+		this.txtFHPonctu2 = new JIntegerTextField(3);
 		this.txtFHPonctu2.setText("" + (int) (Integer.parseInt(this.txtFHPonctu1.getText()) * this.semestre.getNbGroupeTd()));
 		this.txtFHPonctu2.setEditable(false);
-		this.txtFTotSom2 = new JFormattedTextField(formatter);
-		this.txtFTotSom2.setColumns(3);
+		this.txtFTotSom2 = new JIntegerTextField(3);
 		this.txtFTotSom2.setText("" + (int) (Integer.parseInt(txtFTotCm2.getText()) + Integer.parseInt(txtFTotTd2.getText()) + Integer.parseInt(txtFTotTp2.getText()) + Integer.parseInt(txtFHPonctu2.getText())));
 		this.txtFTotSom2.setEditable(false);
 
@@ -627,24 +605,19 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		JLabel lblTotAffect = new JLabel("Total affecté (eqtd)");
 		lblTotAffect.setForeground(PageCreationRessource.COULEUR_LABEL);
 		lblTotAffect.setFont(PageCreationRessource.FONT_LABEL);
-		this.txtFTotCm3 = new JFormattedTextField(formatter);
-		this.txtFTotCm3.setColumns(3);
+		this.txtFTotCm3 = new JIntegerTextField(3);
 		this.txtFTotCm3.setText("" + this.nbTotAffHCm);
 		this.txtFTotCm3.setEditable(false);
-		this.txtFTotTd3 = new JFormattedTextField(formatter);
-		this.txtFTotTd3.setColumns(3);
+		this.txtFTotTd3 = new JIntegerTextField(3);
 		this.txtFTotTd3.setText("" + this.nbTotAffHTd);
 		this.txtFTotTd3.setEditable(false);
-		this.txtFTotTp3 = new JFormattedTextField(formatter);
-		this.txtFTotTp3.setColumns(3);
+		this.txtFTotTp3 = new JIntegerTextField(3);
 		this.txtFTotTp3.setText("" + this.nbTotAffHTp);
 		this.txtFTotTp3.setEditable(false);
-		this.txtFHPonctu3 = new JFormattedTextField(formatter);
-		this.txtFHPonctu3.setColumns(3);
+		this.txtFHPonctu3 = new JIntegerTextField(3);
 		this.txtFHPonctu3.setText("" + this.nbTotAffHPonctu);
 		this.txtFHPonctu3.setEditable(false);
-		this.txtFTotSom3 = new JFormattedTextField(formatter);
-		this.txtFTotSom3.setColumns(3);
+		this.txtFTotSom3 = new JIntegerTextField(3);
 		this.txtFTotSom3.setText("" + (int) (Integer.parseInt(txtFTotCm3.getText()) + Integer.parseInt(txtFTotTd3.getText()) + Integer.parseInt(txtFTotTp3.getText()) + Integer.parseInt(txtFHPonctu3.getText())));
 		this.txtFTotSom3.setEditable(false);
 
@@ -775,7 +748,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		}
 		else
 		{
-			JFormattedTextField tmp = (JFormattedTextField) e.getSource();
+			JIntegerTextField tmp = (JIntegerTextField) e.getSource();
 			if(tmp.getText().equals(""))
 				tmp.setText("0");
 			this.recalcule();
@@ -789,80 +762,78 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 			this.mere.changerPage(new PagePrevisionnel(ctrl, mere));
 		else if(e.getSource() == this.btnValider)
 		{
-			if(!this.chkValider.isSelected())
+			if(this.txtFCode.getText().equals("RX.XX"))
 			{
-				if(this.txtFCode.getText().equals("RX.XX"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un code !", "ERREUR ENTRER CODE", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFLibelCour.getText().equals(""))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un libellé court !", "ERREUR ENTRER LIBELLE", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFLibelLong.getText().equals(""))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un libellé long !", "ERREUR ENTRER LIBELLE LONG", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFHProCm.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de CM programme !", "ERREUR ENTRER PROGRAMME CM", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFHProTd.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TD programme !", "ERREUR ENTRER PROGRAMME TD", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFHProTp.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TP programme !", "ERREUR ENTRER PROGRAMME TP", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFNbSemCm.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre de semestre de CM !", "ERREUR ENTRER NOMBRE SEMESTRE CM", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFNbSemTd.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre de semestre de TD !", "ERREUR ENTRER NOMBRE SEMESTRE TD", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFNbSemTp.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre de semestre de TP !", "ERREUR ENTRER NOMBRE SEMESTRE TP", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFNbHCmSem.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de CM par semestre !", "ERREUR ENTRER NOMBRE HEURE CM SEMESTRE", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFNbHTdSem.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TD par semestre !", "ERREUR ENTRER NOMBRE HEURE TD SEMESTRE", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFNbHTpSem.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TP par semestre !", "ERREUR ENTRER NOMBRE HEURE TP SEMESTRE", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFHProCm.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de CM par semaine !", "ERREUR ENTRER NOMBRE HEURE CM SEMAINE", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFHProTd.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TD programme !", "ERREUR ENTRER NOMBRE HEURE TD SEMAINE", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFHProTp.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TP programme !", "ERREUR ENTRER NOMBRE HEURE TP SEMAINE", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(this.txtFHPonctu1.getText().equals("0"))
-				{
-					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure ponctuelle !", "ERREUR ENTRER NOMBRE HEURE PONCTUELLE", JOptionPane.ERROR_MESSAGE);
-				}
-				else
-				{
-					System.out.println("ok");
-				}
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un code !", "ERREUR ENTRER CODE", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFLibelLong.getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un libellé long !", "ERREUR ENTRER LIBELLE LONG", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFLibelCour.getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un libellé court !", "ERREUR ENTRER LIBELLE", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFHProCm.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de CM programme !", "ERREUR ENTRER PROGRAMME CM", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFHProTd.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TD programme !", "ERREUR ENTRER PROGRAMME TD", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFHProTp.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TP programme !", "ERREUR ENTRER PROGRAMME TP", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFNbSemCm.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre de semestre de CM !", "ERREUR ENTRER NOMBRE SEMESTRE CM", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFNbSemTd.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre de semestre de TD !", "ERREUR ENTRER NOMBRE SEMESTRE TD", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFNbSemTp.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre de semestre de TP !", "ERREUR ENTRER NOMBRE SEMESTRE TP", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFNbHCmSem.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de CM par semestre !", "ERREUR ENTRER NOMBRE HEURE CM SEMESTRE", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFNbHTdSem.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TD par semestre !", "ERREUR ENTRER NOMBRE HEURE TD SEMESTRE", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFNbHTpSem.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TP par semestre !", "ERREUR ENTRER NOMBRE HEURE TP SEMESTRE", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFHProCm.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de CM par semaine !", "ERREUR ENTRER NOMBRE HEURE CM SEMAINE", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFHProTd.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TD programme !", "ERREUR ENTRER NOMBRE HEURE TD SEMAINE", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFHProTp.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TP programme !", "ERREUR ENTRER NOMBRE HEURE TP SEMAINE", JOptionPane.ERROR_MESSAGE);
+			}
+			else if(this.txtFHPonctu1.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure ponctuelle !", "ERREUR ENTRER NOMBRE HEURE PONCTUELLE", JOptionPane.ERROR_MESSAGE);
+			}
+
+			if(this.chkValider.isSelected())
+			{
+				this.ctrl.ajouterModule();
 			}
 			else
 			{
-				System.out.println("ok");
+				
 			}
 		}
 		else if(e.getSource() == this.btnAjouterAffectation)
@@ -886,7 +857,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 		}
 		else
 		{
-			JFormattedTextField tmp = (JFormattedTextField) e.getSource();
+			JIntegerTextField tmp = (JIntegerTextField) e.getSource();
 			if(tmp.getText().equals(""))
 				tmp.setText("0");
 
