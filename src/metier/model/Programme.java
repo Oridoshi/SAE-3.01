@@ -30,10 +30,6 @@ public class Programme {
 		this.programme.remove(key);
 	}
 
-	public Collection<ProgrammeItem> listProgrammeItems(){
-		return programme.values();
-	}
-
 	/*
 	 * Méthode inutile
 	 */
