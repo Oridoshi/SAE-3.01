@@ -35,6 +35,7 @@ import javax.swing.text.NumberFormatter;
 
 import controleur.Controleur;
 import ihm.FrameIhm;
+import ihm.PagePrevisionnel;
 import metier.model.Affectation;
 import metier.model.Semestre;
 
@@ -50,7 +51,7 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 	private JPanel panelCentre;
 	private JPanel panelOuest;
 
-	private JFrame mere;
+	private FrameIhm mere;
 	private Controleur ctrl;
 	private Semestre semestre;
 
@@ -784,7 +785,87 @@ public class PageCreationRessource extends JPanel implements ActionListener, Foc
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		if(e.getSource() == this.btnAjouterAffectation)
+		if(e.getSource() == this.btnAnnuler)
+			this.mere.changerPage(new PagePrevisionnel(ctrl, mere));
+		else if(e.getSource() == this.btnValider)
+		{
+			if(!this.chkValider.isSelected())
+			{
+				if(this.txtFCode.getText().equals("RX.XX"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un code !", "ERREUR ENTRER CODE", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFLibelCour.getText().equals(""))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un libellé court !", "ERREUR ENTRER LIBELLE", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFLibelLong.getText().equals(""))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un libellé long !", "ERREUR ENTRER LIBELLE LONG", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFHProCm.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de CM programme !", "ERREUR ENTRER PROGRAMME CM", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFHProTd.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TD programme !", "ERREUR ENTRER PROGRAMME TD", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFHProTp.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TP programme !", "ERREUR ENTRER PROGRAMME TP", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFNbSemCm.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre de semestre de CM !", "ERREUR ENTRER NOMBRE SEMESTRE CM", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFNbSemTd.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre de semestre de TD !", "ERREUR ENTRER NOMBRE SEMESTRE TD", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFNbSemTp.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre de semestre de TP !", "ERREUR ENTRER NOMBRE SEMESTRE TP", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFNbHCmSem.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de CM par semestre !", "ERREUR ENTRER NOMBRE HEURE CM SEMESTRE", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFNbHTdSem.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TD par semestre !", "ERREUR ENTRER NOMBRE HEURE TD SEMESTRE", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFNbHTpSem.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TP par semestre !", "ERREUR ENTRER NOMBRE HEURE TP SEMESTRE", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFHProCm.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de CM par semaine !", "ERREUR ENTRER NOMBRE HEURE CM SEMAINE", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFHProTd.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TD programme !", "ERREUR ENTRER NOMBRE HEURE TD SEMAINE", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFHProTp.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure de TP programme !", "ERREUR ENTRER NOMBRE HEURE TP SEMAINE", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(this.txtFHPonctu1.getText().equals("0"))
+				{
+					JOptionPane.showMessageDialog(this.mere, "Vous devez entrer un nombre d'heure ponctuelle !", "ERREUR ENTRER NOMBRE HEURE PONCTUELLE", JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					System.out.println("ok");
+				}
+			}
+			else
+			{
+				System.out.println("ok");
+			}
+		}
+		else if(e.getSource() == this.btnAjouterAffectation)
 		{
 			new PageCreaAffectation(this.ctrl, this.mere, this.lstAffectation, this.tableAffectation, this.txtFTyMo.getText());
 
