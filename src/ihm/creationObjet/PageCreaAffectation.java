@@ -228,9 +228,9 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 			{
 				Intervenant inter = (Intervenant) this.cbIntervenant.getSelectedItem();
 				CategorieHeure catHeure = (CategorieHeure) this.cbCategorieHeure.getSelectedItem();
-				Integer nbSemaine = null;
-				Integer nbHeure = null;
-				Integer nbGroupe = null;
+				Integer nbSemaine = 0;
+				Integer nbHeure   = 0;
+				Integer nbGroupe  = 0;
 				if(this.txtFNbSemaine.getText().equals(""))
 				{
 					try
