@@ -1,4 +1,4 @@
-# Application ASTRE - Cahier des Charges
+# Application ASTRE
 
 ## Objectifs du Projet
 
