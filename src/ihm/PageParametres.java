@@ -71,11 +71,13 @@ public class PageParametres extends JPanel implements ActionListener
 	{
 		if (e.getSource() == this.btnEnregistrer)
 		{
-			// TODO
+			this.ctrl.sauvegarder();
+			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
 		}
 		
 		if (e.getSource() == this.btnAnnuler)
 		{
+			this.ctrl.annuler();
 			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
 		}
 	}
@@ -142,7 +144,7 @@ public class PageParametres extends JPanel implements ActionListener
 		{
 			if (e.getSource() == this.btnAjouter)
 			{
-				new PageCreaCategorieIntervenant(this.mere, ctrl);
+				new PageCreaCategorieIntervenant(this.mere, ctrl, this.lstCategorieIntervenant, this.tableCategorieIntervenant);
 			}
 		}
 
@@ -223,7 +225,7 @@ public class PageParametres extends JPanel implements ActionListener
 		{
 			if (e.getSource() == this.btnAjouter)
 			{
-				new PageCreaCategorieHeure(this.mere, ctrl);
+				new PageCreaCategorieHeure(this.mere, ctrl, this.lstCategorieHeure, this.tableCategorieHeure);
 			}
 		}
 

@@ -7,6 +7,8 @@ import javax.swing.text.NumberFormatter;
 
 import controleur.Controleur;
 import ihm.FrameIhm;
+import metier.model.CategorieHeure;
+import metier.model.CategorieIntervenant;
 import metier.model.Module;
 import metier.model.Semestre;
 
@@ -21,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 
 public class PageCreaCategorieIntervenant implements ActionListener, KeyListener
 {
@@ -28,16 +31,22 @@ public class PageCreaCategorieIntervenant implements ActionListener, KeyListener
 	private Controleur ctrl;
 	private FrameIhm   mere;
 
+	private List<CategorieIntervenant> lstCategorieIntervenant;
+	private JTable tableCategorieIntervenant;
+
 	private JTextField textFieldCode;
 	private JTextField textFieldNom;
 	private JTextField textFieldCoefTP;
 	private JTextField textFieldMinH;
 	private JTextField textFieldMaxH;
 
-	public PageCreaCategorieIntervenant(FrameIhm mere, Controleur ctrl)
+	public PageCreaCategorieIntervenant(FrameIhm mere, Controleur ctrl, List<CategorieIntervenant> lstCategorieIntervenant, JTable tableCategorieIntervenant)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
+
+		this.lstCategorieIntervenant = lstCategorieIntervenant;
+		this.tableCategorieIntervenant = tableCategorieIntervenant;
 
 		this.dial = new JDialog(mere, "Création d'une catégorie d'intervenant", true);
 		this.dial.setLayout(new BorderLayout());
@@ -132,6 +141,13 @@ public class PageCreaCategorieIntervenant implements ActionListener, KeyListener
 	{
 		// this.ctrl.ajouterModule(new Module(null, null, null, false, null, null, null));
 		// this.mere.majTable();
+
+
+		CategorieIntervenant categorieIntervenant = new CategorieIntervenant(this.textFieldCode.getText(), this.textFieldNom.getText(), Integer.parseInt(this.textFieldMinH.getText()), Integer.parseInt(this.textFieldMaxH.getText()), Double.parseDouble(this.textFieldCoefTP.getText()));
+		this.lstCategorieIntervenant.add(categorieIntervenant);
+		this.tableCategorieIntervenant.repaint();
+		this.ctrl.ajouterSauvAttente(categorieIntervenant);
+
 		this.dial.dispose();
 	}
 
