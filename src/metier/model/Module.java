@@ -3,6 +3,7 @@ package metier.model;
 import java.util.List;
 import java.util.Map;
 
+import metier.IModifiable;
 import metier.repo.AffectationDB;
 import metier.repo.CategorieHeureDB;
 import metier.repo.CategorieModuleDB;
@@ -14,7 +15,7 @@ import metier.repo.SemestreDB;
  * Module
  * Classe qui permet de creer un module (classe mère des classes ModuleX)
  */
-public class Module
+public class Module implements IModifiable
 {
 	private String   code;
 	private Semestre semestre;
@@ -121,8 +122,7 @@ public class Module
 	{
 		return AffectationDB.getAffectationsParModule(code);
 	}
-
-
+ 
 	public int getNbHeureProgramme(String string)
 	{
 		return this.getProgramme().getItem(string).getNbHPn();

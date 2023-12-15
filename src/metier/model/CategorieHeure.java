@@ -1,5 +1,6 @@
 package metier.model;
 
+import metier.IModifiable;
 import metier.repo.CategorieHeureDB;
 import metier.repo.CategorieIntervenantDB;
 
@@ -8,7 +9,7 @@ import metier.repo.CategorieIntervenantDB;
  * Classe qui permet les différents types d'heures
  */
 
-public class CategorieHeure
+public class CategorieHeure implements IModifiable
 {
 	
 	private String nom;

@@ -1,5 +1,6 @@
 package metier.model;
 
+import metier.IModifiable;
 import metier.repo.AffectationDB;
 import metier.repo.CategorieHeureDB;
 import metier.repo.IntervenantDB;
@@ -10,7 +11,7 @@ import metier.repo.ModuleDB;
  * Classe permettant de gérer les différentes affectations
  */
 
-public class Affectation
+public class Affectation implements IModifiable
 {
 	private Intervenant intervenant;
 	private CategorieHeure categorieHeure;
@@ -87,13 +88,13 @@ public class Affectation
 		return this.module;
 	}
 
-	public void sauvegarder()
+	public boolean sauvegarder()
 	{
-		AffectationDB.save(this);
+		return AffectationDB.save(this);
 	}
 
-	public void supprimer()
+	public boolean supprimer()
 	{
-		AffectationDB.delete(this);
+		return AffectationDB.delete(this);
 	}
 }

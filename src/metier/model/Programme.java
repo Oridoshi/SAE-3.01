@@ -9,7 +9,7 @@ import java.util.Set;
 
 import metier.repo.ProgrammeItemDB;
 
-public class Programme {
+public class Programme{
 
 	private Map<String, ProgrammeItem> programme;
 
