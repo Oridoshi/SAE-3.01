@@ -24,6 +24,8 @@ import java.awt.event.KeyListener;
 import java.text.NumberFormat;
 import java.util.List;
 
+import ihm.PageParametres;
+
 public class PageCreaCategorieHeure implements ActionListener, KeyListener
 {
 	private JDialog    dial;
