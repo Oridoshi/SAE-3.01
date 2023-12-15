@@ -21,7 +21,7 @@ public class Intervenant
 		this.nom = nom;
 		this.prenom = prenom;
 		this.hMax = hServ;
- 		}
+	}
 
 	public int getId() {return id;}
 	public CategorieIntervenant getCategorie() { return categorieIntervenant; }
