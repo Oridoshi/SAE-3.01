@@ -1,6 +1,7 @@
 package metier.model;
 
 import metier.repo.IntervenantDB;
+import metier.IModifiable;
 
 /*
  * Intervenant
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Intervenant
+public class Intervenant implements IModifiable
 {
 
 	private int id;

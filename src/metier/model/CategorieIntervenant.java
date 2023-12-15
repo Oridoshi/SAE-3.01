@@ -1,6 +1,7 @@
 package metier.model;
 
 import metier.DB;
+import metier.IModifiable;
 import metier.repo.CategorieIntervenantDB;
 import metier.repo.CategorieModuleDB;
 
@@ -8,7 +9,7 @@ import metier.repo.CategorieModuleDB;
  * Categorie
  * Classe servant a la gestion des types d'intervenants 
  */
-public class CategorieIntervenant
+public class CategorieIntervenant implements IModifiable
 {
 	private String code;
 	private String nom;

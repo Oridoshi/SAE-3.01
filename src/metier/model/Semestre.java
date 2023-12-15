@@ -2,6 +2,7 @@ package metier.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import metier.IModifiable;
 import metier.repo.IntervenantDB;
 import metier.repo.ModuleDB;
 import metier.repo.SemestreDB;
@@ -11,7 +12,7 @@ import metier.repo.SemestreDB;
  * Semestre
  * Classe de création des semestres 
  */
-public class Semestre
+public class Semestre implements IModifiable
 {
 	private int id;
 	private int nbGroupeTd;

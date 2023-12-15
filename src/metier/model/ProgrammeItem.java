@@ -1,10 +1,11 @@
 package metier.model;
 
+import metier.IModifiable;
 import metier.repo.CategorieHeureDB;
 import metier.repo.ModuleDB;
 import metier.repo.ProgrammeItemDB;
 
-public class ProgrammeItem {
+public class ProgrammeItem implements IModifiable{
 
     private Integer nbHPn;
     private Integer nbSemaine;

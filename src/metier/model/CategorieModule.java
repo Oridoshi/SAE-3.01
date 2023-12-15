@@ -2,10 +2,11 @@ package metier.model;
 
 import java.util.List;
 
+import metier.IModifiable;
 import metier.repo.CategorieModuleDB;
 import metier.repo.PatternCategorieModuleItemDB;
 
-public class CategorieModule {
+public class CategorieModule implements IModifiable {
 
     private String nom;
 
