@@ -22,6 +22,14 @@ public class FrameIhm extends JFrame
 		this.add(new PageAccueil(this.ctrl, this));
 		this.setResizable(false);
 		this.setVisible(true);
+
+		this.addWindowListener(new java.awt.event.WindowAdapter() 
+		{
+			public void windowClosing(java.awt.event.WindowEvent windowEvent) 
+			{
+				ctrl.fermerConnexion();
+			}
+		});
 	}
 
 	public void changerPage(JPanel page)

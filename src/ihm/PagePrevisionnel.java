@@ -12,9 +12,12 @@ import metier.model.Module;
 import metier.model.Semestre;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,8 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 	private JTabbedPane tabbedPane;
 
 	private List<PanelInfoSemestre> lstPanelInfoSemestre;
+
+	private JButton btnHome;
 
 	public PagePrevisionnel(Controleur ctrl, FrameIhm mere)
 	{
@@ -51,7 +56,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			this.tabbedPane.addTab("S" + s, this.lstPanelInfoSemestre.get(s - 1));
 		}
 
-		this.add(this.tabbedPane);
+		this.add(this.tabbedPane, BorderLayout.CENTER);
 
 		JPanel panelBtn = new JPanel();
 		panelBtn.setLayout(new GridLayout(1, 5, 5, 0));
@@ -77,6 +82,16 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 		panelBtn.setBorder(new EmptyBorder(10, 5, 0, 0));
 
 		this.add(panelBtn, BorderLayout.SOUTH);
+
+		JPanel panelNord = new JPanel();
+		panelNord.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+		this.btnHome = new JButton("Accueil");
+		this.btnHome.addActionListener(this);
+
+		panelNord.add(this.btnHome);
+
+		this.add(panelNord, BorderLayout.NORTH);
 	}
 
 	@Override
@@ -105,14 +120,35 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 		{
 			if(this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).hasRowSelect())
 			{
-				this.ctrl.ajouterSuppAttente(this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getModuleSelectedRow());
-				this.ctrl.sauvegarder();
-				this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).updateTable();
+				if(this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getModuleSelectedRow().getLstAffectation() != null)
+				{
+					JOptionPane.showMessageDialog(this.mere, "Ce Module a des affectation ! ", "ERREUR SUPPRESSION", JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					int rep = JOptionPane.showConfirmDialog(this.mere, "Voulez-vous vraiment supprimer cette ressource ?", "Suppression", JOptionPane.YES_NO_OPTION);
+					if(rep == JOptionPane.YES_OPTION)
+					{
+						int emplacement = this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getSelectedIndex();
+						this.ctrl.ajouterSuppAttente(this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getModuleSelectedRow());
+						this.ctrl.sauvegarder();
+						this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).updateTable();
+
+						if(this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getCountRow() <= emplacement)
+							emplacement--;
+
+						this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).setSelectedIndex(emplacement);
+					}
+				}
 			}
+		}
+		else if(e.getSource() == this.btnHome)
+		{
+			this.mere.changerPage(new PageAccueil(ctrl, mere));
 		}
 	}
 
-	private class PanelInfoSemestre extends JPanel
+	private class PanelInfoSemestre extends JPanel implements ActionListener, FocusListener
 	{
 		private JIntegerTextField txtFNbGpTd; //Nombre de groupe TD
 		private JIntegerTextField txtFNbGpTp; //Nombre de groupe TP
@@ -144,16 +180,24 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 
 			panelInfoSemestre.add(new JLabel("nb gp TD"));
 			panelInfoSemestre.add((this.txtFNbGpTd = new JIntegerTextField(3, this.semestreActu.getNbGroupeTd())));
-			this.txtFNbGpTd.bloquerCaractereNonValide(true);
+			this.txtFNbGpTd.setAllowsInvalid(false);
+			this.txtFNbGpTd.addActionListener(this);
+			this.txtFNbGpTd.addFocusListener(this);
 			panelInfoSemestre.add(new JLabel("nb gp TP"));
 			panelInfoSemestre.add((this.txtFNbGpTp = new JIntegerTextField(3, this.semestreActu.getNbGroupeTp())));
-			this.txtFNbGpTp.bloquerCaractereNonValide(true);
+			this.txtFNbGpTp.setAllowsInvalid(false);
+			this.txtFNbGpTp.addActionListener(this);
+			this.txtFNbGpTp.addFocusListener(this);
 			panelInfoSemestre.add(new JLabel("nb Etd"));
 			panelInfoSemestre.add((this.txtFNbEtud = new JIntegerTextField(3, this.semestreActu.getNbEtu())));
-			this.txtFNbEtud.bloquerCaractereNonValide(true);
+			this.txtFNbEtud.setAllowsInvalid(false);
+			this.txtFNbEtud.addActionListener(this);
+			this.txtFNbEtud.addFocusListener(this);
 			panelInfoSemestre.add(new JLabel("nb semaine"));
 			panelInfoSemestre.add((this.txtFNbSeme = new JIntegerTextField(3, this.semestreActu.getNbSemaine())));
-			this.txtFNbSeme.bloquerCaractereNonValide(true);
+			this.txtFNbSeme.setAllowsInvalid(false);
+			this.txtFNbSeme.addActionListener(this);
+			this.txtFNbSeme.addFocusListener(this);
 
 
 			/*----------PanelInfo----------*/
@@ -163,13 +207,6 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			/*----------PanelInfoSemestre----------*/
 			JPanel panelTab = new JPanel();
 			panelTab.setLayout(new BorderLayout());
-
-			System.out.println("--------------------");
-			for (Module mm : this.ctrl.getSemestre(1).getlstModules())
-			{
-				System.out.println(mm.getLibelleLong());
-			}
-			System.out.println("--------------------");
 
 			this.tableRessource = new JTable( new ModelAffichageTableau(this.ctrl, this.semestreActu.getlstModules()) );
 			this.tableRessource.setFillsViewportHeight(true);
@@ -186,6 +223,21 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			this.add(panelTab, BorderLayout.CENTER);
 		}
 
+		public void setSelectedIndex(int emplacement)
+		{
+			this.tableRessource.setRowSelectionInterval(emplacement, emplacement);
+		}
+
+		public int getCountRow()
+		{
+			return this.tableRessource.getRowCount();
+		}
+
+		public int getSelectedIndex()
+		{
+			return this.tableRessource.getSelectedRow();
+		}
+
 		public void updateTable()
 		{
 			this.tableRessource.setModel(new ModelAffichageTableau(this.ctrl, this.semestreActu.getlstModules()));
@@ -199,6 +251,51 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 		public boolean hasRowSelect()
 		{
 			return this.tableRessource.getSelectedRow() != -1;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			if(e.getSource() == this.txtFNbGpTd)
+			{
+				this.semestreActu.setNbGroupeTd(this.txtFNbGpTd.getValue());
+			}
+			else if(e.getSource() == this.txtFNbGpTp)
+			{
+				this.semestreActu.setNbGroupeTp(this.txtFNbGpTp.getValue());
+			}
+			else if(e.getSource() == this.txtFNbEtud)
+			{
+				this.semestreActu.setNbEtu(this.txtFNbEtud.getValue());
+			}
+			else if(e.getSource() == this.txtFNbSeme)
+			{
+				this.semestreActu.setNbSemaine(this.txtFNbSeme.getValue());
+			}
+		}
+
+		@Override
+		public void focusGained(FocusEvent e){}
+
+		@Override
+		public void focusLost(FocusEvent e)
+		{
+			if(e.getSource() == this.txtFNbGpTd)
+			{
+				this.semestreActu.setNbGroupeTd(this.txtFNbGpTd.getValue());
+			}
+			else if(e.getSource() == this.txtFNbGpTp)
+			{
+				this.semestreActu.setNbGroupeTp(this.txtFNbGpTp.getValue());
+			}
+			else if(e.getSource() == this.txtFNbEtud)
+			{
+				this.semestreActu.setNbEtu(this.txtFNbEtud.getValue());
+			}
+			else if(e.getSource() == this.txtFNbSeme)
+			{
+				this.semestreActu.setNbSemaine(this.txtFNbSeme.getValue());
+			}
 		}
 	}
 
@@ -224,7 +321,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 					tabDonnees[ligne][0] = lstRessource.get(ligne).getCode();
 					tabDonnees[ligne][1] = lstRessource.get(ligne).getLibelleLong();
 					tabDonnees[ligne][2] = calcul(lstRessource.get(ligne));
-					tabDonnees[ligne][3] = lstRessource.get(ligne).getValider();
+					tabDonnees[ligne][3] = lstRessource.get(ligne).isValider();
 				}
 			}
 			else
@@ -252,6 +349,12 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 
 		private String calcul(Module m)
 		{
+			int tot = 0;
+			if(m.getCategorieModule() == ctrl.getCategorieModule("Ressource"))
+			{
+				tot = (int) ((m.getNbHeureProgramme("CM") * this.ctrl.getCoefH("CM")) + (m.getNbHeureProgramme("TD") * this.ctrl.getCoefH("TD")) + (m.getNbHeureProgramme("TP") * this.ctrl.getCoefH("TP")));
+			}
+
 			int nbTotAffHCm = 0;
 			int nbTotAffHTd = 0;
 			int nbTotAffHTp = 0;
@@ -259,7 +362,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 
 			List<Affectation> lstAff = m.getLstAffectation();
 
-			if(lstAff == null) return "0/TOT";
+			if(lstAff == null) return "0 / " + tot;
 
 
 			for (Affectation aff : m.getLstAffectation())
@@ -295,7 +398,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			}
 
 
-			return (nbTotAffHCm + nbTotAffHTd + nbTotAffHTp + nbTotAffHPonctu) + "/" + "TOT";
+			return (nbTotAffHCm + nbTotAffHTd + nbTotAffHTp + nbTotAffHPonctu) + " / " + tot;
 		}
 
 		public int getRowCount()                                {return this.tabDonnees.length;}

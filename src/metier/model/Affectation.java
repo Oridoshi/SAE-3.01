@@ -2,15 +2,11 @@ package metier.model;
 
 import metier.IModifiable;
 import metier.repo.AffectationDB;
-import metier.repo.CategorieHeureDB;
-import metier.repo.IntervenantDB;
-import metier.repo.ModuleDB;
 
-/*
+/**
  * Affectation
  * Classe permettant de gérer les différentes affectations
  */
-
 public class Affectation implements IModifiable
 {
 	private Intervenant intervenant;
@@ -20,9 +16,11 @@ public class Affectation implements IModifiable
 	private int nbHeure;
 	private String commentaire;
 	private Module module;
+	private int id;
 
-	public Affectation(Intervenant intervenant, CategorieHeure categorieHeure, int nbGroupe, int nbSemaine, int nbHeure, String commentaire,
+	public Affectation(int id, Intervenant intervenant, CategorieHeure categorieHeure, int nbGroupe, int nbSemaine, int nbHeure, String commentaire,
 			Module module) {
+		this.id = id;
 		this.intervenant = intervenant;
 		this.categorieHeure = categorieHeure;
 		this.nbGroupe = nbGroupe;
@@ -31,7 +29,11 @@ public class Affectation implements IModifiable
 		this.commentaire = commentaire;
 		this.module = module;
 	}
-	
+
+	public int getId() {
+		return this.id;
+	}
+
 	public Intervenant getIntervenant(){
 		return this.intervenant;
 	}

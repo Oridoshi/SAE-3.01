@@ -2,12 +2,7 @@ package metier.repo;
 
 import metier.DB;
 import metier.DBResult;
-import metier.model.Affectation;
-import metier.model.CategorieHeure;
-import metier.model.CategorieModule;
-import metier.model.Intervenant;
 import metier.model.Module;
-import metier.model.Programme;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,11 +24,14 @@ public class ModuleDB {
 	private static PreparedStatement psUpdate;
 	private static PreparedStatement psCreate;
 
+	private static PreparedStatement psDeleteDependance;
+
 	static{
 		modules = new ArrayList<>();
 		modulesParIdSemestre = new HashMap<>();
 		try{
 			psGetAll = db.prepareStatement("SELECT * FROM Module");
+			psDeleteDependance = db.prepareStatement("DELETE FROM remplirprogramme WHERE codeModule = ?");
 			psDelete = db.prepareStatement("DELETE FROM Module WHERE code = ?");
 			psUpdate = db.prepareStatement("UPDATE Module SET code = ?, idSemestre = ?, nomCatModule = ?, forceValider = ?, libcourt = ?, liblong = ? WHERE code = ?");
 			psCreate = db.prepareStatement("INSERT INTO Module VALUES (?, ?, ?, ?, ?, ?)");
@@ -69,9 +67,12 @@ public class ModuleDB {
 
 	public static boolean delete(Module module){
 		try{
+			psDeleteDependance.setString(1, module.getCode());
+			DB.update(psDeleteDependance);
 			psDelete.setString(1, module.getCode());
 			if ( DB.update(psDelete) == 1){
 				modules.remove(module);
+				modulesParIdSemestre.get(module.getSemestre().getId()).remove(module);
 				init();
 				return true;
 			} else {
@@ -88,7 +89,7 @@ public class ModuleDB {
 				psUpdate.setString(1, module.getCode());
 				psUpdate.setInt(2, module.getSemestre().getId());
 				psUpdate.setString(3, module.getCategorieModule().getNom());
-				psUpdate.setBoolean(4, module.getValider());
+				psUpdate.setBoolean(4, module.isValider());
 				psUpdate.setString(5, module.getLibelleCourt());
 				psUpdate.setString(6, module.getLibelleLong());
 				psUpdate.setString(7, module.getCodeOrigine());
@@ -104,7 +105,7 @@ public class ModuleDB {
 		} else {
 			try{
 				psCreate.setString(1, module.getCode());
-				psCreate.setBoolean(2, module.getValider());
+				psCreate.setBoolean(2, module.isValider());
 				psCreate.setInt(3, module.getSemestre().getId());
 				psCreate.setString(4, module.getCategorieModule().getNom());
 				psCreate.setString(5, module.getLibelleCourt());
@@ -126,7 +127,8 @@ public class ModuleDB {
 	private static void init(){
 		for ( Module module : modules ){
 			modulesParIdSemestre.putIfAbsent(module.getSemestre().getId(), new ArrayList<>());
-			modulesParIdSemestre.get(module.getSemestre().getId()).add(module);
+			if(!modulesParIdSemestre.get(module.getSemestre().getId()).contains(module))
+				modulesParIdSemestre.get(module.getSemestre().getId()).add(module);
 		}
 	}
 	

@@ -2,12 +2,7 @@ package metier.repo;
 
 import metier.DB;
 import metier.DBResult;
-import metier.model.Affectation;
-import metier.model.CategorieHeure;
-import metier.model.CategorieModule;
-import metier.model.Intervenant;
 import metier.model.PatternCategorieModuleItem;
-import metier.model.Semestre;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

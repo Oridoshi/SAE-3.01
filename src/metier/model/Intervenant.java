@@ -11,35 +11,36 @@ import metier.IModifiable;
 import metier.repo.AffectationDB;
 import metier.repo.CategorieIntervenantDB;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class Intervenant implements IModifiable
 {
-
 	private int id;
 	private CategorieIntervenant categorieIntervenant;
 	private String nom;
 	private String prenom;
 	private Integer hMax;
+	private Integer hMin;
+	private double coefTP;
 
-	public Intervenant(int id, CategorieIntervenant categorieIntervenant, String nom, String prenom, int hServ)
+	public Intervenant( int id, CategorieIntervenant categorieIntervenant, String nom, String prenom, int hMin, int hMax, double coefTP)
 	{
 		this.id = id;
 		this.categorieIntervenant = categorieIntervenant;
 		this.nom = nom;
 		this.prenom = prenom;
-		this.hMax = hServ;
+		this.hMax = hMax;
+		this.hMin = hMin;
+		this.coefTP = coefTP;
 	}
 
 	public int getId() {return id;}
+	public String getNom()    { return nom;    }
+	public String getPrenom() { return prenom; }
+
 	public CategorieIntervenant getCategorie() {
 		return this.categorieIntervenant;
 	}
-	public String getNom()    { return nom;    }
-	public String getPrenom() { return prenom; }
 	public Integer gethMax(){
 		if ( this.hMax > 0 ){
 			return this.hMax;
@@ -47,18 +48,6 @@ public class Intervenant implements IModifiable
 			return getCategorie().getMaxH();
 		}
 	}
-
-	public boolean setCategorie(CategorieIntervenant categorieIntervenant) {
-		if ( !CategorieIntervenantDB.list().contains(categorieIntervenant) ) return false;
-		this.categorieIntervenant = categorieIntervenant;
-		return true;
-	}
-	public boolean sethMax(Integer hMax)             {
-		if ( this.categorieIntervenant.getMinH() > hMax ) return false;
-		this.hMax = hMax;
-		return true;
-	}
-
 
 	public float getHParSemestre(int i){
 		int h = 0;
@@ -95,17 +84,21 @@ public class Intervenant implements IModifiable
 
 	public Integer getHMin()
 	{
-		return this.getCategorie().getMinH();
+		return this.hMin;
 	}
 
 	public double getCoefTP()
 	{
-		return this.getCategorie().getCoefTp();
+		return this.coefTP;
 	}
 
 	public double getTotal()
 	{
 		return this.getTotalParImpair() + this.getTotalParPair();
+	}
+
+	public Set<Module> getModulesOuIntervient(){
+		return AffectationDB.getModulesParIntervenant(this);
 	}
 
 	public void setNom(String nom) {
@@ -116,8 +109,30 @@ public class Intervenant implements IModifiable
 		this.prenom = prenom;
 	}
 
-	public Set<Module> getModulesOuIntervient(){
-		return AffectationDB.getModulesParIntervenant(this);
+	public boolean setCoefTP(double coefTP) {
+		if ( coefTP > 0 ){
+			this.coefTP = coefTP;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean setHMin(Integer hMin) {
+		if ( hMin < 0 ) return false;
+		if ( hMin > this.hMax ) return false;
+		this.hMin = hMin;
+		return true;
+	}
+
+	public boolean setCategorie(CategorieIntervenant categorieIntervenant) {
+	if ( !CategorieIntervenantDB.list().contains(categorieIntervenant) ) return false;
+	this.categorieIntervenant = categorieIntervenant;
+	return true;
+	}
+	public boolean sethMax(Integer hMax){
+		if ( this.hMin > hMax ) return false;
+		this.hMax = hMax;
+		return true;
 	}
 
 	public boolean sauvegarder()

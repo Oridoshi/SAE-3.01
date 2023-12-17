@@ -1,54 +1,48 @@
 package ihm.creationObjet;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.text.NumberFormatter;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import controleur.Controleur;
 import ihm.FrameIhm;
-import metier.model.CategorieHeure;
+import ihm.classPerso.JDoubleTextField;
+import ihm.classPerso.JIntegerTextField;
 import metier.model.CategorieIntervenant;
-import metier.model.Module;
-import metier.model.Semestre;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.List;
 
-public class PageCreaCategorieIntervenant implements ActionListener, KeyListener
+public class PageCreaCategorieIntervenant implements ActionListener
 {
 	private JDialog    dial;
 	private Controleur ctrl;
 	private FrameIhm   mere;
 
 	private List<CategorieIntervenant> lstCategorieIntervenant;
-	private JTable tableCategorieIntervenant;
 
 	private JTextField textFieldCode;
 	private JTextField textFieldNom;
-	private JTextField textFieldCoefTP;
-	private JTextField textFieldMinH;
-	private JTextField textFieldMaxH;
+	private JDoubleTextField textFieldCoefTP;
+	private JIntegerTextField textFieldMinH;
+	private JIntegerTextField textFieldMaxH;
 
-	public PageCreaCategorieIntervenant(FrameIhm mere, Controleur ctrl, List<CategorieIntervenant> lstCategorieIntervenant, JTable tableCategorieIntervenant)
+	public PageCreaCategorieIntervenant(FrameIhm mere, Controleur ctrl, List<CategorieIntervenant> lstCategorieIntervenant)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
 
 		this.lstCategorieIntervenant = lstCategorieIntervenant;
-		this.tableCategorieIntervenant = tableCategorieIntervenant;
 
-		this.dial = new JDialog(mere, "Création d'une catégorie d'intervenant", true);
+		this.dial = new JDialog(this.mere, "Création d'une catégorie d'intervenant", true);
 		this.dial.setLayout(new BorderLayout());
 		this.dial.setSize(500, 500);
 		this.dial.setLocationRelativeTo(mere);
@@ -66,12 +60,6 @@ public class PageCreaCategorieIntervenant implements ActionListener, KeyListener
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.insets = new Insets(5, 5, 5, 5); // Marge autour des composants
-
-		NumberFormat formatInteger = NumberFormat.getIntegerInstance();
-        NumberFormatter formatterInteger = new NumberFormatter(formatInteger);
-        formatterInteger.setValueClass(Integer.class);
-        formatterInteger.setMinimum(0); // Valeur minimale autorisée
-		formatterInteger.setAllowsInvalid(false); // Empêcher les valeurs invalides
 
 		// Code \\
 		JLabel lblCode = new JLabel("Code de la catégorie : ");
@@ -93,8 +81,8 @@ public class PageCreaCategorieIntervenant implements ActionListener, KeyListener
 
 		// minH \\
 		JLabel lblMinH = new JLabel("Min. d'heures : ");
-		this.textFieldMinH = new JFormattedTextField(formatterInteger);
-		this.textFieldMinH.setColumns(15);
+		this.textFieldMinH = new JIntegerTextField(15);
+		this.textFieldMinH.setAllowsInvalid(false);
 		gbc.gridx = 0;
 		gbc.gridy = 2;
 		panelFormulaire.add(lblMinH, gbc);
@@ -103,8 +91,8 @@ public class PageCreaCategorieIntervenant implements ActionListener, KeyListener
 
 		// maxH \\
 		JLabel lblMaxH = new JLabel("Max. d'heures : ");
-		this.textFieldMaxH = new JFormattedTextField(formatterInteger);
-		this.textFieldMaxH.setColumns(15);
+		this.textFieldMaxH = new JIntegerTextField(15);
+		this.textFieldMaxH.setAllowsInvalid(false);
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		panelFormulaire.add(lblMaxH, gbc);
@@ -113,8 +101,8 @@ public class PageCreaCategorieIntervenant implements ActionListener, KeyListener
 
 		// CoefTP \\
 		JLabel lblCoefTP = new JLabel("Coefficient TP : ");
-		this.textFieldCoefTP = new JTextField();
-		this.textFieldCoefTP.setColumns(15);
+		this.textFieldCoefTP = new JDoubleTextField(15);
+		this.textFieldCoefTP.setAllowsInvalid(false);
 		gbc.gridx = 0;
 		gbc.gridy = 4;
 		panelFormulaire.add(lblCoefTP, gbc);
@@ -133,33 +121,39 @@ public class PageCreaCategorieIntervenant implements ActionListener, KeyListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		// this.ctrl.ajouterModule(new Module(null, null, null, false, null, null, null));
-		// this.mere.majTable();
-
-
-		CategorieIntervenant categorieIntervenant = new CategorieIntervenant(this.textFieldCode.getText(), this.textFieldNom.getText(), Integer.parseInt(this.textFieldMinH.getText()), Integer.parseInt(this.textFieldMaxH.getText()), Double.parseDouble(this.textFieldCoefTP.getText()));
-		this.lstCategorieIntervenant.add(categorieIntervenant);
-		this.tableCategorieIntervenant.repaint();
-		this.ctrl.ajouterSauvAttente(categorieIntervenant);
-
-		this.dial.dispose();
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e)
-	{
-		if(e.getKeyChar() == KeyEvent.VK_ENTER)
+		if(this.textFieldCode.getText().equals("") || this.textFieldNom.getText().equals("") || this.textFieldMinH.isEmpty() || this.textFieldMaxH.isEmpty() || this.textFieldCoefTP.isEmpty())
 		{
-			// this.ctrl.ajouterModule(new Module(null, null, null, false, null, null, null));
-			// this.mere.majTable();
+			JOptionPane.showMessageDialog(this.dial, "Veuillez remplir tous les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
+		}
+		else
+		{
+			for (CategorieIntervenant categorieIntervenant : lstCategorieIntervenant)
+			{
+				if(categorieIntervenant.getCode().equals(this.textFieldCode.getText().trim()))
+				{
+					JOptionPane.showMessageDialog(this.dial, "Ce code est déja pris", "ERREUR CODE", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+
+			if(this.textFieldMinH.getValue() > this.textFieldMaxH.getValue())
+			{
+				JOptionPane.showMessageDialog(this.dial, "Le nombre d'heures minimum ne peut pas être supérieur au nombre d'heures maximum", "ERREUR HEURES", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			if(this.textFieldCoefTP.getValue() <= 0)
+			{
+				JOptionPane.showMessageDialog(this.dial, "Le coefficient TP doit être supérieur à 0", "ERREUR COEFFICIENT", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			CategorieIntervenant categorieIntervenant = new CategorieIntervenant(this.textFieldCode.getText().trim(), this.textFieldNom.getText().trim(), this.textFieldMinH.getValue(), this.textFieldMaxH.getValue(), this.textFieldCoefTP.getValue());
+			this.lstCategorieIntervenant.add(categorieIntervenant);
+			this.ctrl.ajouterSauvAttente(categorieIntervenant);
+	
 			this.dial.dispose();
 		}
 	}
-
-	@Override
-	public void keyPressed(KeyEvent e){}
-
-	@Override
-	public void keyReleased(KeyEvent e){}
 }
 

@@ -38,11 +38,12 @@ public class AffectationDB {
 		try{
 			psGetAffectations = db.prepareStatement("SELECT * FROM Affectation");
 			psDeleteAffectation = db.prepareStatement("DELETE FROM Affectation WHERE idIntervenant = ? AND nomCatHeure = ? AND codeModule = ?");
-			psUpdateAffectation = db.prepareStatement("UPDATE Affectation SET nbGrp = ?, nbSemaine = ?, nbH = ?, commentaire = ? WHERE idIntervenant = ? AND nomCatHeure = ? AND codeModule = ?");
+			psUpdateAffectation = db.prepareStatement("UPDATE Affectation SET nbGrp = ?, nbSemaine = ?, nbH = ?, commentaire = ? WHERE id = ?");
 			psCreateAffectation = db.prepareStatement("INSERT INTO Affectation VALUES (?, ?, ?, ?, ?, ?, ?)");
 			DBResult result = new DBResult(psGetAffectations.executeQuery());
 			for ( Map<String, String> ligne : result.getLignes() ){
 				affectations.add(new Affectation(
+					Integer.parseInt(ligne.get("id")),
 					IntervenantDB.getParId(Integer.parseInt(ligne.get("idintervenant"))),
 					CategorieHeureDB.getParNom(ligne.get("nomcatheure")),
 					Integer.parseInt(ligne.get("nbgrp")),
@@ -56,6 +57,13 @@ public class AffectationDB {
 		} catch ( Exception e ){
 			e.printStackTrace();
 		}
+	}
+
+	public static int getDernierId(){
+		int max = 0;
+		for ( Affectation affectation : affectations )
+			if ( affectation.getId() > max ) max = affectation.getId();
+		return max;
 	}
 
 	public static List<Affectation> list(){
@@ -94,26 +102,24 @@ public class AffectationDB {
 	public static boolean save(Affectation affectation){
 		if ( affectations.contains(affectation) ){
 			try{
-				psUpdateAffectation.setInt(1, affectation.getNbGroupe());
-				psUpdateAffectation.setInt(2, affectation.getNbSemaine());
-				psUpdateAffectation.setInt(3, affectation.getNbHeure());
+				psUpdateAffectation.setInt(1, affectation.getNbGroupe() == null?0:affectation.getNbGroupe());
+				psUpdateAffectation.setInt(2, affectation.getNbSemaine() == null?0:affectation.getNbSemaine());
+				psUpdateAffectation.setInt(3, affectation.getNbHeure() == null?0:affectation.getNbHeure());
 				psUpdateAffectation.setString(4, affectation.getCommentaire());
-				psUpdateAffectation.setInt(5, affectation.getIntervenant().getId());
-				psUpdateAffectation.setString(6, affectation.getCategorieHeure().getNom());
-				psUpdateAffectation.setString(7, affectation.getModule().getCode());
+				psUpdateAffectation.setInt(5, affectation.getId());
 				return DB.update(psGetAffectations) == 1;
-			} catch ( SQLException e){
+			} catch ( SQLException e) {
 				return false;
 			}
 		} else {
 			try{
 				psCreateAffectation.setInt(1, affectation.getIntervenant().getId());
 				psCreateAffectation.setString(2, affectation.getCategorieHeure().getNom());
-				psCreateAffectation.setInt(3, affectation.getNbHeure());
-				psCreateAffectation.setInt(4, affectation.getNbGroupe());
+				psCreateAffectation.setInt(3, affectation.getNbHeure() == null?0:affectation.getNbHeure());
+				psCreateAffectation.setInt(4, affectation.getNbGroupe() == null?0:affectation.getNbGroupe());
 				psCreateAffectation.setString(5, affectation.getModule().getCode());
 				psCreateAffectation.setString(6, affectation.getCommentaire());
-				psCreateAffectation.setInt(7, affectation.getNbSemaine());
+				psCreateAffectation.setInt(7, affectation.getNbSemaine() == null?0:affectation.getNbSemaine());
 				if ( DB.update(psCreateAffectation) == 1 ){
 					affectations.add(affectation);
 					init();

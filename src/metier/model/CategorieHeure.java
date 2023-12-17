@@ -2,13 +2,11 @@ package metier.model;
 
 import metier.IModifiable;
 import metier.repo.CategorieHeureDB;
-import metier.repo.CategorieIntervenantDB;
 
 /**
  * TypeHeure
  * Classe qui permet les différents types d'heures
  */
-
 public class CategorieHeure implements IModifiable
 {
 	

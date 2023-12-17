@@ -2,17 +2,12 @@ package metier.repo;
 
 import metier.DB;
 import metier.DBResult;
-import metier.model.Affectation;
-import metier.model.CategorieHeure;
-import metier.model.CategorieModule;
 import metier.model.Intervenant;
-import metier.model.Module;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,11 +32,13 @@ public class IntervenantDB {
 			DBResult result = new DBResult(psGetAll.executeQuery());
 			for ( Map<String, String> ligne : result.getLignes() ){
 				intervenants.add(new Intervenant(
-					Integer.parseInt(ligne.get("id")), 
+					Integer.parseInt(ligne.get("id")),
 					CategorieIntervenantDB.getParCode(ligne.get("codecatintervenant")),
 					ligne.get("nom"), 
 					ligne.get("prenom"), 
-					Integer.parseInt(ligne.get("hmax"))));
+					Integer.parseInt(ligne.get("hmin")),
+					Integer.parseInt(ligne.get("hmax")),
+					Double.parseDouble(ligne.get("coeftp"))));
 			}
 			init();
 		} catch ( Exception e ){
@@ -57,6 +54,14 @@ public class IntervenantDB {
 		for ( Intervenant intervenant : intervenants )
 			if ( intervenant.getId() == id ) return intervenant;
 		return null;
+	}
+
+	public static int getDernierId()
+	{
+		int id = 0;
+		for ( Intervenant intervenant : intervenants )
+			if ( intervenant.getId() > id ) id = intervenant.getId();
+		return id;
 	}
 
 	public static boolean delete(Intervenant intervenant){
@@ -106,10 +111,26 @@ public class IntervenantDB {
 
 	}
 
-	private static void init(){
-		for ( Intervenant intervenant : intervenants ){
-			// empty
+	public static List<Intervenant> getLstIntervenantParCode(String code)
+	{
+		List<Intervenant> inters = null;
+		for (Intervenant intervenant : intervenants)
+		{
+			if (intervenant.getCategorie().getCode().equals(code))
+			{
+				if(inters == null)
+					inters = new ArrayList<>();
+
+				inters.add(intervenant);
+			}
 		}
+
+		return inters;
 	}
-	
+
+	private static void init(){
+		// for ( Intervenant intervenant : intervenants ){
+		// 	// empty
+		// }
+	}	
 }

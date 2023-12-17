@@ -2,17 +2,12 @@ package metier.repo;
 
 import metier.DB;
 import metier.DBResult;
-import metier.model.Affectation;
-import metier.model.CategorieHeure;
-import metier.model.CategorieModule;
-import metier.model.Intervenant;
 import metier.model.Semestre;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -107,9 +102,9 @@ public class SemestreDB {
 	}
 
 	private static void init(){
-		for ( Semestre semestre : semestres ){
-			// empty
-		}
+		// for ( Semestre semestre : semestres ){
+		// 	// empty
+		// }
 	}
 	
 }

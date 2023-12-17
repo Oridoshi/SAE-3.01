@@ -1,16 +1,16 @@
 package ihm.creationObjet;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.text.NumberFormatter;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import controleur.Controleur;
 import ihm.FrameIhm;
-import metier.model.Affectation;
+
 import metier.model.CategorieHeure;
-import metier.model.Module;
-import metier.model.Semestre;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -19,43 +19,46 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.text.NumberFormat;
-import java.util.List;
 
-import ihm.PageParametres;
+import ihm.classPerso.JDoubleTextField;
 
-public class PageCreaCategorieHeure implements ActionListener, KeyListener
+public class PageCreaCategorieHeure implements ActionListener
 {
 	private JDialog    dial;
 	private Controleur ctrl;
 	private FrameIhm   mere;
 
-	private List<CategorieHeure> lstCategorieHeure;
-	private JTable tableCategorieHeure;
+	private CategorieHeure categorieHeure;
 
 	private JTextField textFieldNom;
-	private JTextField textFieldCoefTP;
+	private JDoubleTextField textFieldCoefTP;
+	private JButton btnAjout;
+	private JButton btnAnnuler;
 
-	public PageCreaCategorieHeure(FrameIhm mere, Controleur ctrl, List<CategorieHeure> lstCategorieHeure, JTable tableCategorieHeure)
+	public PageCreaCategorieHeure(FrameIhm mere, Controleur ctrl, CategorieHeure categorieHeure)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
 
-		this.lstCategorieHeure = lstCategorieHeure;
-		this.tableCategorieHeure = tableCategorieHeure;
+		this.categorieHeure = categorieHeure;
 
-		this.dial = new JDialog(mere, "Création d'une catégorie d'heure", true);
+		this.dial = new JDialog(this.mere, "Édition d'une catégorie d'heure", true);
 		this.dial.setLayout(new BorderLayout());
 		this.dial.setSize(500, 500);
 		this.dial.setLocationRelativeTo(mere);
 		
 		// Ajout du Button Ajouter
-		JButton ajout = new JButton("Ajouter");
-		ajout.addActionListener(this);
+		JPanel panelBouton = new JPanel();
+		panelBouton.setLayout(new GridLayout(1, 2));
+		this.btnAjout = new JButton("Modifier");
+		btnAjout.addActionListener(this);
+		panelBouton.add(btnAjout);
+
+		this.btnAnnuler = new JButton("Annuler");
+		btnAnnuler.addActionListener(this);
+		panelBouton.add(btnAnnuler);
 		
-		this.dial.add(ajout, BorderLayout.SOUTH);
+		this.dial.add(panelBouton, BorderLayout.SOUTH);
 		
 
 		/*----------Formulaire----------*/
@@ -65,16 +68,11 @@ public class PageCreaCategorieHeure implements ActionListener, KeyListener
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.insets = new Insets(5, 5, 5, 5); // Marge autour des composants
 
-		NumberFormat format = NumberFormat.getIntegerInstance();
-        NumberFormatter formatter = new NumberFormatter(format);
-        formatter.setValueClass(Integer.class);
-        formatter.setMinimum(0); // Valeur minimale autorisée
-		formatter.setAllowsInvalid(false); // Empêcher les valeurs invalides
-		
-
 		// Nom \\
 		JLabel lblNom = new JLabel("Nom de la catégorie : ");
 		this.textFieldNom = new JTextField(15);
+		this.textFieldNom.setText(this.categorieHeure.getNom());
+		this.textFieldNom.setEditable(false);
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		panelFormulaire.add(lblNom, gbc);
@@ -83,8 +81,9 @@ public class PageCreaCategorieHeure implements ActionListener, KeyListener
 
 		// Coef \\
 		JLabel lblCoefTP = new JLabel("Coefficient : ");
-		this.textFieldCoefTP = new JFormattedTextField(formatter);
-		this.textFieldCoefTP.setColumns(15);
+		this.textFieldCoefTP = new JDoubleTextField(15);
+		this.textFieldCoefTP.setValue(this.categorieHeure.getCoef());
+		this.textFieldCoefTP.setAllowsInvalid(false);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		panelFormulaire.add(lblCoefTP, gbc);
@@ -103,32 +102,24 @@ public class PageCreaCategorieHeure implements ActionListener, KeyListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		// this.ctrl.ajouterModule(new Module(null, null, null, false, null, null, null));
-		// this.mere.majTable();
-
-		CategorieHeure categorieHeure = new CategorieHeure(this.textFieldNom.getText(), Integer.parseInt(this.textFieldCoefTP.getText()));
-		this.lstCategorieHeure.add(categorieHeure);
-		this.tableCategorieHeure.repaint();
-		this.ctrl.ajouterSauvAttente(categorieHeure);
-
-		this.dial.dispose();
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e)
-	{
-		if(e.getKeyChar() == KeyEvent.VK_ENTER)
+		if(e.getSource() == this.btnAnnuler)
 		{
-			// this.ctrl.ajouterModule(new Module(null, null, null, false, null, null, null));
-			// this.mere.majTable();
 			this.dial.dispose();
 		}
+		else if(e.getSource() == this.btnAjout)
+		{
+			if(this.textFieldCoefTP.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this.dial, "Veuillez saisir un coefficient", "Erreur", JOptionPane.ERROR_MESSAGE);
+			}
+			else
+			{
+				this.categorieHeure.setCoef(this.textFieldCoefTP.getValue());
+				this.ctrl.ajouterSauvAttente(categorieHeure);
+		
+				this.dial.dispose();
+			}
+		}
 	}
-
-	@Override
-	public void keyPressed(KeyEvent e){}
-
-	@Override
-	public void keyReleased(KeyEvent e){}
 }
 

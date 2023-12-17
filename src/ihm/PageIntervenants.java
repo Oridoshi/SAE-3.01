@@ -8,18 +8,16 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
 import controleur.Controleur;
+import ihm.creationObjet.PageCreaIntervenant;
 import metier.model.Intervenant;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Flow;
 
 
 public class PageIntervenants extends JPanel implements ActionListener, ListSelectionListener
@@ -42,11 +40,20 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 
 	private FrameIhm mere;
 
+	private ArrayList<Intervenant> lstIntervenantsLocal;
+
 
 	public PageIntervenants(Controleur ctrl, FrameIhm mere)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
+
+		this.lstIntervenantsLocal = new ArrayList<Intervenant>();
+		for (Intervenant intervenant : this.ctrl.getLstIntervenants())
+		{
+			this.lstIntervenantsLocal.add(intervenant);
+		}
+		
 
 		this.setLayout(new BorderLayout());
 
@@ -58,7 +65,9 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 		this.panelBoutons = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 		this.panelBoutons.setBorder(new EmptyBorder(30, 0, 0, 0));
 		this.btnEnregistrer = new JButton("Enregistrer");
+		this.btnEnregistrer.addActionListener(this);
 		this.btnAnnuler = new JButton("Annuler");
+		this.btnAnnuler.addActionListener(this);
 
 
 
@@ -69,7 +78,7 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 		this.panelTableau.setBorder(new EmptyBorder(0, 0, 15, 0));
 
 		// Ajout de la table
-		this.tableIntervenants = new JTable( new ModelAffichageTableau(this.ctrl, this.ctrl.getLstIntervenants()) );
+		this.tableIntervenants = new JTable( new ModelAffichageTableau(this.ctrl, this.lstIntervenantsLocal) );
 		this.tableIntervenants.setFillsViewportHeight(true);
 		this.tableIntervenants.setRowHeight(25);
 		TableColumnModel model = this.tableIntervenants.getColumnModel();
@@ -88,7 +97,9 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 		this.panelBoutonsTableau.setBorder(new EmptyBorder(15, 0, 0, 0));
 
 		this.btnAjouter = new JButton("ajouter");
+		this.btnAjouter.addActionListener(this);
 		this.btnSupprimer = new JButton("supprimer");
+		this.btnSupprimer.addActionListener(this);
 		this.btnSupprimer.setEnabled(false); // Désactiver le bouton au démarrage
 
 		this.panelBoutonsTableau.add(this.btnAjouter);
@@ -110,23 +121,88 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 		this.add(panelBoutons, BorderLayout.SOUTH);
 		this.panelBoutons.add(this.btnEnregistrer);
 		this.panelBoutons.add(this.btnAnnuler);
-
-
+		
+		
 		this.btnAnnuler.addActionListener(this);
 	}
 
+	public void majTab()
+	{
+		this.tableIntervenants.setModel(new ModelAffichageTableau(this.ctrl, this.lstIntervenantsLocal));
+
+		TableColumnModel model = this.tableIntervenants.getColumnModel();
+
+		for (int i = 3; i <= 14; i++)
+		{
+			(model.getColumn(i)).setPreferredWidth(5);
+		}
+	}
+	
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting() && this.tableIntervenants.getSelectedRow() != -1) {
+			this.btnSupprimer.setEnabled(true); // Activer le bouton
+		} else {
+			this.btnSupprimer.setEnabled(false); // Désactiver le bouton si aucune ligne n'est sélectionnée
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == this.btnAnnuler)
+		{
+			this.ctrl.annuler();
+			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
+		}
+		else if(e.getSource() == btnSupprimer)
+		{
+			if(this.ctrl.getLstAffectationParIntervenant(this.lstIntervenantsLocal.get(this.tableIntervenants.getSelectedRow()).getId()) != null)
+			{
+				JOptionPane.showMessageDialog(this.mere, "Cette intervenant a des affectation ! ", "ERREUR SUPPRESSION", JOptionPane.ERROR_MESSAGE);
+			}
+			else
+			{
+				int rep = JOptionPane.showConfirmDialog(this.mere, "Voulez-vous vraiment supprimer cette intervenant ?", "Suppression", JOptionPane.YES_NO_OPTION);
+				if(rep == JOptionPane.YES_OPTION)
+				{
+					int emplacement = this.tableIntervenants.getSelectedRow();
+					this.ctrl.ajouterSuppAttente(this.lstIntervenantsLocal.get(this.tableIntervenants.getSelectedRow()));
+					this.lstIntervenantsLocal.remove(this.tableIntervenants.getSelectedRow());
+					this.majTab();;
+
+					if(this.tableIntervenants.getRowCount() <= emplacement)
+						emplacement--;
+
+					this.tableIntervenants.setRowSelectionInterval(emplacement, emplacement);
+				}
+			}
+		}
+		else if(e.getSource() == btnAjouter)
+		{
+			new PageCreaIntervenant(this.mere, ctrl, this.lstIntervenantsLocal);
+			this.tableIntervenants.repaint();
+		}
+		else if(e.getSource() == btnEnregistrer)
+		{
+			this.ctrl.sauvegarder();
+			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
+		}
+
+		this.majTab();
+	}
 
 
 	private class ModelAffichageTableau extends AbstractTableModel
 	{
-		private Controleur ctrl;
+		// private Controleur ctrl;
 
 		private Object[][] tabDonnees;
 		private String[] tabEntetes;
 
 		public ModelAffichageTableau(Controleur ctrl, List<Intervenant> lstIntervenants)
 		{
-			this.ctrl = ctrl;
+			// this.ctrl = ctrl;
 
 			int nbCol = 15;
 			int nbLig = lstIntervenants.size();
@@ -179,28 +255,6 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 		public int getColumnCount()                             {return this.tabDonnees[0].length;}
 		public String getColumnName (int col)                  {return this.tabEntetes[col];}
 		public Object getValueAt(int rowIndex, int columnIndex) {return this.tabDonnees[rowIndex][columnIndex];}
-	}
-
-
-
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		if (!e.getValueIsAdjusting() && this.tableIntervenants.getSelectedRow() != -1) {
-			this.btnSupprimer.setEnabled(true); // Activer le bouton
-		} else {
-			this.btnSupprimer.setEnabled(false); // Désactiver le bouton si aucune ligne n'est sélectionnée
-		}
-	}
-
-
-
-	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == this.btnAnnuler)
-		{
-			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
-		}
 	}
 }
 

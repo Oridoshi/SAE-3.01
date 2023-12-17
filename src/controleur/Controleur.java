@@ -1,7 +1,6 @@
 package controleur;
 import metier.repo.*;
 
-import java.lang.module.ModuleDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class Controleur
 	{
 		this.listSauvegarder = new ArrayList<>();
 		this.listSuppression = new ArrayList<>();
-		this.version = "v0.1.4";
+		this.version = "v0.5.0";
 
 		new FrameIhm(this);
 	}
@@ -87,9 +86,9 @@ public class Controleur
 		return CategorieHeureDB.list();
 	}
 
-	public double getCoefH(String string)
+	public double getCoefH(String categorieHeure)
 	{
-		return CategorieHeureDB.getParNom(string).getCoef();
+		return CategorieHeureDB.getParNom(categorieHeure).getCoef();
 	}
 
 	public List<CategorieHeure> getLstCategorieParTypeModule(String typeModule)
@@ -100,11 +99,33 @@ public class Controleur
 		return lstCategorieHeure;
 	}
 
-	public void ajouterModule() {
+	public List<Affectation> getLstAffectationParIntervenant(int id)
+	{
+		return AffectationDB.getAffectationsParIntervenant(id);
+	}
+
+	public List<Intervenant> getLstIntervenantParCode (String code)
+	{
+		return IntervenantDB.getLstIntervenantParCode(code);
 	}
 
 	public CategorieModule getCategorieModule(String string)
 	{
 		return CategorieModuleDB.getParNom(string);
+	}
+
+	public void fermerConnexion()
+	{
+		DB.fermerConnexion();
+	}
+
+	public int getIdNouvIntervenant()
+	{
+		return IntervenantDB.getDernierId() + 1;
+	}
+
+	public int getIdNouvAffectation()
+	{
+		return AffectationDB.getDernierId() + 1;
 	}
 }

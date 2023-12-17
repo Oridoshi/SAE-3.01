@@ -1,9 +1,7 @@
 package metier.model;
 
-import metier.DB;
 import metier.IModifiable;
 import metier.repo.CategorieIntervenantDB;
-import metier.repo.CategorieModuleDB;
 
 /**
  * Categorie
@@ -63,6 +61,12 @@ public class CategorieIntervenant implements IModifiable
 			return true;
 		}
 		return false;
+	}
+
+	
+	public boolean estDispo()
+	{
+		return CategorieIntervenantDB.getParCode(this.code) == null;
 	}
 
 	public boolean sauvegarder(){

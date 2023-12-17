@@ -2,15 +2,12 @@ package metier.repo;
 
 import metier.DB;
 import metier.DBResult;
-import metier.model.Affectation;
-import metier.model.CategorieHeure;
 import metier.model.CategorieIntervenant;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -110,9 +107,9 @@ public class CategorieIntervenantDB {
 	}
 
 	private static void init(){
-		for ( CategorieIntervenant categorieIntervenant : categoriesIntervenant ){
-			// empty
-		}
+		// for ( CategorieIntervenant categorieIntervenant : categoriesIntervenant ){
+		// 	// empty
+		// }
 	}
 	
 }

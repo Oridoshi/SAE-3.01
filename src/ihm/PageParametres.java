@@ -5,7 +5,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumnModel;
 
 import controleur.Controleur;
 import ihm.creationObjet.PageCreaCategorieHeure;
@@ -19,13 +18,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PageParametres extends JPanel implements ActionListener
 {
 	private Controleur ctrl;
-
-
 
 	private JPanel panelBoutons;
 	private JButton btnEnregistrer;
@@ -33,6 +31,8 @@ public class PageParametres extends JPanel implements ActionListener
 
 	private FrameIhm mere;
 	private JTabbedPane tabbedPane;
+
+	private PanelCategoriesHeure panelIntervenant;
 
 	public PageParametres(Controleur ctrl, FrameIhm mere) 
 	{
@@ -47,7 +47,8 @@ public class PageParametres extends JPanel implements ActionListener
 		this.tabbedPane = new JTabbedPane();
 		this.tabbedPane.setBorder(new EmptyBorder(0, 0, 15, 0));
 		this.tabbedPane.addTab("Catégories d'intervenants", new PanelCategoriesIntervenant(ctrl, this.mere, this.ctrl.getLstCategorieIntervenant()));
-		this.tabbedPane.addTab("Catégories d'heures", new PanelCategoriesHeure(ctrl, this.mere, this.ctrl.getLstCategorieHeure()));
+		this.panelIntervenant = new PanelCategoriesHeure(ctrl, this.mere, this.ctrl.getLstCategorieHeure());
+		this.tabbedPane.addTab("Catégories d'heures", this.panelIntervenant);
 		
 		this.add(this.tabbedPane, BorderLayout.CENTER);
 
@@ -79,6 +80,7 @@ public class PageParametres extends JPanel implements ActionListener
 		if (e.getSource() == this.btnAnnuler)
 		{
 			this.ctrl.annuler();
+			this.panelIntervenant.refreshHeure();
 			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
 		}
 	}
@@ -91,7 +93,7 @@ public class PageParametres extends JPanel implements ActionListener
 	{
 		private Controleur ctrl;
 		private FrameIhm mere;
-		private List<CategorieIntervenant> lstCategorieIntervenant;
+		private List<CategorieIntervenant> lstCategorieIntervenantLocal;
 
 		private JPanel panelBoutonsTableau;
 		private JButton btnAjouter;
@@ -104,7 +106,12 @@ public class PageParametres extends JPanel implements ActionListener
 		public PanelCategoriesIntervenant(Controleur ctrl, FrameIhm mere, List<CategorieIntervenant> lstCategorieIntervenant)
 		{
 			this.ctrl = ctrl;
-			this.lstCategorieIntervenant = lstCategorieIntervenant;
+
+			this.lstCategorieIntervenantLocal = new ArrayList<CategorieIntervenant>();
+			for (CategorieIntervenant categorieIntervenant : lstCategorieIntervenant)
+			{
+				this.lstCategorieIntervenantLocal.add(categorieIntervenant);
+			}
 
 			this.setLayout(new BorderLayout());
 
@@ -142,7 +149,7 @@ public class PageParametres extends JPanel implements ActionListener
 
 		public void majTab()
 		{
-			this.tableCategorieIntervenant.setModel(new ModelAffichageTableauIntervenant(this.ctrl, this.lstCategorieIntervenant));
+			this.tableCategorieIntervenant.setModel(new ModelAffichageTableauIntervenant(this.ctrl, this.lstCategorieIntervenantLocal));
 		}
 
 		@Override
@@ -150,12 +157,22 @@ public class PageParametres extends JPanel implements ActionListener
 		{
 			if (e.getSource() == this.btnAjouter)
 			{
-				new PageCreaCategorieIntervenant(this.mere, ctrl, this.lstCategorieIntervenant, this.tableCategorieIntervenant);
+				new PageCreaCategorieIntervenant(this.mere, ctrl, this.lstCategorieIntervenantLocal);
+				this.tableCategorieIntervenant.repaint();
 			}
 			
 			if (e.getSource() == this.btnSupprimer)
 			{
-				this.ctrl.ajouterSuppAttente(this.lstCategorieIntervenant.get(this.tableCategorieIntervenant.getSelectedRow()));
+				if(this.ctrl.getLstIntervenantParCode(this.lstCategorieIntervenantLocal.get(this.tableCategorieIntervenant.getSelectedRow()).getCode()) != null)
+				{
+					JOptionPane.showMessageDialog(this.mere, "Impossible de supprimer cette catégorie car elle est utilisée par un intervenant", "Erreur", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				else
+				{
+					this.ctrl.ajouterSuppAttente(this.lstCategorieIntervenantLocal.get(this.tableCategorieIntervenant.getSelectedRow()));
+					this.lstCategorieIntervenantLocal.remove(this.tableCategorieIntervenant.getSelectedRow());
+				}
 			}
 
 			this.majTab();
@@ -174,8 +191,6 @@ public class PageParametres extends JPanel implements ActionListener
 	}
 
 
-
-
 	/*---------------------------*/
 	//   Catégorie Heures        //
 	/*---------------------------*/
@@ -192,11 +207,14 @@ public class PageParametres extends JPanel implements ActionListener
 		private JScrollPane spTableauCategorieHeure;
 		private ListSelectionModel selectionModel;
 
+		private HashMap<CategorieHeure, Double> hashCateHeurModi;
+
 		public PanelCategoriesHeure(Controleur ctrl, FrameIhm mere, List<CategorieHeure> lstCategorieHeure)
 		{
 			this.ctrl = ctrl;
 			this.mere = mere;
 			this.lstCategorieHeure = lstCategorieHeure;
+			this.hashCateHeurModi = new HashMap<CategorieHeure, Double>();
 
 			this.setLayout(new BorderLayout());
 
@@ -230,6 +248,17 @@ public class PageParametres extends JPanel implements ActionListener
 			this.btnModifier.addActionListener(this);
 		}
 
+		/**
+		 * Permet de remettre tout les coef des categorie d'heure avant modification
+		 */
+		public void refreshHeure()
+		{
+			for (CategorieHeure categorieHeure : hashCateHeurModi.keySet())
+			{
+				categorieHeure.setCoef(hashCateHeurModi.get(categorieHeure));
+			}
+		}
+
 		public void majTab()
 		{
 			this.tableCategorieHeure.setModel(new ModelAffichageTableauHeure(this.ctrl, this.lstCategorieHeure));
@@ -240,7 +269,11 @@ public class PageParametres extends JPanel implements ActionListener
 		{
 			if (e.getSource() == this.btnModifier)
 			{
-				new PageCreaCategorieHeure(this.mere, ctrl, this.lstCategorieHeure, this.tableCategorieHeure);
+				CategorieHeure cateHeurModif = this.lstCategorieHeure.get(this.tableCategorieHeure.getSelectedRow());
+				if(!hashCateHeurModi.containsKey(cateHeurModif))
+					this.hashCateHeurModi.put(cateHeurModif,((Double) cateHeurModif.getCoef()));
+
+				new PageCreaCategorieHeure(this.mere, ctrl, cateHeurModif);
 			}
 
 			this.majTab();
@@ -260,13 +293,13 @@ public class PageParametres extends JPanel implements ActionListener
 
 	private class ModelAffichageTableauIntervenant extends AbstractTableModel
 	{
-		private Controleur ctrl;
+		// private Controleur ctrl;
 
 		private Object[][] tabDonnees;
 
 		public ModelAffichageTableauIntervenant(Controleur ctrl, List<CategorieIntervenant> lstCategorieIntervenant)
 		{
-			this.ctrl = ctrl;
+			// this.ctrl = ctrl;
 
 			int nbCol = 5;
 			int nbLig = lstCategorieIntervenant.size();
@@ -310,13 +343,13 @@ public class PageParametres extends JPanel implements ActionListener
 
 	private class ModelAffichageTableauHeure extends AbstractTableModel
 	{
-		private Controleur ctrl;
+		// private Controleur ctrl;
 
 		private Object[][] tabDonnees;
 
 		public ModelAffichageTableauHeure(Controleur ctrl, List<CategorieHeure> lstCategorieHeure)
 		{
-			this.ctrl = ctrl;
+			// this.ctrl = ctrl;
 
 			int nbCol = 2;
 			int nbLig = lstCategorieHeure.size();
@@ -347,5 +380,4 @@ public class PageParametres extends JPanel implements ActionListener
 		public int getColumnCount()                             {return this.tabDonnees[0].length;}
 		public Object getValueAt(int rowIndex, int columnIndex) {return this.tabDonnees[rowIndex][columnIndex];}
 	}
-
 }

@@ -1,9 +1,8 @@
 package metier.model;
-import java.util.ArrayList;
+
 import java.util.List;
 
 import metier.IModifiable;
-import metier.repo.IntervenantDB;
 import metier.repo.ModuleDB;
 import metier.repo.SemestreDB;
 

@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -30,7 +29,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
-import javax.swing.text.NumberFormatter;
 
 import controleur.Controleur;
 import ihm.FrameIhm;
@@ -105,9 +103,13 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 	private JButton btnAnnuler;
 	private JCheckBox chkValider;
 
+	private String  codeAvantChangement;
+	private boolean validerAvantChangement;
+	private ArrayList<Affectation> lstAffectationSupp;
+
 	public static PageEditionRessource factorieCreationRessource(Controleur ctrl, FrameIhm mere, Semestre semestre)
 	{
-		PageEditionRessource page = new PageEditionRessource(ctrl, mere, semestre, new Module("RX.XX", semestre, ctrl.getCategorieModule("Ressource"), false, "", ""), new ArrayList<Affectation>());
+		PageEditionRessource page = new PageEditionRessource(ctrl, mere, semestre, new Module("RX.XX", semestre, ctrl.getCategorieModule("Ressource"), false, "", ""), null);
 		return page;
 	}
 
@@ -122,16 +124,14 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		this.ctrl = ctrl;
 		this.mere = mere;
 		this.MODULE = module;
+		this.lstAffectationSupp = new ArrayList<Affectation>();
 
-		this.lstAffectation = lstAffectation;
+		if(lstAffectation != null)
+			this.lstAffectation = lstAffectation;
+		else
+			this.lstAffectation = new ArrayList<Affectation>();
 
 		this.panelCentre = new JPanel();
-
-		// Formateur pour forcé la saisie d'un entier
-		NumberFormat format = NumberFormat.getIntegerInstance();
-		NumberFormatter formatter = new NumberFormatter(format);
-		formatter.setValueClass(Integer.class);
-		formatter.setMinimum(0);
 
 		/*------------Panel Nord------------*/
 
@@ -182,6 +182,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		txtFSeme.setEditable(false);
 		this.txtFCode = new JTextField(4);
 		this.txtFCode.setText(this.MODULE.getCode());
+		this.codeAvantChangement = this.MODULE.getCode();
 		this.txtFCode.addFocusListener(this);
 		this.txtFLibelLong = new JTextField(30);
 		this.txtFLibelLong.setText(this.MODULE.getLibelleLong());
@@ -297,19 +298,17 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		gbcTemp.insets = new Insets(0, 1, 1, 0); // Marge autour des composants
 
 		this.txtFHProCm = new JIntegerTextField(3, module.getNbHeureProgramme("CM"));
-		this.txtFHProCm.bloquerCaractereNonValide(true);
+		this.txtFHProCm.setAllowsInvalid(false);
 		this.txtFHProCm.addFocusListener(this);
 		this.txtFHProCm.addActionListener(this);
 		this.txtFHProTd = new JIntegerTextField(3, module.getNbHeureProgramme("TD"));
-		this.txtFHProTd.bloquerCaractereNonValide(true);
+		this.txtFHProTd.setAllowsInvalid(false);
 		this.txtFHProTd.addFocusListener(this);
 		this.txtFHProTd.addActionListener(this);
 		this.txtFHProTp = new JIntegerTextField(3, module.getNbHeureProgramme("TP"));
-		this.txtFHProTp.bloquerCaractereNonValide(true);
+		this.txtFHProTp.setAllowsInvalid(false);
 		this.txtFHProTp.addFocusListener(this);
 		this.txtFHProTp.addActionListener(this);
-		this.txtFHProTp.setColumns(3);
-		this.txtFHProTp.setText("0");
 		this.txtFHProSomme = new JIntegerTextField(3);
 		this.txtFHProSomme.setValue(this.txtFHProCm.getValue() + this.txtFHProTd.getValue() + this.txtFHProTp.getValue());
 		this.txtFHProSomme.setEditable(false);
@@ -381,8 +380,9 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		lblValider.setForeground(PageEditionRessource.COULEUR_LABEL);
 		lblValider.setFont(PageEditionRessource.FONT_LABEL);
 		this.chkValider = new JCheckBox();
-		this.chkValider.setSelected(false);
+		this.chkValider.setSelected(this.MODULE.isValider());
 		this.chkValider.addActionListener(this);
+		this.validerAvantChangement = this.MODULE.isValider();
 
 		panelValider.add(lblValider);
 		panelValider.add(this.chkValider);
@@ -517,29 +517,29 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		//troisieme ligne
 		gbcRepartition.anchor = GridBagConstraints.CENTER;
 		this.txtFNbSemCm = new JIntegerTextField(3, module.getNbSemaine("CM"));
-		this.txtFNbSemCm.bloquerCaractereNonValide(true);
+		this.txtFNbSemCm.setAllowsInvalid(false);
 		this.txtFNbSemCm.addFocusListener(this);
 		this.txtFNbSemCm.addActionListener(this);
 		this.txtFNbHCmSem = new JIntegerTextField(3, module.getNbHeureSemaine("CM"));
-		this.txtFNbHCmSem.bloquerCaractereNonValide(true);
+		this.txtFNbHCmSem.setAllowsInvalid(false);
 		this.txtFNbHCmSem.addFocusListener(this);
 		this.txtFNbHCmSem.addActionListener(this);
 
 		this.txtFNbSemTd = new JIntegerTextField(3, module.getNbSemaine("TD"));
-		this.txtFNbSemTd.bloquerCaractereNonValide(true);
+		this.txtFNbSemTd.setAllowsInvalid(false);
 		this.txtFNbSemTd.addFocusListener(this);
 		this.txtFNbSemTd.addActionListener(this);
-		this.txtFNbHTdSem = new JIntegerTextField(3, module.getNbHeureSemaine("CM"));
-		this.txtFNbHTdSem.bloquerCaractereNonValide(true);
+		this.txtFNbHTdSem = new JIntegerTextField(3, module.getNbHeureSemaine("TD"));
+		this.txtFNbHTdSem.setAllowsInvalid(false);
 		this.txtFNbHTdSem.addFocusListener(this);
 		this.txtFNbHTdSem.addActionListener(this);
 
 		this.txtFNbSemTp = new JIntegerTextField(3, module.getNbSemaine("TP"));
-		this.txtFNbSemTp.bloquerCaractereNonValide(true);
+		this.txtFNbSemTp.setAllowsInvalid(false);
 		this.txtFNbSemTp.addFocusListener(this);
 		this.txtFNbSemTp.addActionListener(this);
-		this.txtFNbHTpSem = new JIntegerTextField(3, module.getNbHeureSemaine("CM"));
-		this.txtFNbHTpSem.bloquerCaractereNonValide(true);
+		this.txtFNbHTpSem = new JIntegerTextField(3, module.getNbHeureSemaine("TP"));
+		this.txtFNbHTpSem.setAllowsInvalid(false);
 		this.txtFNbHTpSem.addFocusListener(this);
 		this.txtFNbHTpSem.addActionListener(this);
 
@@ -552,8 +552,8 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		this.txtFTotTp1 = new JIntegerTextField(3);
 		this.txtFTotTp1.setValue(this.txtFNbSemTp.getValue() * this.txtFNbHTpSem.getValue());
 		this.txtFTotTp1.setEditable(false);
-		this.txtFHPonctu1 = new JIntegerTextField(3, 0);
-		this.txtFHPonctu1.bloquerCaractereNonValide(true);
+		this.txtFHPonctu1 = new JIntegerTextField(3, module.getNbHeureSemaine("HP"));
+		this.txtFHPonctu1.setAllowsInvalid(false);
 		this.txtFHPonctu1.addFocusListener(this);
 		this.txtFHPonctu1.addActionListener(this);
 		this.txtFSom1 = new JIntegerTextField(3);
@@ -619,6 +619,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		panelTmpRepartition.add(txtFTotSom2, gbcRepartition);
 
 		//cinquieme ligne
+		this.recalculeTotalAffecte();
 		JLabel lblTotAffect = new JLabel("Total affecté (eqtd)");
 		lblTotAffect.setForeground(PageEditionRessource.COULEUR_LABEL);
 		lblTotAffect.setFont(PageEditionRessource.FONT_LABEL);
@@ -744,24 +745,24 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 	{
 		if (e.getSource() == this.txtFCode)
 		{
-			String regex = "^[RSP][1-6]\\.\\d{2}$";
+			String regex = "^[R][1-6]\\.\\d{2}$";
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(this.txtFCode.getText());
 			if(matcher.matches())
 			{
-				regex   = "^[RSP][" + this.MODULE.getSemestre().getId() + "]\\.\\d{2}$";
+				regex   = "^[R][" + this.MODULE.getSemestre().getId() + "]\\.\\d{2}$";
 				pattern = Pattern.compile(regex);
 				matcher = pattern.matcher(this.txtFCode.getText());
 				if(!matcher.matches())
 				{
 					JOptionPane.showMessageDialog(this.mere, "Vous avez un semestre différent pour votre code que celui de votre module.", "Information Module entrer différente", JOptionPane.INFORMATION_MESSAGE);
 				}
-				
+
 				this.MODULE.setCode(this.txtFCode.getText());
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(this.mere, "Le code doit être sous la format [RSP][1-6].[1-99] !", "ERREUR ENTRER CODE", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this.mere, "Le code doit être sous la format [R][1-6].[1-99] !", "ERREUR ENTRER CODE", JOptionPane.ERROR_MESSAGE);
 				this.txtFCode.setText("RX.XX");
 			}
 		}
@@ -780,6 +781,12 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		if(e.getSource() == this.btnAnnuler)
 		{
 			this.ctrl.annuler();
+			this.MODULE.setCode(codeAvantChangement);
+			this.MODULE.setValider(validerAvantChangement);
+			for (Affectation aff : lstAffectationSupp)
+			{
+				this.MODULE.getLstAffectation().add(aff);
+			}
 			this.mere.changerPage(new PagePrevisionnel(ctrl, mere));
 		}
 		else if(e.getSource() == this.btnValider)
@@ -802,15 +809,13 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 			}
 			else
 			{
-				if(this.chkValider.isSelected())
+				if(valeurEntreOk(this.chkValider.isSelected()))
 				{
-					System.out.println("test");
 					this.majModule();
 					this.ctrl.ajouterSauvAttente(MODULE);
 					this.ctrl.sauvegarder();
 					this.mere.changerPage(new PagePrevisionnel(ctrl, mere));
 				}
-
 			}
 		}
 		else if(e.getSource() == this.chkValider)
@@ -819,7 +824,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		}
 		else if(e.getSource() == this.btnAjouterAffectation)
 		{
-			new PageCreaAffectation(this.ctrl, this.mere, this.lstAffectation, this.tableAffectation, this.txtFTyMo.getText());
+			new PageCreaAffectation(this.ctrl, this.mere, this.lstAffectation, this.tableAffectation, this.MODULE);
 
 			this.recalcule();
 		}
@@ -827,7 +832,13 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		{
 			if(this.tableAffectation.getSelectedRow() != -1 && this.lstAffectation.size() > 0)
 			{
-				this.lstAffectation.remove(this.tableAffectation.getSelectedRow());
+				int rep = JOptionPane.showConfirmDialog(this.mere, "Voulez-vous vraiment supprimer cette ressource ?", "Suppression", JOptionPane.YES_NO_OPTION);
+				if(rep == JOptionPane.YES_OPTION)
+				{
+					this.lstAffectationSupp.add(this.lstAffectation.get(this.tableAffectation.getSelectedRow()));
+					this.ctrl.ajouterSuppAttente(this.lstAffectation.get(this.tableAffectation.getSelectedRow()));
+					this.lstAffectation.remove(this.tableAffectation.getSelectedRow());
+				}
 
 				this.recalcule();
 			}
@@ -846,6 +857,54 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		}
 	}
 
+	private boolean valeurEntreOk(boolean selected)
+	{
+		if(selected)
+		{
+			if(this.txtFHProSomme.getValue() < this.txtFSom1.getValue()) 
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure que vous avez défini est supérieur au nombre d'heure programme !", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFTotSom2.getValue() < this.txtFTotSom3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		else
+		{
+			if(this.txtFHProSomme.getValue() < this.txtFSom1.getValue()) 
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure que vous avez défini est supérieur au nombre d'heure programme !", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFTotSom2.getValue() < this.txtFTotSom3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFHProSomme.getValue() > this.txtFSom1.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure que vous avez défini est inférieur au nombre d'heure programme !", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFTotSom2.getValue() > this.txtFTotSom3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+	}
+
 	private void majModule()
 	{
 		//Definition des informations du module
@@ -859,6 +918,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		this.MODULE.getProgramme().getItem("TP").setNbHPn(this.txtFHProTp.getValue());
 		this.MODULE.getProgramme().getItem("CM").setNbHeure(this.txtFNbHCmSem.getValue());
 		this.MODULE.getProgramme().getItem("TD").setNbHeure(this.txtFNbHTdSem.getValue());
+		this.MODULE.getProgramme().getItem("HP").setNbHeure(this.txtFHPonctu1.getValue());
 		this.MODULE.getProgramme().getItem("TP").setNbHeure(this.txtFNbHTpSem.getValue());
 		this.MODULE.getProgramme().getItem("CM").setNbSemaine(this.txtFNbSemCm.getValue());
 		this.MODULE.getProgramme().getItem("TD").setNbSemaine(this.txtFNbSemTd.getValue());
@@ -961,16 +1021,12 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 
 	private class ModelAffichageTableau extends AbstractTableModel
 	{
-		private Controleur ctrl;
-
 		private Object[][] tabDonnees;
 
 		private String[] tabEntetes;
 
 		public ModelAffichageTableau(Controleur ctrl, List<Affectation> lstAffectation)
 		{
-			this.ctrl = ctrl;
-
 			int nbCol = 7;
 			if(lstAffectation != null && lstAffectation.size() > 0)
 			{
@@ -997,7 +1053,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 			}
 			else
 			{
-				this.tabDonnees = new Object[1][nbCol];
+				this.tabDonnees = new Object[0][nbCol];
 			}
 
 			this.tabEntetes = new String[]{"Intervenant", "Type", "Nb Gp", "Nb Sem", "Nb H", "Total Eqtd", "Commentaire"};
@@ -1025,7 +1081,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		}
 
 		public int getRowCount()                                {return this.tabDonnees.length;}
-		public int getColumnCount()                             {return this.tabDonnees[0].length;}
+		public int getColumnCount()                             {return 7;}
 		public String getColumnName (int col)                  {return this.tabEntetes[col];}
 		public Object getValueAt(int rowIndex, int columnIndex) {return this.tabDonnees[rowIndex][columnIndex];}
 	}

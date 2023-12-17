@@ -10,8 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -19,7 +17,6 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -27,9 +24,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.text.NumberFormatter;
 
 import controleur.Controleur;
+import ihm.classPerso.JIntegerTextField;
 import metier.model.Affectation;
 import metier.model.CategorieHeure;
 import metier.model.Intervenant;
@@ -45,14 +42,13 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 	private JDialog dial;
 	private JComboBox<Intervenant> cbIntervenant;
 	private JComboBox<CategorieHeure> cbCategorieHeure;
-	private JFormattedTextField txtFNbSemaine;
-	private JFormattedTextField txtFNbGroupe;
+	private JIntegerTextField txtFNbSemaine;
+	private JIntegerTextField txtFNbGroupe;
 	private JTextField txtFCommentaire;
-	private JFormattedTextField txtFNbHeure;
+	private JIntegerTextField txtFNbHeure;
 	private JButton btnValider;
 	private JButton btnAnnuler;
 	private Module module;
-	private String typeModule;
 	
 	public PageCreaAffectation(Controleur ctrl, JFrame mere, List<Affectation> lstAffectation, JTable tableRessource, Module module)
 	{
@@ -64,21 +60,8 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 		this.creationPage();
 	}
 
-	public PageCreaAffectation(Controleur ctrl, JFrame mere, List<Affectation> lstAffectation, JTable tableRessource, String typeModule)
-	{
-		this.ctrl = ctrl;
-		this.mere = mere;
-		this.lstAffectation = lstAffectation;
-		this.tableRessource = tableRessource;
-		this.module = null;
-		this.typeModule = typeModule;
-		this.creationPage();
-	}
-
 	private void creationPage()
 	{
-		
-
 		this.dial = new JDialog(mere, "Création D'une Afféctation", true);
 		this.dial.setLayout(new BorderLayout());
 		this.dial.setSize(500, 500);
@@ -90,11 +73,6 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.insets = new Insets(5, 5, 5, 5); // Marge autour des composants
-
-		NumberFormat format = NumberFormat.getIntegerInstance();
-		NumberFormatter formatter = new NumberFormatter(format);
-		formatter.setValueClass(Integer.class);
-		formatter.setMinimum(0); // Valeur minimale autorisée
 
 		// Intervenant \\
 		JLabel lblIntervenant = new JLabel("Intervenant : ");
@@ -109,7 +87,7 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 
 		// Categorie Heure \\
 		JLabel lblCategorieHeure = new JLabel("Categorie Heure : ");
-		this.cbCategorieHeure = new JComboBox<CategorieHeure>((new Vector<>(module == null ?this.ctrl.getLstCategorieParTypeModule(this.typeModule):this.ctrl.getLstCategorieParTypeModule(module.getCategorieModule().getNom()))));
+		this.cbCategorieHeure = new JComboBox<CategorieHeure>(new Vector<>(this.ctrl.getLstCategorieParTypeModule(module.getCategorieModule().getNom())));
 		this.cbCategorieHeure.setRenderer(new Renderer());
 		this.cbCategorieHeure.addActionListener(this);
 
@@ -121,9 +99,9 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 
 		// Nombre d'heure \\
 		JLabel lblNbHeure = new JLabel("Nombre d'heure : ");
-		this.txtFNbHeure = new JFormattedTextField(formatter);
-		this.txtFNbHeure.setColumns(5);
+		this.txtFNbHeure = new JIntegerTextField(5);
 		this.txtFNbHeure.addFocusListener(this);
+		this.txtFNbHeure.setAllowsInvalid(false);
 
 		gbc.gridx = 0;
 		gbc.gridy = 2;
@@ -133,9 +111,9 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 
 		// Nombre de semaine \\
 		JLabel lblNbSemaine = new JLabel("Nombre de semaine : ");
-		this.txtFNbSemaine = new JFormattedTextField(formatter);
-		this.txtFNbSemaine.setColumns(5);
+		this.txtFNbSemaine = new JIntegerTextField(5);
 		this.txtFNbSemaine.addFocusListener(this);
+		this.txtFNbSemaine.setAllowsInvalid(false);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 3;
@@ -145,9 +123,9 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 
 		// Nombre de groupe \\
 		JLabel lblNbGroupe = new JLabel("Nombre de groupe : ");
-		this.txtFNbGroupe = new JFormattedTextField(formatter);
-		this.txtFNbGroupe.setColumns(5);
+		this.txtFNbGroupe = new JIntegerTextField(5);
 		this.txtFNbGroupe.addFocusListener(this);
+		this.txtFNbGroupe.setAllowsInvalid(false);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 4;
@@ -232,41 +210,61 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 				Integer nbSemaine = 0;
 				Integer nbHeure   = 0;
 				Integer nbGroupe  = 0;
-				if(this.txtFNbSemaine.getText().equals(""))
+				if(this.txtFNbSemaine.isEmpty())
 				{
-					try
-					{
-						nbHeure = Integer.parseInt(this.txtFNbHeure.getValue().toString().replace(" ", ""));
-						nbGroupe = 1;
-					} catch (Exception err) {
-						JOptionPane.showMessageDialog(this.dial, "Veuillez remplir tous les champs avec des valeur valide", "Erreur", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
+					nbHeure = this.txtFNbHeure.getValue();
+					nbGroupe = 1;
 				}
 				else
 				{
-					try
-					{
-						nbSemaine = Integer.parseInt(this.txtFNbSemaine.getValue().toString().replace(" ", ""));
-						nbGroupe  = Integer.parseInt(this.txtFNbGroupe.getValue().toString().replace(" ", ""));
-					} catch (Exception err) {
-						JOptionPane.showMessageDialog(this.dial, "Veuillez remplir tous les champs avec des valeur valide", "Erreur", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
+					nbSemaine = this.txtFNbSemaine.getValue();
+					nbGroupe  = this.txtFNbGroupe.getValue();
 				}
 				
 				String  commentaire = this.txtFCommentaire.getText();
 
-				Affectation affectation = new Affectation(inter, catHeure, nbGroupe, nbSemaine, nbHeure, commentaire, module);
-				this.ctrl.ajouterSauvAttente(affectation);
-				this.lstAffectation.add(affectation);
-				this.tableRessource.repaint();
-				this.dial.dispose();
+				if(nbSemaine > this.module.getSemestre().getNbSemaine())
+				{
+					JOptionPane.showMessageDialog(this.dial, "Le nombre de semaine ne peut pas être supérieur au nombre de semaine du semestre", "Erreur", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(nbGroupe > (((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("TD")?this.module.getSemestre().getNbGroupeTd():100000000))
+				{
+					JOptionPane.showMessageDialog(this.dial, "Le nombre de groupe ne peut pas être supérieur au nombre de groupe du semestre", "Erreur", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(nbGroupe > (((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("TP")?this.module.getSemestre().getNbGroupeTp():100000000))
+				{
+					JOptionPane.showMessageDialog(this.dial, "Le nombre de groupe ne peut pas être supérieur au nombre de groupe du semestre", "Erreur", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(nbGroupe > (((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("CM")?this.module.getSemestre().getNbGroupeTd():100000000))
+				{
+					JOptionPane.showMessageDialog(this.dial, "Le nombre de groupe ne peut pas être supérieur au nombre de groupe du semestre", "Erreur", JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					Affectation affectation = new Affectation(this.ctrl.getIdNouvAffectation() , inter, catHeure, nbGroupe, nbSemaine, nbHeure, commentaire, module);
+					this.ctrl.ajouterSauvAttente(affectation);
+					this.lstAffectation.add(affectation);
+					this.tableRessource.repaint();
+					this.dial.dispose();
+				}
 			}
 		}
 		else if(e.getSource() == this.btnAnnuler)
 		{
 			this.dial.dispose();
+		}
+		else if(e.getSource() == this.cbCategorieHeure)
+		{
+			if(((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP"))
+			{
+				this.txtFNbSemaine.setEditable(false);
+				this.txtFNbGroupe.setEditable(false);
+			}
+			else
+			{
+				this.txtFNbSemaine.setEditable(true);
+				this.txtFNbGroupe.setEditable(true);
+			}
 		}
 	}
 

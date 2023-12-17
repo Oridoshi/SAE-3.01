@@ -1,8 +1,5 @@
 package metier.model;
 
-import metier.IModifiable;
-import metier.repo.CategorieHeureDB;
-
 public class PatternCategorieModuleItem{
 
 	private CategorieHeure categorieHeure;

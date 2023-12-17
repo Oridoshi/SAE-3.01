@@ -1,15 +1,12 @@
 package metier.model;
 
 import java.util.List;
-import java.util.Map;
 
 import metier.IModifiable;
 import metier.repo.AffectationDB;
-import metier.repo.CategorieHeureDB;
 import metier.repo.CategorieModuleDB;
 import metier.repo.ModuleDB;
 import metier.repo.ProgrammeItemDB;
-import metier.repo.SemestreDB;
 
 /**
  * Module
@@ -35,6 +32,7 @@ public class Module implements IModifiable
 		this.libelleCourt = libelleCourt;
 		this.libelleLong = libelleLong;
 		Programme programme = new Programme();
+		this.programme = programme;
 		if ( ProgrammeItemDB.listParCodeModule(this.code) == null ) {
 			for ( PatternCategorieModuleItem pattern : this.categorieModule.getCategorieHeures() ){
 				programme.addItem(new ProgrammeItem(this.categorieModule, pattern.getCategorieHeure(), this.code, 0, 0, 0));
@@ -44,7 +42,6 @@ public class Module implements IModifiable
 				programme.addItem(item);
 			}
 		}
-		this.programme = programme;
 	}
 
 	
@@ -89,7 +86,6 @@ public class Module implements IModifiable
 
 	public CategorieModule getCategorieModule(){return this.categorieModule;}
 	public Semestre getSemestre(){return this.semestre;}
-	public boolean getValider(){return valider;}
 	public String  getCode(){return code;}
 
 	public boolean isValider() {

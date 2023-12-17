@@ -71,10 +71,13 @@ CREATE TABLE Intervenant (
 	nom VARCHAR(255) NOT NULL,
 	prenom VARCHAR(255) NOT NULL,
 	hMax INT default 0 NOT NULL,
+	hMin INT default 0 NOT NULL,
+	coefTp DECIMAL(5, 2) NOT NULL default 1,
 	FOREIGN KEY (codeCatIntervenant) REFERENCES CategorieIntervenant(code)
 );
 
 CREATE TABLE Affectation (
+	id SERIAL PRIMARY KEY,
 	idIntervenant INT NOT NULL,
 	nomCatHeure VARCHAR(50) NOT NULL,
 	nbH INT default 0 NOT NULL,
@@ -84,6 +87,5 @@ CREATE TABLE Affectation (
 	nbSemaine INT default 0 NOT NULL,
 	FOREIGN KEY (idIntervenant) REFERENCES Intervenant(id),
 	FOREIGN KEY (nomCatHeure) REFERENCES CategorieHeure(nom),
-	FOREIGN KEY (codeModule) REFERENCES Module(code),
-	PRIMARY KEY(idIntervenant, nomCatHeure, codeModule)
+	FOREIGN KEY (codeModule) REFERENCES Module(code)
 );

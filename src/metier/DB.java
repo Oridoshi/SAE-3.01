@@ -8,9 +8,12 @@ import java.sql.*;
 
 public class DB 
 {
-	private static String chemin = "woody/dt220522";
-	private static String identifiant = "dt220522";
-	private static String motDePasse = "22555225Tt.";
+	// private static String chemin = "woody/dt220522";
+	// private static String identifiant = "dt220522";
+	// private static String motDePasse = "22555225Tt.";
+	private static String chemin = "bernouy.com/sae301";
+	private static String identifiant = "admin";
+	private static String motDePasse = "Matthias76930!";
 	private static Connection db;
 
 
@@ -55,7 +58,18 @@ public class DB
 		try{
 			return ps.executeUpdate();
 		} catch ( SQLException e ){
+			System.out.println("DEBUG : " + e);
 			return -1;
+		}
+	}
+
+	public static void fermerConnexion()
+	{
+		try{
+			if(!DB.db.isClosed())
+				DB.db.close();
+		} catch (Exception e) {
+			System.out.println("DEBUG : IL Y A EUX UN PROBLEME LORS DE LA DECONNECTION");
 		}
 	}
 }

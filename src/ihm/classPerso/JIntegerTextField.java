@@ -24,7 +24,7 @@ import javax.swing.JTextField;
  */
 public class JIntegerTextField extends JTextField implements KeyListener, FocusListener {
 
-	private boolean bloquerCaractereNonValide;
+	private boolean autoriserCaractereInvalide;
 
 	/**
 	 * Constructeur par défaut. Initialise un champ de texte sans limite de caractères
@@ -32,7 +32,7 @@ public class JIntegerTextField extends JTextField implements KeyListener, FocusL
 	 */
 	public JIntegerTextField() {
 		super();
-		this.bloquerCaractereNonValide = false;
+		this.autoriserCaractereInvalide = true;
 
 		this.addKeyListener(this);
 		this.addFocusListener(this);
@@ -46,7 +46,7 @@ public class JIntegerTextField extends JTextField implements KeyListener, FocusL
 	 */
 	public JIntegerTextField(int nbCaractere) {
 		super(nbCaractere);
-		this.bloquerCaractereNonValide = false;
+		this.autoriserCaractereInvalide = true;
 
 		this.addKeyListener(this);
 		this.addFocusListener(this);
@@ -63,8 +63,8 @@ public class JIntegerTextField extends JTextField implements KeyListener, FocusL
 	 */
 	public JIntegerTextField(int nbCaractere, int valeurDefaut) {
 		super(nbCaractere);
-		this.bloquerCaractereNonValide = false;
-		this.setText("" + valeurDefaut);
+		this.autoriserCaractereInvalide = true;
+		this.setValue(valeurDefaut);
 
 		this.addKeyListener(this);
 		this.addFocusListener(this);
@@ -100,13 +100,13 @@ public class JIntegerTextField extends JTextField implements KeyListener, FocusL
 	 * 
 	 * @param bloquer {@code true} pour bloquer les caractères non valides, {@code false} sinon.
 	 */
-	public void bloquerCaractereNonValide(boolean bloquer) {
-		this.bloquerCaractereNonValide = bloquer;
+	public void setAllowsInvalid(boolean allows) {
+		this.autoriserCaractereInvalide = allows;
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if (this.bloquerCaractereNonValide)
+		if (!this.autoriserCaractereInvalide)
 			if (!verifCaractere(e.getKeyChar()))
 				e.consume();
 	}
@@ -138,18 +138,17 @@ public class JIntegerTextField extends JTextField implements KeyListener, FocusL
 	public void focusLost(FocusEvent e) {
 		if (this.getText().equals("")) return;
 
-		if (!this.bloquerCaractereNonValide)
+		if (this.autoriserCaractereInvalide)
 			try {
 				Integer.parseInt(this.getText());
 			} catch (Exception err) {
 				this.setText("");
 			}
 
-		if (!this.getText().equals("")) {
-			NumberFormat numberFormat = NumberFormat.getInstance();
-			String nombreAvecEspace = numberFormat.format(Integer.parseInt(this.getText()));
-			this.setText(nombreAvecEspace);
-		}
+
+		NumberFormat numberFormat = NumberFormat.getInstance();
+		String nombreAvecEspace = numberFormat.format(Integer.parseInt(this.getText()));
+		this.setText(nombreAvecEspace);
 	}
 
 	@Override

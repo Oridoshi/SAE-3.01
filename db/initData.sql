@@ -12,6 +12,7 @@ INSERT INTO CategorieIntervenant VALUES
 ('vaca_pro', 'vaca_pro', 120, 187, 0.67),
 ('vaca_sd', 'vac_sd', 90, 187, 0.67),
 ('vaca_ret', 'vaca_ret', 80, 96, 0.67),
+('info_etd', 'vaca_ret', 1, 1000, 0.01),
 ('info_sd', 'info_sd', 384, 576, 1);
 
 
@@ -134,10 +135,23 @@ INSERT INTO Intervenant ( codeCatIntervenant, nom, prenom) VALUES
 	( 'info_sd' , 'Legrix'    , 'Bruno'     ),
 	( 'info_sd' , 'Nivet'     , 'Laurence'  );
 
+INSERT INTO Intervenant ( codeCatIntervenant, nom, prenom, hMax, hMin, coefTp) VALUES
+	( 'info_etd', 'Dunet'   , 'Tom'      , 100, 1, 0.1 ),
+	( 'info_etd', 'Bernouy' , 'Matthias' , 100, 1, 0.1 ),
+	( 'info_etd', 'Bouloché', 'Éléonore' , 100, 1, 0.1 ),
+	( 'info_etd', 'Bureaux' , 'Axel'     , 100, 1, 0.1 ),
+	( 'info_etd', 'Bertaux' , 'Titouan'  , 100, 1, 0.1 );
 
 -- INSERT valeurs de AFFECTATION
-INSERT INTO Affectation VALUES
-	( 1, 'TD',  6, 2, 'R1.01' ),
-	( 2, 'TD',  8, 3, 'R1.01' ),
-	( 2, 'TP',  7, 2, 'R3.13' ),
-	( 3, 'TD', 13, 2, 'R3.13' );
+INSERT INTO Affectation (idIntervenant, nomCatHeure, nbH, codeModule) VALUES
+	( 1, 'TD',  6, 'R1.01' ),
+	( 2, 'TD',  8, 'R1.01' ),
+	( 2, 'TP',  7, 'R3.13' ),
+	( 3, 'TD', 13, 'R3.13' );
+
+INSERT INTO Affectation (idIntervenant, nomCatHeure, nbGrp,  nbSemaine, codeModule) VALUES
+	( 10, 'TP', 5, 2, 'S3.01' ),
+	( 11, 'TP', 5, 2, 'S3.01' ),
+	( 12, 'TP', 5, 2, 'S3.01' ),
+	( 13, 'TP', 5, 2, 'S3.01' ),
+	( 14, 'TP', 5, 2, 'S3.01' );
