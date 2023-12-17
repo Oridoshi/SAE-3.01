@@ -47,7 +47,7 @@ public class PageAccueil extends JPanel implements ActionListener
 		this.add(lblVersion, gbc);
 
 		JPanel panelBtn = new JPanel();
-		panelBtn.setLayout(new GridLayout(5, 1, 5, 0));
+		panelBtn.setLayout(new GridLayout(4, 1, 5, 0));
 
 		// btnParametres //
 		this.btnParametres = new JButton("Paramètres");
@@ -75,8 +75,8 @@ public class PageAccueil extends JPanel implements ActionListener
 		// btnTest.addActionListener(this);
 		// panelBtn.add(btnTest, gbc);
 		
-		// gbc.gridy = 2;
-		// this.add(panelBtn, gbc);
+		gbc.gridy = 2;
+		this.add(panelBtn, gbc);
 	}
 
 	@Override
