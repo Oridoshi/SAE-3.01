@@ -6,12 +6,17 @@ import javax.swing.table.AbstractTableModel;
 
 import controleur.Controleur;
 import ihm.classPerso.JIntegerTextField;
+import ihm.creationObjet.PageEditionPpp;
 import ihm.creationObjet.PageEditionRessource;
+import ihm.creationObjet.PageEditionSae;
+import ihm.creationObjet.PageEditionStage;
 import metier.model.Affectation;
+import metier.model.CategorieModule;
 import metier.model.Module;
 import metier.model.Semestre;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -20,14 +25,14 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class PagePrevisionnel extends JPanel implements ActionListener
 {
 	private Controleur ctrl;
 
-	private JButton btnCreaRessource;
-	private JButton btnCreaSae;
-	private JButton btnCreaStage;
+
+	private JButton btnCreaModule;
 	private JButton btnModif;
 	private JButton btnSupp;
 
@@ -37,6 +42,8 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 	private List<PanelInfoSemestre> lstPanelInfoSemestre;
 
 	private JButton btnHome;
+
+	private JComboBox<CategorieModule> cbCategorieModule;
 
 	public PagePrevisionnel(Controleur ctrl, FrameIhm mere)
 	{
@@ -59,23 +66,20 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 		this.add(this.tabbedPane, BorderLayout.CENTER);
 
 		JPanel panelBtn = new JPanel();
-		panelBtn.setLayout(new GridLayout(1, 5, 5, 0));
+		panelBtn.setLayout(new GridLayout(1, 4, 5, 0));
 
-		this.btnCreaRessource = new JButton("créer Ressource");
-		this.btnCreaSae       = new JButton("créer SAE");
-		this.btnCreaStage     = new JButton("créer Stage/Suivi");
-		this.btnModif         = new JButton("modifier");
-		this.btnSupp          = new JButton("supprimer");
+		this.cbCategorieModule = new JComboBox<CategorieModule>((new Vector<>(this.ctrl.getLstCategorieModule())));
+		this.cbCategorieModule.setRenderer(new Renderer());
+		this.btnCreaModule     = new JButton("Créer Module");
+		this.btnModif         = new JButton("Modifier");
+		this.btnSupp          = new JButton("Supprimer");
 
-		this.btnCreaRessource.addActionListener(this);
-		this.btnCreaSae      .addActionListener(this);
-		this.btnCreaStage    .addActionListener(this);
+		this.btnCreaModule   .addActionListener(this);
 		this.btnModif        .addActionListener(this);
 		this.btnSupp         .addActionListener(this);
 
-		panelBtn.add(btnCreaRessource);
-		panelBtn.add(btnCreaSae);
-		panelBtn.add(btnCreaStage);
+		panelBtn.add(this.cbCategorieModule);
+		panelBtn.add(btnCreaModule);
 		panelBtn.add(btnModif);
 		panelBtn.add(btnSupp);
 
@@ -94,26 +98,51 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 		this.add(panelNord, BorderLayout.NORTH);
 	}
 
+	private class Renderer extends DefaultListCellRenderer
+	{
+		@Override
+		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+		{
+			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+			if (value instanceof CategorieModule)
+			{
+				CategorieModule inter = (CategorieModule) value;
+				setText(inter.getNom());
+			}
+
+			return this;
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == this.btnCreaRessource)
+		if (e.getSource() == this.btnCreaModule)
 		{
-			this.mere.changerPage(PageEditionRessource.factorieCreationRessource(this.ctrl, this.mere, this.ctrl.getSemestre(this.tabbedPane.getSelectedIndex() + 1)));
-		}
-		else if (e.getSource() == this.btnCreaSae)
-		{
-
-		}
-		else if (e.getSource() == this.btnCreaStage)
-		{
-
+			CategorieModule categorieModule = ((CategorieModule) this.cbCategorieModule.getSelectedItem());
+			if(categorieModule.getNom().equals("Ressource"))
+				this.mere.changerPage(PageEditionRessource.factorieCreationRessource(this.ctrl, this.mere, this.ctrl.getSemestre(this.tabbedPane.getSelectedIndex() + 1)));
+			else if(categorieModule.getNom().equals("SAE"))
+				this.mere.changerPage(PageEditionSae.factorieCreationSae(this.ctrl, this.mere, this.ctrl.getSemestre(this.tabbedPane.getSelectedIndex() + 1)));
+			else if(categorieModule.getNom().equals("Stage/Suivi"))
+				this.mere.changerPage(PageEditionStage.factorieCreationStage(this.ctrl, this.mere, this.ctrl.getSemestre(this.tabbedPane.getSelectedIndex() + 1)));
+			else if(categorieModule.getNom().equals("PPP"))
+				this.mere.changerPage(PageEditionPpp.factorieCreationPpp(this.ctrl, this.mere, this.ctrl.getSemestre(this.tabbedPane.getSelectedIndex() + 1)));
 		}
 		else if (e.getSource() == this.btnModif)
 		{
 			if(this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).hasRowSelect())
 			{
-				this.mere.changerPage(PageEditionRessource.factorieEditionRessource(this.ctrl, this.mere, this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getModuleSelectedRow()));
+				Module m = this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getModuleSelectedRow();
+				if(m.getCategorieModule() == this.ctrl.getCategorieModule("Ressource"))
+					this.mere.changerPage(PageEditionRessource.factorieEditionRessource(this.ctrl, this.mere, m));
+				else if(m.getCategorieModule() == this.ctrl.getCategorieModule("SAE"))
+					this.mere.changerPage(PageEditionSae.factorieEditionSae(this.ctrl, this.mere, m));
+				else if(m.getCategorieModule() == this.ctrl.getCategorieModule("Stage/Suivi"))
+					this.mere.changerPage(PageEditionStage.factorieEditionStage(this.ctrl, this.mere, m));
+				else if(m.getCategorieModule() == this.ctrl.getCategorieModule("PPP"))
+					this.mere.changerPage(PageEditionPpp.factorieEditionPpp(this.ctrl, this.mere, m));
 			}
 		}
 		else if (e.getSource() == this.btnSupp)
@@ -350,14 +379,30 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 		private String calcul(Module m)
 		{
 			int tot = 0;
+
 			if(m.getCategorieModule() == ctrl.getCategorieModule("Ressource"))
 			{
 				tot = (int) ((m.getNbHeureProgramme("CM") * this.ctrl.getCoefH("CM")) + (m.getNbHeureProgramme("TD") * this.ctrl.getCoefH("TD")) + (m.getNbHeureProgramme("TP") * this.ctrl.getCoefH("TP")));
+			}
+			else if(m.getCategorieModule() == ctrl.getCategorieModule("SAE"))
+			{
+				tot = (int) (m.getNbHeureProgramme("HSAE") * this.ctrl.getCoefH("HSAE") + m.getNbHeureProgramme("HT") * this.ctrl.getCoefH("HT"));
+			}
+			else if(m.getCategorieModule() == ctrl.getCategorieModule("Stage/Suivi"))
+			{
+				tot = (int) (m.getNbHeureProgramme("REH") * this.ctrl.getCoefH("REH") + m.getNbHeureProgramme("HT") * this.ctrl.getCoefH("HT"));
+			}
+			else if(m.getCategorieModule() == ctrl.getCategorieModule("PPP"))
+			{
+				tot = (int) ((m.getNbHeureProgramme("CM") * this.ctrl.getCoefH("CM")) + (m.getNbHeureProgramme("TD") * this.ctrl.getCoefH("TD")) + (m.getNbHeureProgramme("TP") * this.ctrl.getCoefH("TP")) + m.getNbHeureProgramme("HT") * this.ctrl.getCoefH("HT"));
 			}
 
 			int nbTotAffHCm = 0;
 			int nbTotAffHTd = 0;
 			int nbTotAffHTp = 0;
+			int nbTotAffHReh = 0;
+			int nbTotAffHSae = 0;
+			int nbTotAffHTut = 0;
 			int nbTotAffHPonctu = 0;
 
 			List<Affectation> lstAff = m.getLstAffectation();
@@ -388,7 +433,28 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 					else
 						nbTotAffHTp += aff.getNbGroupe() * aff.getNbSemaine();
 				}
-				else
+				else if (aff.getCategorieHeure().getNom().equals("REH"))
+				{
+					if(aff.getNbHeure() != null)
+						nbTotAffHReh += aff.getNbHeure();
+					else
+						nbTotAffHReh += aff.getNbGroupe() * aff.getNbSemaine();
+				}
+				else if (aff.getCategorieHeure().getNom().equals("HSAE"))
+				{
+					if(aff.getNbHeure() != null)
+						nbTotAffHSae += aff.getNbHeure();
+					else
+						nbTotAffHSae += aff.getNbGroupe() * aff.getNbSemaine();
+				}
+				else if (aff.getCategorieHeure().getNom().equals("HT"))
+				{
+					if(aff.getNbHeure() != null)
+						nbTotAffHTut += aff.getNbHeure();
+					else
+						nbTotAffHTut += aff.getNbGroupe() * aff.getNbSemaine();
+				}
+				else if (aff.getCategorieHeure().getNom().equals("HP"))
 				{
 					if(aff.getNbHeure() != null)
 						nbTotAffHPonctu += aff.getNbHeure();
@@ -398,7 +464,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			}
 
 
-			return (nbTotAffHCm + nbTotAffHTd + nbTotAffHTp + nbTotAffHPonctu) + " / " + tot;
+			return (nbTotAffHCm + nbTotAffHTd + nbTotAffHTp + nbTotAffHPonctu + nbTotAffHReh + nbTotAffHSae + nbTotAffHTut) + " / " + tot;
 		}
 
 		public int getRowCount()                                {return this.tabDonnees.length;}

@@ -170,8 +170,19 @@ public class PageParametres extends JPanel implements ActionListener
 				}
 				else
 				{
-					this.ctrl.ajouterSuppAttente(this.lstCategorieIntervenantLocal.get(this.tableCategorieIntervenant.getSelectedRow()));
-					this.lstCategorieIntervenantLocal.remove(this.tableCategorieIntervenant.getSelectedRow());
+					int rep = JOptionPane.showConfirmDialog(this.mere, "Voulez-vous vraiment supprimer ce tyoe intervenant ?", "Suppression", JOptionPane.YES_NO_OPTION);
+					if(rep == JOptionPane.YES_OPTION)
+					{
+						int emplacement = this.tableCategorieIntervenant.getSelectedRow();
+						this.ctrl.ajouterSuppAttente(this.lstCategorieIntervenantLocal.get(this.tableCategorieIntervenant.getSelectedRow()));
+						this.lstCategorieIntervenantLocal.remove(this.tableCategorieIntervenant.getSelectedRow());
+						this.majTab();;
+
+						if(this.tableCategorieIntervenant.getRowCount() <= emplacement)
+							emplacement--;
+
+						this.tableCategorieIntervenant.setRowSelectionInterval(emplacement, emplacement);
+					}
 				}
 			}
 

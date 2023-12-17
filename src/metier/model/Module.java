@@ -54,8 +54,9 @@ public class Module implements IModifiable
 	}
 
 	public boolean setCode(String code) {
-		if ( ModuleDB.getParCode(code) != null ) return false;
+		if ( ModuleDB.getParCode(code) != null && !code.equals(this.code)) return false;
 		this.code = code;
+		this.codeOrigine = code;
 		for ( ProgrammeItem item : this.programme.listProgrammeItems()){
 			item.setCodeModule(code);
 		}
@@ -116,11 +117,6 @@ public class Module implements IModifiable
 			item.sauvegarder();
 		}
 		return ModuleDB.save(this);
-	}
-
-	public boolean estDispo()
-	{
-		return !(ModuleDB.getParCode(this.code) == null || ModuleDB.getParCode(this.code) == this);
 	}
 
 	public boolean supprimer()

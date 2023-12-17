@@ -128,4 +128,9 @@ public class Controleur
 	{
 		return AffectationDB.getDernierId() + 1;
 	}
+
+	public List<CategorieModule> getLstCategorieModule()
+	{
+		return CategorieModuleDB.list();
+	}
 }

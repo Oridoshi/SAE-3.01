@@ -58,7 +58,7 @@ public class DB
 		try{
 			return ps.executeUpdate();
 		} catch ( SQLException e ){
-			System.out.println("DEBUG : " + e);
+			// System.out.println("DEBUG : " + e);
 			return -1;
 		}
 	}

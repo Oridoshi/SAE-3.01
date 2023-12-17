@@ -37,9 +37,9 @@ public class AffectationDB {
 		modulesParIntervenant = new HashMap<>();
 		try{
 			psGetAffectations = db.prepareStatement("SELECT * FROM Affectation");
-			psDeleteAffectation = db.prepareStatement("DELETE FROM Affectation WHERE idIntervenant = ? AND nomCatHeure = ? AND codeModule = ?");
+			psDeleteAffectation = db.prepareStatement("DELETE FROM Affectation WHERE id = ?");
 			psUpdateAffectation = db.prepareStatement("UPDATE Affectation SET nbGrp = ?, nbSemaine = ?, nbH = ?, commentaire = ? WHERE id = ?");
-			psCreateAffectation = db.prepareStatement("INSERT INTO Affectation VALUES (?, ?, ?, ?, ?, ?, ?)");
+			psCreateAffectation = db.prepareStatement("INSERT INTO Affectation VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 			DBResult result = new DBResult(psGetAffectations.executeQuery());
 			for ( Map<String, String> ligne : result.getLignes() ){
 				affectations.add(new Affectation(
@@ -84,9 +84,7 @@ public class AffectationDB {
 
 	public static boolean delete(Affectation affectation){
 		try{
-			psDeleteAffectation.setInt(1, affectation.getIntervenant().getId());
-			psDeleteAffectation.setString(2, affectation.getCategorieHeure().getNom());
-			psDeleteAffectation.setString(3, affectation.getModule().getCode());
+			psDeleteAffectation.setInt(1, affectation.getId());
 			if ( DB.update(psDeleteAffectation) == 1){
 				affectations.remove(affectation);
 				init();
@@ -113,13 +111,14 @@ public class AffectationDB {
 			}
 		} else {
 			try{
-				psCreateAffectation.setInt(1, affectation.getIntervenant().getId());
-				psCreateAffectation.setString(2, affectation.getCategorieHeure().getNom());
-				psCreateAffectation.setInt(3, affectation.getNbHeure() == null?0:affectation.getNbHeure());
-				psCreateAffectation.setInt(4, affectation.getNbGroupe() == null?0:affectation.getNbGroupe());
-				psCreateAffectation.setString(5, affectation.getModule().getCode());
-				psCreateAffectation.setString(6, affectation.getCommentaire());
-				psCreateAffectation.setInt(7, affectation.getNbSemaine() == null?0:affectation.getNbSemaine());
+				psCreateAffectation.setInt(1, affectation.getId());
+				psCreateAffectation.setInt(2, affectation.getIntervenant().getId());
+				psCreateAffectation.setString(3, affectation.getCategorieHeure().getNom());
+				psCreateAffectation.setInt(4, affectation.getNbHeure() == null?0:affectation.getNbHeure());
+				psCreateAffectation.setInt(5, affectation.getNbGroupe() == null?0:affectation.getNbGroupe());
+				psCreateAffectation.setString(6, affectation.getModule().getCode());
+				psCreateAffectation.setString(7, affectation.getCommentaire());
+				psCreateAffectation.setInt(8, affectation.getNbSemaine() == null?0:affectation.getNbSemaine());
 				if ( DB.update(psCreateAffectation) == 1 ){
 					affectations.add(affectation);
 					init();
@@ -139,15 +138,18 @@ public class AffectationDB {
 
 			// On place dans l'array AffectationParIntervenant
 			affectationsParIntervenant.putIfAbsent(affectation.getIntervenant().getId(), new ArrayList<>());
-			affectationsParIntervenant.get(affectation.getIntervenant().getId()).add(affectation);
+			if(!affectationsParIntervenant.get(affectation.getIntervenant().getId()).contains(affectation))
+				affectationsParIntervenant.get(affectation.getIntervenant().getId()).add(affectation);
 
 			// On place dans l'array AffectationParModule
 			affectationsParModule.putIfAbsent(affectation.getModule().getCode(), new ArrayList<>());
-			affectationsParModule.get(affectation.getModule().getCode()).add(affectation);
+			if(!affectationsParModule.get(affectation.getModule().getCode()).contains(affectation))
+				affectationsParModule.get(affectation.getModule().getCode()).add(affectation);
 
 			// On place dans ModulesParIntervenants
 			modulesParIntervenant.putIfAbsent(affectation.getIntervenant(), new HashSet<>());
-			modulesParIntervenant.get(affectation.getIntervenant()).add(affectation.getModule());
+			if(!modulesParIntervenant.get(affectation.getIntervenant()).contains(affectation.getModule()))
+				modulesParIntervenant.get(affectation.getIntervenant()).add(affectation.getModule());
 		}
 	}
 	

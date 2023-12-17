@@ -167,6 +167,16 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 		this.dial.add(panelBtn, BorderLayout.SOUTH);
 		/*----------Fin Boutons----------*/
 
+		if(((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP") || this.module.getCategorieModule().getNom().equals("SAE") || this.module.getCategorieModule().getNom().equals("PPP") || this.module.getCategorieModule().getNom().equals("Stage/Suivi"))
+		{
+			this.txtFNbSemaine.setEditable(false);
+			this.txtFNbGroupe.setEditable(false);
+		}
+		else
+		{
+			this.txtFNbSemaine.setEditable(true);
+			this.txtFNbGroupe.setEditable(true);
+		}
 
 		this.dial.setResizable(false);
 		this.dial.setVisible(true);
@@ -225,19 +235,19 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 
 				if(nbSemaine > this.module.getSemestre().getNbSemaine())
 				{
-					JOptionPane.showMessageDialog(this.dial, "Le nombre de semaine ne peut pas être supérieur au nombre de semaine du semestre", "Erreur", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this.dial, "Le nombre de semaine ne peut pas être supérieur au nombre de semaine que vous avez défini !", "ERREUR SEMAINE", JOptionPane.ERROR_MESSAGE);
 				}
 				else if(nbGroupe > (((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("TD")?this.module.getSemestre().getNbGroupeTd():100000000))
 				{
-					JOptionPane.showMessageDialog(this.dial, "Le nombre de groupe ne peut pas être supérieur au nombre de groupe du semestre", "Erreur", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this.dial, "Le nombre de groupe ne peut pas être supérieur au nombre de groupe du semestre !", "ERREUR GROUPE", JOptionPane.ERROR_MESSAGE);
 				}
 				else if(nbGroupe > (((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("TP")?this.module.getSemestre().getNbGroupeTp():100000000))
 				{
-					JOptionPane.showMessageDialog(this.dial, "Le nombre de groupe ne peut pas être supérieur au nombre de groupe du semestre", "Erreur", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this.dial, "Le nombre de groupe ne peut pas être supérieur au nombre de groupe du semestre !", "ERREUR GROUPE", JOptionPane.ERROR_MESSAGE);
 				}
 				else if(nbGroupe > (((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("CM")?this.module.getSemestre().getNbGroupeTd():100000000))
 				{
-					JOptionPane.showMessageDialog(this.dial, "Le nombre de groupe ne peut pas être supérieur au nombre de groupe du semestre", "Erreur", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this.dial, "Le nombre de groupe ne peut pas être supérieur au nombre de groupe du semestre !", "ERREUR GROUPE", JOptionPane.ERROR_MESSAGE);
 				}
 				else
 				{
@@ -255,7 +265,7 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 		}
 		else if(e.getSource() == this.cbCategorieHeure)
 		{
-			if(((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP"))
+			if(((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP") || this.module.getCategorieModule().getNom().equals("SAE") || this.module.getCategorieModule().getNom().equals("PPP") || this.module.getCategorieModule().getNom().equals("Stage/Suivi"))
 			{
 				this.txtFNbSemaine.setEditable(false);
 				this.txtFNbGroupe.setEditable(false);
@@ -265,13 +275,17 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 				this.txtFNbSemaine.setEditable(true);
 				this.txtFNbGroupe.setEditable(true);
 			}
+
+			this.txtFNbGroupe.setText("");
+			this.txtFNbSemaine.setText("");
+			this.txtFNbHeure.setText("");
 		}
 	}
 
 	@Override
 	public void focusGained(FocusEvent e)
 	{
-		if(e.getSource() == this.txtFNbHeure || ((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP"))
+		if(e.getSource() == this.txtFNbHeure || ((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP") || this.module.getCategorieModule().getNom().equals("SAE") || this.module.getCategorieModule().getNom().equals("PPP") || this.module.getCategorieModule().getNom().equals("Stage/Suivi"))
 		{
 			this.txtFNbSemaine.setEditable(false);
 			this.txtFNbGroupe.setEditable(false);
@@ -287,7 +301,7 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 	{
 		if(e.getSource() == this.txtFNbHeure)
 		{
-			if(this.txtFNbHeure.getText().equals("") && !((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP"))
+			if(this.txtFNbHeure.getText().equals("") && !((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP") || !this.module.getCategorieModule().getNom().equals("SAE") || !this.module.getCategorieModule().getNom().equals("PPP") || !this.module.getCategorieModule().getNom().equals("Stage/Suivi"))
 			{
 				this.txtFNbSemaine.setEditable(true);
 				this.txtFNbGroupe.setEditable(true);
