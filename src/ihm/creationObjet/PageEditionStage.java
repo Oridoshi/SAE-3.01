@@ -729,7 +729,7 @@ public class PageEditionStage extends JPanel implements ActionListener, FocusLis
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure REH que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			if(this.txtFHProHTut.getValue() < this.txtFNbHTutSem.getValue()) 
+			else if(this.txtFHProHTut.getValue() < this.txtFNbHTutSem.getValue()) 
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
@@ -758,17 +758,17 @@ public class PageEditionStage extends JPanel implements ActionListener, FocusLis
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure REH que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			if(this.txtFHProHReh.getValue() > this.txtFNbHRehSem.getValue()) 
+			else if(this.txtFHProHReh.getValue() > this.txtFNbHRehSem.getValue()) 
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure REH que vous avez défini est inférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			if(this.txtFHProHTut.getValue() < this.txtFNbHTutSem.getValue()) 
+			else if(this.txtFHProHTut.getValue() < this.txtFNbHTutSem.getValue()) 
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			if(this.txtFHProHTut.getValue() > this.txtFNbHTutSem.getValue()) 
+			else if(this.txtFHProHTut.getValue() > this.txtFNbHTutSem.getValue()) 
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est inférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;

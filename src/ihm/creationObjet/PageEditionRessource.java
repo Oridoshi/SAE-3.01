@@ -930,116 +930,116 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 
 	private boolean valeurEntreOk(boolean selected)
 	{
-		// if(selected)
-		// {
-		// 	//Verification des heures défini par rapport au heures programme
-		// 	if(this.txtFHProHReh.getValue() < this.txtFNbHRehSem.getValue()) 
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure REH que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	if(this.txtFHProHTut.getValue() < this.txtFNbHTutSem.getValue()) 
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	if(this.txtFHProHTut.getValue() < this.txtFNbHTutSem.getValue()) 
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	//Verification des heures affecté par rapport au heures défini
-		// 	else if(this.txtFNbHRehSem.getValue() < this.txtFTotHRehAff.getValue())
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure REH affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	else if(this.txtFNbHTutSem.getValue() < this.txtFTotHTutAff.getValue())
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	else if(this.txtFNbHTutSem.getValue() < this.txtFTotHTutAff.getValue())
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	else
-		// 	{
-		// 		return true;
-		// 	}
-		// }
-		// else
-		// {
-		// 	//Verification des heures défini par rapport au heures programme
-		// 	if(this.txtFHProHReh.getValue() < this.txtFNbHRehSem.getValue()) 
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure REH que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	if(this.txtFHProHReh.getValue() > this.txtFNbHRehSem.getValue()) 
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure REH que vous avez défini est inférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	if(this.txtFHProHTut.getValue() < this.txtFNbHTutSem.getValue()) 
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	if(this.txtFHProHTut.getValue() > this.txtFNbHTutSem.getValue()) 
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est inférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	if(this.txtFHProHTut.getValue() < this.txtFNbHTutSem.getValue()) 
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	if(this.txtFHProHTut.getValue() > this.txtFNbHTutSem.getValue()) 
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est inférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	//Verification des heures affecté par rapport au heures défini
-		// 	else if(this.txtFNbHRehSem.getValue() < this.txtFTotHRehAff.getValue())
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure REH affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	else if(this.txtFNbHRehSem.getValue() > this.txtFTotHRehAff.getValue())
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure REH affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	else if(this.txtFNbHTutSem.getValue() < this.txtFTotHTutAff.getValue())
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	else if(this.txtFNbHTutSem.getValue() > this.txtFTotHTutAff.getValue())
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	else if(this.txtFNbHTutSem.getValue() < this.txtFTotHTutAff.getValue())
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	else if(this.txtFNbHTutSem.getValue() > this.txtFTotHTutAff.getValue())
-		// 	{
-		// 		JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
-		// 		return false;
-		// 	}
-		// 	else
-		// 	{
-		// 		return true;
-		// 	}
-		// }
+		if(selected)
+		{
+			//Verification des heures défini par rapport au heures programme
+			if(this.txtFHProCm.getValue() < this.txtFNbHCmSem.getValue()) 
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFHProTd.getValue() < this.txtFNbHTdSem.getValue()) 
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFHProTp.getValue() < this.txtFNbHTpSem.getValue()) 
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 
-		return true;
+			//Verification des heures affecté par rapport au heures défini
+			else if(this.txtFNbHCmSem.getValue() < this.txtFTotCm3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFNbHTdSem.getValue() < this.txtFTotTd3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFNbHTpSem.getValue() < this.txtFTotTp3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		else
+		{
+			//Verification des heures défini par rapport au heures programme
+			if(this.txtFHProCm.getValue() < this.txtFNbHCmSem.getValue()) 
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFHProTd.getValue() < this.txtFNbHTdSem.getValue()) 
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFHProTp.getValue() < this.txtFNbHTpSem.getValue()) 
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+
+			else if(this.txtFHProCm.getValue() > this.txtFNbHCmSem.getValue()) 
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM que vous avez défini est infférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFHProTd.getValue() > this.txtFNbHTdSem.getValue()) 
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD que vous avez défini est infférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFHProTp.getValue() > this.txtFNbHTpSem.getValue()) 
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est infférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+
+			//Verification des heures affecté par rapport au heures défini
+			else if(this.txtFNbHCmSem.getValue() < this.txtFTotCm3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFNbHTdSem.getValue() < this.txtFTotTd3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFNbHTpSem.getValue() < this.txtFTotTp3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+			}
+
+			else if(this.txtFNbHCmSem.getValue() < this.txtFTotCm3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFNbHTdSem.getValue() < this.txtFTotTd3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFNbHTpSem.getValue() < this.txtFTotTp3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+			}
+			else
+			{
+				return true;
+			}
+		}
 	}
 
 	private void majModule()
