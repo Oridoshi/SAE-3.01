@@ -1,19 +1,16 @@
 package metier;
 
 import java.sql.*;
-/*
+
+/**
  * Classe permettant de faire des requetes sur la base de données
 
  */
-
 public class DB 
 {
 	// private static String chemin = "woody/dt220522";
 	// private static String identifiant = "dt220522";
 	// private static String motDePasse = "22555225Tt.";
-	private static String chemin = "bernouy.com/sae301";
-	private static String identifiant = "admin";
-	private static String motDePasse = "Matthias76930!";
 	private static Connection db;
 
 
@@ -26,21 +23,17 @@ public class DB
 		}
 
 		try {
-			db = DriverManager.getConnection("jdbc:postgresql://" + chemin,identifiant,motDePasse);
+			LectureDonneConnexion donneConnexion = new LectureDonneConnexion();
+
+			db = DriverManager.getConnection("jdbc:postgresql://" + donneConnexion.getChemin(),donneConnexion.getIdentifiant(),donneConnexion.getMotDePasse());
 		} 
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/*
-	static{
-		try{
-			db = DriverManager.getConnection("jdbc:postgresql://"+ chemin + "/" + identifiant, identifiant, motDePasse);
-		} catch (Exception e){
+		catch (Exception e) {
 			e.printStackTrace();
 		}
-	}*/
+	}
 
 	public static Connection getInstance(){
 		return db;
