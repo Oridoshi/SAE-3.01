@@ -30,6 +30,8 @@ public class AffectationDB {
 	private static PreparedStatement psCreateAffectation;
 	private static PreparedStatement psDeleteAffectation;
 
+	private static int dernierId;
+
 	static{
 		affectations = new ArrayList<>();
 		affectationsParIntervenant = new HashMap<>();
@@ -53,6 +55,10 @@ public class AffectationDB {
 					ModuleDB.getParCode(ligne.get("codemodule"))
 				));
 			}
+			int max = 0;
+			for ( Affectation affectation : affectations )
+				if ( affectation.getId() > max ) max = affectation.getId();
+			dernierId =  max;
 			init();
 		} catch ( Exception e ){
 			e.printStackTrace();
@@ -60,10 +66,7 @@ public class AffectationDB {
 	}
 
 	public static int getDernierId(){
-		int max = 0;
-		for ( Affectation affectation : affectations )
-			if ( affectation.getId() > max ) max = affectation.getId();
-		return max;
+		return ++dernierId;
 	}
 
 	public static List<Affectation> list(){

@@ -325,6 +325,9 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 			{
 				this.semestreActu.setNbSemaine(this.txtFNbSeme.getValue());
 			}
+
+			this.ctrl.ajouterSauvAttente(this.semestreActu);
+			this.ctrl.sauvegarder();
 		}
 	}
 
