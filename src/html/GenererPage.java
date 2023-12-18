@@ -17,11 +17,10 @@ public class GenererPage
 			this.fichier = module.getCode() + "_" + module.getNom() + ".txt";
 
 
-		this.tabTotalHeures = new int[8];
+		this.tabSemestre = new int[8];
 
-		for ( int cpt = 0; cpt < this.tabTotalHeures.length; cpt ++ )
+		for ( int cpt = 0; cpt < this.tabSemestre.length; cpt ++ )
 		{
-			this.tabTotalHeures[cpt] = 0;
 			this.tabSemestre   [cpt] = 0;
 		}
 	}
