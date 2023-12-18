@@ -1040,6 +1040,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 				return true;
 			}
 		}
+		return false;
 	}
 
 	private void majModule()

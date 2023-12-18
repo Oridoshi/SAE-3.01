@@ -10,18 +10,11 @@ body {
 	margin : 0%;
 }
 
-h1 {
-	text-align: center;
-}
-
-h2 {
-	margin-left : 4%;
-}
+h1 { text-align: center; }
+h2 { margin-left : 4%; }
 
 
-td, th {
-	padding : 1%;
-}
+td, th { padding : 1%; }
 
 
 table {
@@ -29,8 +22,9 @@ table {
 	width : 85%;
 	border-collapse: collapse;
 	text-align: center;
-	border  : 2px solid #E9967A;
 }
+
+
 
 
 hr {
@@ -106,19 +100,19 @@ table.statsIntervenants td { width : 50%; }
 }
 
 
+table.statsIntervenants, table.infosIntervenants { border  : 2px solid #E9967A; }
+
+
+
 /* ------------------------------------ */
 /* ------------------------------------ */
 /*             FICHE MODULES            */
 /* ------------------------------------ */
 /* ------------------------------------ */
 
-table.infosModule > tbody tr:nth-child(even) {
-	background : #8FBC8B;
-}
+table.infosModule > tbody tr:nth-child(even) { background : #8FBC8B; }
 
-table.infosModule > tbody tr:nth-child(odd) {
-	background : #F5FFFA;
-}
+table.infosModule > tbody tr:nth-child(odd) { background : #F5FFFA; }
 
 
 th.nomModule { width : 30%; }
@@ -127,3 +121,22 @@ table.infosModule > thead tr {
 	background : #2E8B57;
 	color      : white;
 }
+
+
+table.infosModule { border  : 2px solid #2E8B57; }
+
+
+.statsTotalModule td {
+	border-top : 2px solid #2E8B57;
+	background : white;
+}
+
+
+td.totalFinalModule {
+	border-left : 2px solid #2E8B57;
+	background  : #2E8B57;
+
+	font-weight : bold;
+}
+
+.totalModule { border-left  : 2px solid #2E8B57; }

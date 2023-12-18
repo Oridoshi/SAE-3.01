@@ -11,7 +11,8 @@ import metier.IModifiable;
 import metier.repo.AffectationDB;
 import metier.repo.CategorieIntervenantDB;
 
-import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Intervenant implements IModifiable
 {
@@ -97,8 +98,16 @@ public class Intervenant implements IModifiable
 		return this.getTotalParImpair() + this.getTotalParPair();
 	}
 
-	public Set<Module> getModulesOuIntervient(){
-		return AffectationDB.getModulesParIntervenant(this);
+	public List<Affectation> getModulesOuIntervient(){
+		ArrayList<Affectation> lstAffectation = new ArrayList<Affectation>();
+
+		if(AffectationDB.getAffectationsParIntervenant(this.id) != null)
+			for ( Affectation affectation : AffectationDB.getAffectationsParIntervenant(this.id))
+			{
+				lstAffectation.add(affectation);
+			}
+
+		return lstAffectation;
 	}
 
 	public void setNom(String nom) {

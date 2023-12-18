@@ -5,8 +5,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import controleur.Controleur;
+import html.GenererPage;
+import metier.model.Intervenant;
+import metier.model.Semestre;
 
 public class PageAccueil extends JPanel implements ActionListener
 {
@@ -96,11 +100,28 @@ public class PageAccueil extends JPanel implements ActionListener
 		}
 		else if (e.getSource() == this.btnEtats)
 		{
-			//this.mere.changerPage(new PageParametres(this.ctrl, this.mere));
+			for (Intervenant inter : this.ctrl.getLstIntervenants())
+			{
+				GenererPage.genererPageInter(inter);
+				ouvrirePageWeb("/home/etudiant/dt220522/TP/s3/s3.01_dev_application/SAE-1.03/" + inter.getId() + "_" + inter.getNom() + "_" + inter.getPrenom() + ".html");
+			}
+			// this.mere.changerPage(new PageParametres(this.ctrl, this.mere));
 		}
 		// else
 		// {
 		// 	this.mere.changerPage(new PageEditionModule(this.ctrl, this.mere));
 		// }
+	}
+
+	private void ouvrirePageWeb(String url)
+	{
+		try
+		{
+			Desktop.getDesktop().browse((new File(url)).toURI());
+		}
+		catch (java.io.IOException e)
+		{
+			System.out.println(e.getMessage());
+		}
 	}
 }

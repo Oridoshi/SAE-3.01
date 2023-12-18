@@ -19,6 +19,8 @@ public class Controleur
 
 	public Controleur()
 	{
+		DB.getInstance();
+
 		this.listSauvegarder = new ArrayList<>();
 		this.listSuppression = new ArrayList<>();
 		this.version = "v0.5.0";
