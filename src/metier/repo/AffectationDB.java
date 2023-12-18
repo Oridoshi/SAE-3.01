@@ -3,14 +3,18 @@ package metier.repo;
 import metier.DB;
 import metier.DBResult;
 import metier.model.Affectation;
+import metier.model.Module;
+import metier.model.Intervenant;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AffectationDB {
 
@@ -19,6 +23,8 @@ public class AffectationDB {
 	private static List<Affectation> affectations;
 	private static Map<Integer, List<Affectation>> affectationsParIntervenant;
 	private static Map<String, List<Affectation>> affectationsParModule;
+	private static Map<Intervenant, Set<Module>> modulesParIntervenant;
+	private static Map<String, List<Affectation>> affectationsParSemestreEtIntervenant;
 
 	private static PreparedStatement psGetAffectations;
 	private static PreparedStatement psUpdateAffectation;
@@ -29,6 +35,8 @@ public class AffectationDB {
 		affectations = new ArrayList<>();
 		affectationsParIntervenant = new HashMap<>();
 		affectationsParModule = new HashMap<>();
+		modulesParIntervenant = new HashMap<>();
+		affectationsParSemestreEtIntervenant = new HashMap<>();
 		try{
 			psGetAffectations = db.prepareStatement("SELECT * FROM Affectation");
 			psDeleteAffectation = db.prepareStatement("DELETE FROM Affectation WHERE idIntervenant = ? AND nomCatHeure = ? AND codeModule = ?");
@@ -64,6 +72,15 @@ public class AffectationDB {
 		return affectationsParIntervenant.get(id);
 	}
 
+	public static Set<Module> getModulesParIntervenant(Intervenant intervenant){
+		return modulesParIntervenant.get(intervenant);
+	}
+
+	public static List<Affectation> getAffectationsParIntervenantParSemestre(Intervenant intervenant, int idSemestre){
+		String s = intervenant.getId() + idSemestre + "";
+		return affectationsParSemestreEtIntervenant.get(s);
+	}
+
 	public static boolean delete(Affectation affectation){
 		try{
 			psDeleteAffectation.setInt(1, affectation.getIntervenant().getId());
@@ -71,8 +88,7 @@ public class AffectationDB {
 			psDeleteAffectation.setString(3, affectation.getModule().getCode());
 			if ( DB.update(psDeleteAffectation) == 1){
 				affectations.remove(affectation);
-				affectationsParIntervenant.get(affectation.getIntervenant().getId()).remove(affectation);
-				affectationsParModule.get(affectation.getModule().getCode()).remove(affectation);
+				init();
 				return true;
 			} else {
 				return false;
@@ -106,13 +122,8 @@ public class AffectationDB {
 				psCreateAffectation.setString(6, affectation.getCommentaire());
 				psCreateAffectation.setInt(7, affectation.getNbSemaine());
 				if ( DB.update(psCreateAffectation) == 1 ){
-					affectationsParIntervenant.putIfAbsent(affectation.getIntervenant().getId(), new ArrayList<>());
-					affectationsParIntervenant.get(affectation.getIntervenant().getId()).add(affectation);
-
-					// On place dans l'array AffectationParModule
-					affectationsParModule.putIfAbsent(affectation.getModule().getCode(), new ArrayList<>());
-					affectationsParModule.get(affectation.getModule().getCode()).add(affectation);
 					affectations.add(affectation);
+					init();
 					return true;
 				} else {
 					return false;
@@ -134,7 +145,15 @@ public class AffectationDB {
 			// On place dans l'array AffectationParModule
 			affectationsParModule.putIfAbsent(affectation.getModule().getCode(), new ArrayList<>());
 			affectationsParModule.get(affectation.getModule().getCode()).add(affectation);
+
+			// On place dans ModulesParIntervenants
+			modulesParIntervenant.putIfAbsent(affectation.getIntervenant(), new HashSet<>());
+			modulesParIntervenant.get(affectation.getIntervenant()).add(affectation.getModule());
+
+			// On place dans affectationsParSemestreEtIntervenant
+			String c = affectation.getIntervenant().getId() + affectation.getModule().getSemestre().getId() + "";
+			affectationsParSemestreEtIntervenant.putIfAbsent(c, new ArrayList<>());
+			affectationsParSemestreEtIntervenant.get(c).add(affectation);
 		}
 	}
-	
 }

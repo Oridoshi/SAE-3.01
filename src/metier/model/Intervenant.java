@@ -1,6 +1,7 @@
 package metier.model;
 
 import metier.repo.IntervenantDB;
+import metier.IModifiable;
 
 /*
  * Intervenant
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Intervenant
+public class Intervenant implements IModifiable
 {
 
 	private int id;
@@ -115,8 +116,8 @@ public class Intervenant
 		this.prenom = prenom;
 	}
 
-	public Set<Module> getModulesOuIntervient(int semestreId){
-		return AffectationDB.getModulesParIntervenant(this);
+	public List<Affectation> getAffectationsParSemestre(int idSemestre){
+		return AffectationDB.getAffectationsParIntervenantParSemestre(this, idSemestre);
 	}
 
 	public boolean sauvegarder()

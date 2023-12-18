@@ -411,11 +411,4 @@ public class GenererPage
 
 		return tab;
 	}
-
-
-	public static void main (String[] a)
-	{
-		GenererPage g = new GenererPage(1);
-	}
-
 }
