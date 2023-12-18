@@ -945,7 +945,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 			}
 			else if(this.txtFHProTp.getValue() < this.txtFNbHTpSem.getValue()) 
 			{
-				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 
@@ -963,6 +963,11 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 			else if(this.txtFNbHTpSem.getValue() < this.txtFTotTp3.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFHPonctu1.getValue() < this.txtFHPonctu3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure Ponctuelle affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 			else
@@ -973,35 +978,35 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		else
 		{
 			//Verification des heures défini par rapport au heures programme
-			if(this.txtFHProCm.getValue() < this.txtFNbHCmSem.getValue()) 
+			if(this.txtFHProCm.getValue() < this.txtFNbHCmSem.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFHProTd.getValue() < this.txtFNbHTdSem.getValue()) 
+			else if(this.txtFHProTd.getValue() < this.txtFNbHTdSem.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFHProTp.getValue() < this.txtFNbHTpSem.getValue()) 
+			else if(this.txtFHProTp.getValue() < this.txtFNbHTpSem.getValue())
 			{
-				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 
-			else if(this.txtFHProCm.getValue() > this.txtFNbHCmSem.getValue()) 
+			else if(this.txtFHProCm.getValue() > this.txtFNbHCmSem.getValue())
 			{
-				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM que vous avez défini est infférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM que vous avez défini est inférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFHProTd.getValue() > this.txtFNbHTdSem.getValue()) 
+			else if(this.txtFHProTd.getValue() > this.txtFNbHTdSem.getValue())
 			{
-				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD que vous avez défini est infférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD que vous avez défini est inférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFHProTp.getValue() > this.txtFNbHTpSem.getValue()) 
+			else if(this.txtFHProTp.getValue() > this.txtFNbHTpSem.getValue())
 			{
-				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est infférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP que vous avez défini est inférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 
@@ -1019,21 +1024,33 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 			else if(this.txtFNbHTpSem.getValue() < this.txtFTotTp3.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFHPonctu1.getValue() < this.txtFHPonctu3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure Ponctuelle affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
 			}
 
-			else if(this.txtFNbHCmSem.getValue() < this.txtFTotCm3.getValue())
+			else if(this.txtFNbHCmSem.getValue() > this.txtFTotCm3.getValue())
 			{
-				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFNbHTdSem.getValue() < this.txtFTotTd3.getValue())
+			else if(this.txtFNbHTdSem.getValue() > this.txtFTotTd3.getValue())
 			{
-				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFNbHTpSem.getValue() < this.txtFTotTp3.getValue())
+			else if(this.txtFNbHTpSem.getValue() > this.txtFTotTp3.getValue())
 			{
-				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFHPonctu1.getValue() > this.txtFHPonctu3.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure Ponctuelle affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
+				return false;
 			}
 			else
 			{
