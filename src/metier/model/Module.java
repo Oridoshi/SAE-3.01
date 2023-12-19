@@ -111,6 +111,15 @@ public class Module implements IModifiable
 		return h;
 	}
 
+	public Integer getTotalAffecteEqTd(){
+		int ret = 0;
+		List<Affectation> affectations = getLstAffectation();
+		for ( Affectation affectation : affectations ){
+			ret += affectation.getNbEqTd();
+		}
+		return ret;
+	}
+
 	public boolean sauvegarder()
 	{
 		for ( ProgrammeItem item : programme.listProgrammeItems() ){
@@ -137,17 +146,14 @@ public class Module implements IModifiable
 		return this.getProgramme().getItem(string).getNbHPn();
 	}
 
-
-
 	public int getNbHeureSemaine(String string)
 	{
 		return this.getProgramme().getItem(string).getNbHeure();
 	}
 
-
-
 	public int getNbSemaine(String string) 
 	{
 		return this.getProgramme().getItem(string).getNbSemaine();
 	}
+
 }
