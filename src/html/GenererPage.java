@@ -1,7 +1,17 @@
+package html;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import controleur.Controleur;
+import metier.model.Intervenant;
+import metier.model.Module;
+import metier.repo.IntervenantDB;
+import metier.model.Affectation;
 
 public class GenererPage
 {
@@ -12,9 +22,9 @@ public class GenererPage
 	private GenererPage ( int choix, Intervenant inter, Module module )
 	{
 		if ( choix == 1 )
-			this.fichier = inter.getNom() + "_" + inter.getPrenom() + ".txt";
+			this.fichier = inter.getId() + "_" + inter.getNom() + "_" + inter.getPrenom() + ".html";
 		else
-			this.fichier = module.getCode() + "_" + module.getNom() + ".txt";
+			this.fichier = module.getCode() + ".html";
 
 
 		this.tabSemestre = new int[8];
@@ -35,12 +45,12 @@ public class GenererPage
 
 	public static void genererPageInter ( Intervenant inter)
 	{
-		new GenererPage(1, inter, null);
+		GenererPage page = new GenererPage(1, inter, null);
 
 
 		try
 		{
-			File fichier = new File (this.fichier);
+			File fichier = new File (page.fichier);
 
 			// Vérifier si le fichier existe
 			if ( !fichier.exists() )
@@ -49,18 +59,18 @@ public class GenererPage
 			// Création d'un PrintWriter pour écrire dans le fichier
 			PrintWriter pw = new PrintWriter(new FileWriter(fichier.getAbsoluteFile(), true));
 
-			pw.println( creerHead() + '\n' );
+			pw.println( page.creerHead(1) + '\n' );
 
 			pw.println( "\t<body>" );
 			pw.println( "\t\t<h1> Fiche de l'intervenant <b>" + inter.getNom() + "</b> </h1>\n" );
 
 
-			for ( int cptNbSemestres = 0; cptNbSemestres < 3; cptNbSemestres ++ )
-				pw.print( creerTableauSemestres( cptNbSemestres, this.genererLstAffectations(cptNbSemestres + 1, inter) ) );
+			for ( int cptNbSemestres = 1; cptNbSemestres <= 6; cptNbSemestres ++ )
+				pw.print( page.creerTableauSemestres( cptNbSemestres, page.genererLstAffectations(cptNbSemestres, inter.getModulesOuIntervient() )));
 
 			pw.println( "\n\t\t<hr>\n\n" );
 
-			pw.println( creerTableauRecapitulatif() );
+			// pw.println( page.creerTableauRecapitulatif( inter ) );
 			pw.println( "\t</body>\n" );
 			pw.println( "</table>" );
 
@@ -72,15 +82,19 @@ public class GenererPage
 
 	private String creerTableauSemestres ( int semestre, List<Affectation> lstAffectation )
 	{
-		String res = "";
-		String tab = "";
-		String tmp;
-		int    tmpNb;
+		String   res = "";
+		String   tab = "\t\t";
+		String   tmp;
+		double[] tmpTabHeures;
 
 		String[] tabNomEnTete    = { "Code du module", "Nom du module", "CM", "TD", "TP", "H tut", "REH", "SAÉ", "HP", "Total" };
 		String[] tabClasseEnTete = { null, "nomModule", "heure", "heure", "heure", "heure", "heure", "heure", "heure", "total" };
 
-		tabTotalHeures = new int[7];
+		int[] tabTotalHeures = new int[7];
+
+		List<Module> lstModulesVues = new ArrayList<Module>();
+
+
 
 		for ( int cptHeures = 0; cptHeures < tabTotalHeures.length; cptHeures ++ )
 			tabTotalHeures[cptHeures] = 0;
@@ -90,7 +104,6 @@ public class GenererPage
 		tab += "\t";
 
 		res += tab + "<h2> Semestre " + semestre + " </h2>\n\n\n";
-		tab += "\t";
 
 		res += tab + "<table class = 'infosIntervenants'>\n\n";
 		tab += "\t";
@@ -104,7 +117,7 @@ public class GenererPage
 		{
 			tmp = (tabClasseEnTete[cptEnTete] == null) ? "" : "class = '" + tabClasseEnTete[cptEnTete] + "'";
 
-			res += tab + "<tr " + String.format("%-19s", tmp)      + "> " +
+			res += tab + "<th " + String.format("%-19s", tmp)      + "> " +
 			       String.format("%-14s", tabNomEnTete[cptEnTete]) + " </th>\n";
 		}
 
@@ -121,22 +134,28 @@ public class GenererPage
 
 		for ( Affectation a : lstAffectation )
 		{
+
+			if ( lstModulesVues.contains(a.getModule()) )
+				continue;
+
+			lstModulesVues.add(a.getModule());
+
 			res += tab + "<tr>\n";
 
 			res += tab + "\t<td> " + a.getModule().getCode()        + " </td>\n";
 			res += tab + "\t<td> " + a.getModule().getLibelleLong() + " </td>\n";
 
-			for ( int cptCell = 2; cptCell < 8; cptCell ++ )
+			tmpTabHeures = genererTabHeuresModules(a.getModule(), lstAffectation);
+
+			for ( int cptCell = 0; cptCell < tabTotalHeures.length; cptCell ++ )
 			{
-				tmpNb = hashNbHeures.getKey(a.getModule)[cptCell];
+				res += tab + "\t<td> " + tmpTabHeures[cptCell] + " </td>\n";
 
-				res += tab + "\t<td> " + tmpNb + " </td>\n";
-
-				tabTotalHeures  [cptCell   ] += tmpNb;
-				this.tabSemestre[semestre-1] += tmpNb;
+				tabTotalHeures  [cptCell   ] += tmpTabHeures[cptCell];
+				this.tabSemestre[semestre-1] += tmpTabHeures[cptCell];
 			}
 
-			res += tab + "\t<td class = 'total'> " + hashNbHeures.getKey(a.getModule)[8] +  " </td>\n";
+			res += tab + "\t<td class = 'total'> " + tmpTabHeures[7] + " </td>\n";
 			res += tab + "</tr>\n\n";
 		}
 
@@ -165,13 +184,10 @@ public class GenererPage
 	}
 
 
-	private String creerTableauRecapitulatif ()
+	private String creerTableauRecapitulatif ( Intervenant inter )
 	{
 		String res = "";
 		String tab = "\t\t";
-
-		String tmp;
-
 
 
 		// PREMIER TABLEAU : RECAPITULATIF DE CHAQUE SEMESTRES
@@ -185,11 +201,11 @@ public class GenererPage
 
 		res += tab + "<tr>\n";
 
-		res += tab + "\t<th class = "statsS"   > Semestre        </th>\n";
-		res += tab + "\t<th class = "statsStot"> Nombre d'heures </th>\n";
+		res += tab + "\t<th class = \"statsS\"   > Semestre        </th>\n";
+		res += tab + "\t<th class = \"statsStot\"> Nombre d'heures </th>\n";
 
 		res += tab + "</tr>\n";
-		tab  = substring(0, tab.length() - 1);
+		tab  = tab.substring(0, tab.length() - 1);
 
 		res += tab + "</thead>\n\n";
 
@@ -200,7 +216,7 @@ public class GenererPage
 		{
 			res += tab + "<tr>\n";
 			res += tab + "\t<td> S" + cptNbSemestres + 1    + " </td>\n";
-			res += tab + "\t<td> "  + this.tabSemestre[cpt] + " </td>\n";
+			res += tab + "\t<td> "  + this.tabSemestre[cptNbSemestres] + " </td>\n";
 			res += tab + "</tr>\n\n";
 		}
 
@@ -209,10 +225,10 @@ public class GenererPage
 		res += tab + "\t<td> <b>"  + inter.getTotal() + "</b> </td>\n";
 		res += tab + "</tr>\n";
 
-		tab = substring(0, tab.length() - 1);
+		tab = tab.substring(0, tab.length() - 1);
 
 		res += "</tbody>\n\n";
-		tab  = substring(0, tab.length() - 1);
+		tab  = tab.substring(0, tab.length() - 1);
 
 		res += "</table>\n\n\n";
 
@@ -227,11 +243,11 @@ public class GenererPage
 		tab += "\t";
 
 		res += tab + "<tr>\n";
-		res += tab + "\t<th class = "statsS"   > Semestre        </th>\n";
-		res += tab + "\t<th class = "statsStot"> Nombre d'heures </th>\n";
+		res += tab + "\t<th class = \"statsS\"   > Semestre        </th>\n";
+		res += tab + "\t<th class = \"statsStot\"> Nombre d'heures </th>\n";
 		res += tab + "</tr>\n";
 
-		tab = substring(0, tab.lenth() - 1);
+		tab = tab.substring(0, tab.length() - 1);
 
 		res += "</thead>\n\n";
 		res += "<tbody>\n";
@@ -255,14 +271,16 @@ public class GenererPage
 		res += tab + "</tr>\n";
 
 
-		tab = substring(0, tab.length() - 1);
+		tab = tab.substring(0, tab.length() - 1);
 		res += tab + "</tbody>\n\n";
 
-		tab = substring(0, tab.length() - 1);
+		tab = tab.substring(0, tab.length() - 1);
 		res += tab + "</table>\n";
 
-		tab = substring(0, tab.length() - 1);
+		tab = tab.substring(0, tab.length() - 1);
 		res += tab + "</section>\n";
+
+		return res;
 	}
 
 
@@ -271,11 +289,53 @@ public class GenererPage
 		List<Affectation> lst = new ArrayList<Affectation>();
 
 		for ( Affectation a : lstAffectation )
-			( if a.getModule.getSemestre() == semestre )
+		{
+			if(a.getModule().getSemestre().getId() == semestre )
 				lst.add(a);
+		}
 
 
 		return lst;
+	}
+
+
+	private double[] genererTabHeuresModules ( Module module, List<Affectation> lstAffectation )
+	{
+		double[]  tab = new double[8];
+		double tmp;
+
+		for ( int cpt = 0; cpt < 8; cpt ++ )
+			tab[cpt] = 0;
+
+		System.out.println(lstAffectation.size());
+		for ( Affectation a : lstAffectation )
+		{
+			System.out.println(a.getIntervenant().getNom() + " " + a.getModule().getCode());
+			if ( a.getModule().equals(module) )
+			{
+				if ( a.getNbHeure() != null )
+				{
+					tmp = a.getNbHeure();
+				}
+				else
+					tmp = a.getNbGroupe() * a.getNbSemaine() * a.getCategorieHeure().getCoef();
+
+				System.out.println(a.getCategorieHeure().getNom());
+				switch ( a.getCategorieHeure().getNom())
+				{
+					case "CM"    -> { tab[0] += tmp; tab[7] += tmp; }
+					case "TD"    -> { tab[1] += tmp; tab[7] += tmp; }
+					case "TP"    -> { tab[2] += tmp; tab[7] += tmp; }
+					case "HT"    -> { tab[3] += tmp; tab[7] += tmp; }
+					case "REH"   -> { tab[4] += tmp; tab[7] += tmp; }
+					case "HSAE"  -> { tab[5] += tmp; tab[7] += tmp; }
+					case "HP"    -> { tab[6] += tmp; tab[7] += tmp; }
+				}
+			}
+
+		}
+
+		return tab;
 	}
 
 
@@ -288,11 +348,11 @@ public class GenererPage
 
 	public static void genererPageModule ( Module module )
 	{
-		new GenererPage(2, null, module);
+		GenererPage page = new GenererPage(2, null, module);
 
 		try
 		{
-			File fichier = new File (this.fichier);
+			File fichier = new File (page.fichier);
 
 			// Vérifier si le fichier existe
 			if ( !fichier.exists() )
@@ -301,18 +361,13 @@ public class GenererPage
 			// Création d'un PrintWriter pour écrire dans le fichier
 			PrintWriter pw = new PrintWriter(new FileWriter(fichier.getAbsoluteFile(), true));
 
-			pw.println( creerHead() + '\n' );
+			pw.println( page.creerHead(2) + '\n' );
 
 			pw.println( "\t<body>" );
-			pw.println( "\t\t<h1> " + module.getCode() + " " + module.getNom() + " </h1>\n" );
+			pw.println( "\t\t<h1> " + module.getCode() + " </h1>\n" );
 
+			pw.print( page.creerTableauInfosModules(module.getLstAffectation(), page.genererLstInter(module.getLstAffectation())) );
 
-			for ( int cptNbSemestres = 0; cptNbSemestres < 3; cptNbSemestres ++ )
-				pw.print( creerTableauInfosModules( cptNbSemestres, this.genererLstAffectations(cptNbSemestres + 1, inter) ) );
-
-			pw.println( "\n\t\t<hr>\n\n" );
-
-			pw.println( creerTableauRecapitulatif() );
 			pw.println( "\t</body>\n" );
 			pw.println( "</table>" );
 
@@ -323,16 +378,30 @@ public class GenererPage
 	}
 
 
-	private String creerTableauInfosModules ( List<Affectation>, List<Intervenant> lst )
+	private List<Intervenant> genererLstInter( List<Affectation> lstAffectation )
 	{
-		String[] tabTHead = { "Nom", "Prénom", "CM", "TD", "TP", "H tut", "REH", "SAE", "HP" };
+		List<Intervenant> lst = new ArrayList<Intervenant>();
+
+		for ( Affectation a : lstAffectation )
+		{
+			if ( !lst.contains(a.getIntervenant()) )
+				lst.add(a.getIntervenant());
+		}
+
+		return lst;
+	}
+
+
+	private String creerTableauInfosModules ( List<Affectation> affectations , List<Intervenant> lst )
+	{
+		String[] tabTHead = { "Nom", "Prénom", "CM", "TD", "TP", "H tut", "REH", "SAE", "HP", "Total" };
 
 		String res = "";
 		String tab = "\t\t";
-		int[] tmp;
+		double[] tmp;
 
 
-		res += tab + "<table class = "infosModule">\n";
+		res += tab + "<table class = \"infosModule\">\n";
 		tab += "\t";
 
 		res += tab + "<thead>\n";
@@ -348,7 +417,7 @@ public class GenererPage
 		res += tab + "</tr>\n";
 
 
-		tab = substring(0, tab.length() - 1);
+		tab = tab.substring(0, tab.length() - 1);
 
 		res += tab + "</thead>\n\n";
 
@@ -357,25 +426,27 @@ public class GenererPage
 
 
 		// GENERER TBODY
-		for ( int cpt = 0; cpt < lst.length; cpt ++ )
+		for ( int cpt = 0; cpt < lst.size(); cpt ++ )
 		{
 			res += tab + "<tr>\n";
 
 			tmp = genererTabHeures( lst.get(cpt), affectations );
 
-			res += tab + "\t<td> " + lst.get(cpt).getIntervenant().getNom   () + " </td>\n";
-			res += tab + "\t<td> " + lst.get(cpt).getIntervenant().getPrenom() + " </td>\n";
+			res += tab + "\t<td> " + lst.get(cpt).getNom   () + " </td>\n";
+			res += tab + "\t<td> " + lst.get(cpt).getPrenom() + " </td>\n";
 
 			for ( int cptHeures = 0; cptHeures < tmp.length; cptHeures ++ )
-				res += tab + "\t<td> " + tmp.get(cpt) + " </td>\n";
+				res += tab + "\t<td> " + tmp[cptHeures] + " </td>\n";
+
+			res += tab + "\t<tr class = 'totalModule'> " + tmp[7] + " </td>\n";
 
 			res += tab + "<\tr>\n";
 		}
 
-		tab = substring(0, tab.length() - 1);
+		tab = tab.substring(0, tab.length() - 1);
 
 		res += tab + "</tbody>\n";
-		tab = substring(0, tab.length() - 1);
+		tab = tab.substring(0, tab.length() - 1);
 
 		res += tab + "</table>\n\n";
 
@@ -384,30 +455,74 @@ public class GenererPage
 	}
 
 
-	private int[] genererTabHeures ( Intervenant inter, List<Affectation> lstAffectation )
+	private double[] genererTabHeures ( Intervenant inter, List<Affectation> lstAffectation )
 	{
-		int[] tab = new int[7];
+		double[]  tab = new double[8];
+		double tmp;
 
-		for ( int cpt = 0; cpt < 7; cpt ++ )
+		for ( int cpt = 0; cpt < 8; cpt ++ )
 			tab[cpt] = 0;
+
 
 		for ( Affectation a : lstAffectation )
 		{
-
-			if ( a.getIntervenant.equals(inter) )
+			if ( a.getIntervenant().equals(inter) )
 			{
-				switch ( a.getCategorieHeure().getNom() ) : 
-					case "CM"    -> tab[0] = a.getNbHeure();
-					case "TD"    -> tab[1] = a.getNbHeure();
-					case "TP"    -> tab[2] = a.getNbHeure();
-					case "H tut" -> tab[3] = a.getNbHeure();
-					case "REH"   -> tab[4] = a.getNbHeure();
-					case "SAE"   -> tab[5] = a.getNbHeure();
-					case "HP"    -> tab[6] = a.getNbHeure();
+				if ( a.getNbHeure() != null )
+					tmp = a.getNbHeure();
+				else
+					tmp = a.getNbGroupe() * a.getNbSemaine() * a.getCategorieHeure().getCoef();
+
+
+				switch ( a.getCategorieHeure().getNom())
+				{
+					case "CM"    -> { tab[0] += tmp; tab[7] += tmp; }
+					case "TD"    -> { tab[1] += tmp; tab[7] += tmp; }
+					case "TP"    -> { tab[2] += tmp; tab[7] += tmp; }
+					case "HT"    -> { tab[3] += tmp; tab[7] += tmp; }
+					case "REH"   -> { tab[4] += tmp; tab[7] += tmp; }
+					case "HSAE"  -> { tab[5] += tmp; tab[7] += tmp; }
+					case "HP"    -> { tab[6] += tmp; tab[7] += tmp; }
+				}
 			}
 
 		}
 
 		return tab;
+	}
+
+
+	/* -------------------------------- /
+	/ -------------------------------- /
+	/            GENERER HEAD          /
+	/ -------------------------------- /
+	/ -------------------------------- */
+	private String creerHead( int type )
+	{
+		String res = "";
+		String tab = "";
+
+
+		res += "<!DOCTYPE html>   \n";
+		res += "<html lang = 'fr'>\n";
+		tab += "\t";
+
+		res += tab + "<head>\n";
+		tab += "\t";
+
+		if ( type == 1 )
+			res += tab + "<title> Fiche module </title>\n\n";
+		else
+			res += tab + "<title> Fiche intervenant </title>\n\n";
+
+		res += tab + "<meta charset = 'utf-8'>\n";
+		res += tab + "<meta content = 'Author' lang = 'fr' name = 'BOULOCHE Eleonore'>\n\n";
+
+		res += tab + "<link rel = 'stylesheet' href = \"./style.css\" media = 'all' type = 'text/css'>\n";
+
+		tab = tab.substring(0, tab.length() - 1);
+		res += tab + "</head>\n";
+
+		return res;
 	}
 }
