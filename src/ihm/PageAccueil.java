@@ -100,12 +100,14 @@ public class PageAccueil extends JPanel implements ActionListener
 		}
 		else if (e.getSource() == this.btnEtats)
 		{
+			/* 
 			for (Intervenant inter : this.ctrl.getLstIntervenants())
 			{
 				GenererPage.genererPageInter(inter);
 				ouvrirePageWeb("/home/etudiant/dt220522/TP/s3/s3.01_dev_application/SAE-1.03/" + inter.getId() + "_" + inter.getNom() + "_" + inter.getPrenom() + ".html");
 			}
-			// this.mere.changerPage(new PageParametres(this.ctrl, this.mere));
+			*/
+			this.mere.changerPage(new PageEtats(this.ctrl, this.mere));
 		}
 		// else
 		// {
