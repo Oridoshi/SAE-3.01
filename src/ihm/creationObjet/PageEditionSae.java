@@ -853,11 +853,11 @@ public class PageEditionSae extends JPanel implements ActionListener, FocusListe
 		{
 			if (aff.getCategorieHeure().getNom().equals("HSAE"))
 			{
-				this.nbTotAffHSae += aff.getNbHeure();
+				this.nbTotAffHSae += aff.getNbHeure() * this.ctrl.getCoefH("HSAE");
 			}
 			else
 			{
-				this.nbTotAffHTut += aff.getNbHeure();
+				this.nbTotAffHTut += aff.getNbHeure() * this.ctrl.getCoefH("HT");
 			}
 		}
 	}
@@ -888,7 +888,7 @@ public class PageEditionSae extends JPanel implements ActionListener, FocusListe
 						tabDonnees[ligne][5] = lstAffectation.get(ligne).getNbHeure() * lstAffectation.get(ligne).getCategorieHeure().getCoef();
 					else
 					{
-						tabDonnees[ligne][5] = lstAffectation.get(ligne).getNbGroupe() * lstAffectation.get(ligne).getCategorieHeure().getCoef() * lstAffectation.get(ligne).getNbSemaine();
+						tabDonnees[ligne][5] = lstAffectation.get(ligne).getNbGroupe() * lstAffectation.get(ligne).getCategorieHeure().getCoef() * lstAffectation.get(ligne).getNbSemaine() * PageEditionSae.this.getNbHeureSemaine(lstAffectation.get(ligne).getCategorieHeure().getNom());
 					}
 					tabDonnees[ligne][6] = lstAffectation.get(ligne).getCommentaire();
 				}
@@ -927,5 +927,17 @@ public class PageEditionSae extends JPanel implements ActionListener, FocusListe
 		public int getColumnCount()                             {return 7;}
 		public String getColumnName (int col)                  {return this.tabEntetes[col];}
 		public Object getValueAt(int rowIndex, int columnIndex) {return this.tabDonnees[rowIndex][columnIndex];}
+	}
+
+	public Integer getNbHeureSemaine(String nom)
+	{
+		if(nom.equals("HSAE"))
+		{
+			return this.txtFNbHSaeSem.getValue();
+		}
+		else
+		{
+			return this.txtFNbHTutSem.getValue();
+		}
 	}
 }

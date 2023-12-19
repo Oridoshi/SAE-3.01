@@ -11,6 +11,7 @@ import controleur.Controleur;
 import html.GenererPage;
 import metier.model.Intervenant;
 import metier.model.Semestre;
+import metier.model.Module;
 
 public class PageAccueil extends JPanel implements ActionListener
 {
@@ -100,11 +101,9 @@ public class PageAccueil extends JPanel implements ActionListener
 		}
 		else if (e.getSource() == this.btnEtats)
 		{
-			for (Intervenant inter : this.ctrl.getLstIntervenants())
-			{
-				GenererPage.genererPageInter(inter);
-				ouvrirePageWeb("/home/etudiant/dt220522/TP/s3/s3.01_dev_application/SAE-1.03/" + inter.getId() + "_" + inter.getNom() + "_" + inter.getPrenom() + ".html");
-			}
+			Module mod = this.ctrl.getLstModule().get(0);
+			GenererPage.genererPageModule(mod);
+			ouvrirePageWeb("C:\\Users\\tom18\\OneDrive\\Bureau\\Ecole\\SAE-3.01\\" + mod.getCode() + ".html");
 			// this.mere.changerPage(new PageParametres(this.ctrl, this.mere));
 		}
 		// else

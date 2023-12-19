@@ -59,7 +59,7 @@ public class Affectation implements IModifiable
 
 	public float getNbEqTd (){
 		if ( this.nbHeure > 0 ) return (int) (this.nbHeure * getCategorieHeure().getCoef());
-		return (int) (getModule().getProgramme().getItem(getCategorieHeure().getNom()).getNbHeure() * this.nbGroupe * this.nbSemaine * getCategorieHeure().getCoef());
+		return (int) (getModule().getNbHeureSemaine(getCategorieHeure().getNom()) * this.nbGroupe * this.nbSemaine * getCategorieHeure().getCoef());
 	}
 
 	public CategorieHeure getCategorieHeure() {

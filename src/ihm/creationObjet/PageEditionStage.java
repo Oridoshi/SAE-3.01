@@ -854,11 +854,11 @@ public class PageEditionStage extends JPanel implements ActionListener, FocusLis
 		{
 			if (aff.getCategorieHeure().getNom().equals("REH"))
 			{
-				this.nbTotAffHReh += aff.getNbHeure();
+				this.nbTotAffHReh += aff.getNbHeure() * this.ctrl.getCoefH("REH");
 			}
 			else
 			{
-				this.nbTotAffHTut += aff.getNbHeure();
+				this.nbTotAffHTut += aff.getNbHeure() * this.ctrl.getCoefH("HT");
 			}
 		}
 	}
@@ -889,7 +889,7 @@ public class PageEditionStage extends JPanel implements ActionListener, FocusLis
 						tabDonnees[ligne][5] = lstAffectation.get(ligne).getNbHeure() * lstAffectation.get(ligne).getCategorieHeure().getCoef();
 					else
 					{
-						tabDonnees[ligne][5] = lstAffectation.get(ligne).getNbGroupe() * lstAffectation.get(ligne).getCategorieHeure().getCoef() * lstAffectation.get(ligne).getNbSemaine();
+						tabDonnees[ligne][5] = lstAffectation.get(ligne).getNbGroupe() * lstAffectation.get(ligne).getCategorieHeure().getCoef() * lstAffectation.get(ligne).getNbSemaine() * PageEditionStage.this.getNbHeureSemaine(lstAffectation.get(ligne).getCategorieHeure().getNom());
 					}
 					tabDonnees[ligne][6] = lstAffectation.get(ligne).getCommentaire();
 				}
@@ -928,5 +928,17 @@ public class PageEditionStage extends JPanel implements ActionListener, FocusLis
 		public int getColumnCount()                             {return 7;}
 		public String getColumnName (int col)                  {return this.tabEntetes[col];}
 		public Object getValueAt(int rowIndex, int columnIndex) {return this.tabDonnees[rowIndex][columnIndex];}
+	}
+
+	public Integer getNbHeureSemaine(String nom)
+	{
+		if(nom.equals("REH"))
+		{
+			return this.txtFNbHRehSem.getValue();
+		}
+		else
+		{
+			return this.txtFNbHTutSem.getValue();
+		}
 	}
 }

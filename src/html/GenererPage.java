@@ -301,7 +301,7 @@ public class GenererPage
 
 	private double[] genererTabHeuresModules ( Module module, List<Affectation> lstAffectation )
 	{
-		double[]  tab = new double[8];
+		double[] tab = new double[8];
 		double tmp;
 
 		for ( int cpt = 0; cpt < 8; cpt ++ )
@@ -346,143 +346,167 @@ public class GenererPage
 	/* -------------------------------- */
 	/* -------------------------------- */
 
-	// public static void genererPageModule ( Module module )
-	// {
-	// 	GenererPage page = new GenererPage(2, null, module);
+	public static void genererPageModule ( Module module )
+	{
+		GenererPage page = new GenererPage(2, null, module);
 
-	// 	try
-	// 	{
-	// 		File fichier = new File (page.fichier);
+		try
+		{
+			File fichier = new File (page.fichier);
 
-	// 		// Vérifier si le fichier existe
-	// 		if ( !fichier.exists() )
-	// 			fichier.createNewFile();
+			// Vérifier si le fichier existe
+			if ( !fichier.exists() )
+				fichier.createNewFile();
 
-	// 		// Création d'un PrintWriter pour écrire dans le fichier
-	// 		PrintWriter pw = new PrintWriter(new FileWriter(fichier.getAbsoluteFile(), true));
+			// Création d'un PrintWriter pour écrire dans le fichier
+			PrintWriter pw = new PrintWriter(new FileWriter(fichier.getAbsoluteFile(), true));
 
-	// 		pw.println( page.creerHead(2) + '\n' );
+			pw.println( page.creerHead(2) + '\n' );
 
-	// 		pw.println( "\t<body>" );
-	// 		pw.println( "\t\t<h1> " + module.getCode() + " </h1>\n" );
+			pw.println( "\t<body>" );
+			pw.println( "\t\t<h1> " + module.getCode() + " </h1>\n" );
 
-	// 		pw.print( page.creerTableauInfosModules(module.getLstAffectation(), page.genererLstInter(module.getLstAffectation())) );
+			pw.print( page.creerTableauInfosModules(module.getLstAffectation(), page.genererLstInter(module.getLstAffectation())) );
 
-	// 		pw.println( "\t</body>\n" );
-	// 		pw.println( "</table>" );
+			pw.println( "\t</body>\n" );
+			pw.println( "</table>" );
 
-	// 		pw.close();
-	// 	}
-	// 	catch (Exception e){ e.printStackTrace(); }
+			pw.close();
+		}
+		catch (Exception e){ e.printStackTrace(); }
 
-	// }
-
-
-	// private List<Intervenant> genererLstInter( List<Affectation> lstAffectation )
-	// {
-	// 	List<Intervenant> lst = new ArrayList<Intervenant>();
-
-	// 	for ( Affectation a : lstAffectation )
-	// 	{
-	// 		if ( !lst.contains(a.getIntervenant()) )
-	// 			lst.add(a.getIntervenant());
-	// 	}
-
-	// 	return lst;
-	// }
+	}
 
 
-	// private String creerTableauInfosModules ( List<Affectation> affectations , List<Intervenant> lst )
-	// {
-	// 	String[] tabTHead = { "Nom", "Prénom", "CM", "TD", "TP", "H tut", "REH", "SAE", "HP", "Total" };
+	private List<Intervenant> genererLstInter( List<Affectation> lstAffectation )
+	{
+		List<Intervenant> lst = new ArrayList<Intervenant>();
 
-	// 	String res = "";
-	// 	String tab = "\t\t";
-	// 	int[] tmp;
+		for ( Affectation a : lstAffectation )
+		{
+			if ( !lst.contains(a.getIntervenant()) )
+				lst.add(a.getIntervenant());
+		}
 
-
-	// 	res += tab + "<table class = \"infosModule\">\n";
-	// 	tab += "\t";
-
-	// 	res += tab + "<thead>\n";
-	// 	tab += "\t";
+		return lst;
+	}
 
 
-	// 	res += tab + "<tr>\n";
+	private String creerTableauInfosModules ( List<Affectation> affectations , List<Intervenant> lst )
+	{
+		String[] tabTHead = { "Nom", "Prénom", "CM", "TD", "TP", "H tut", "REH", "SAE", "HP", "Total" };
 
-	// 	// GENERER THEAD
-	// 	for ( int cpt = 0; cpt < tabTHead.length; cpt++ )
-	// 		res += tab + "\t<th> " + tabTHead[cpt] + " </th>\n" ;
+		String res = "";
+		String tab = "\t\t";
+		double[] tmp;
 
-	// 	res += tab + "</tr>\n";
-
-
-	// 	tab = tab.substring(0, tab.length() - 1);
-
-	// 	res += tab + "</thead>\n\n";
-
-	// 	res += tab + "<tbody>\n";
-	// 	tab += "\t";
+		int[] tabTotalFinal = new int[8];
 
 
-	// 	// GENERER TBODY
-	// 	for ( int cpt = 0; cpt < lst.size(); cpt ++ )
-	// 	{
-	// 		res += tab + "<tr>\n";
+		res += tab + "<table class = \"infosModule\">\n";
+		tab += "\t";
 
-	// 		tmp = genererTabHeures( lst.get(cpt), affectations );
-
-	// 		res += tab + "\t<td> " + lst.get(cpt).getNom   () + " </td>\n";
-	// 		res += tab + "\t<td> " + lst.get(cpt).getPrenom() + " </td>\n";
-
-	// 		for ( int cptHeures = 0; cptHeures < tmp.length; cptHeures ++ )
-	// 			res += tab + "\t<td> " + tmp[cptHeures] + " </td>\n";
-
-	// 		res += tab + "\t<tr class = 'totalModule'> " + tmp[7] + " </td>\n";
-
-	// 		res += tab + "<\tr>\n";
-	// 	}
-
-	// 	tab = tab.substring(0, tab.length() - 1);
-
-	// 	res += tab + "</tbody>\n";
-	// 	tab = tab.substring(0, tab.length() - 1);
-
-	// 	res += tab + "</table>\n\n";
-
-	// 	return res;
-
-	// }
+		res += tab + "<thead>\n";
+		tab += "\t";
 
 
-	// private int[] genererTabHeures ( Intervenant inter, List<Affectation> lstAffectation )
-	// {
-	// 	int[] tab = new int[8];
+		res += tab + "<tr>\n";
 
-	// 	for ( int cpt = 0; cpt < 7; cpt ++ )
-	// 		tab[cpt] = 0;
+		// GENERER THEAD
+		for ( int cpt = 0; cpt < tabTHead.length; cpt++ )
+			res += tab + "\t<th> " + tabTHead[cpt] + " </th>\n" ;
 
-	// 	for ( Affectation a : lstAffectation )
-	// 	{
+		res += tab + "</tr>\n";
 
-	// 		if ( a.getIntervenant().equals(inter) )
-	// 		{
-	// 			switch ( a.getCategorieHeure().getNom() )
-	// 			{
-	// 				case "CM"    -> { tab[0] = a.getNbHeure(); tab[7] += a.getNbHeure(); }
-	// 				case "TD"    -> { tab[1] = a.getNbHeure(); tab[7] += a.getNbHeure(); }
-	// 				case "TP"    -> { tab[2] = a.getNbHeure(); tab[7] += a.getNbHeure(); }
-	// 				case "H tut" -> { tab[3] = a.getNbHeure(); tab[7] += a.getNbHeure(); }
-	// 				case "REH"   -> { tab[4] = a.getNbHeure(); tab[7] += a.getNbHeure(); }
-	// 				case "SAE"   -> { tab[5] = a.getNbHeure(); tab[7] += a.getNbHeure(); }
-	// 				case "HP"    -> { tab[6] = a.getNbHeure(); tab[7] += a.getNbHeure(); }
-	// 			}
-	// 		}
 
-	// 	}
+		tab = tab.substring(0, tab.length() - 1);
 
-	// 	return tab;
-	// }
+		res += tab + "</thead>\n\n";
+
+		res += tab + "<tbody>\n";
+		tab += "\t";
+
+
+		// GENERER TBODY
+		for ( int cpt = 0; cpt < lst.size(); cpt ++ )
+		{
+			res += tab + "<tr>\n";
+
+			tmp = genererTabHeures( lst.get(cpt), affectations );
+
+			res += tab + "\t<td> " + lst.get(cpt).getNom   () + " </td>\n";
+			res += tab + "\t<td> " + lst.get(cpt).getPrenom() + " </td>\n";
+
+			for ( int cptHeures = 0; cptHeures < tmp.length; cptHeures ++ )
+			{
+				res += tab + "\t<td> " + tmp[cptHeures] + " </td>\n";
+
+				tabTotalFinal[cptHeures] += tmp[cptHeures];
+			}
+
+			res += tab + "\t<tr class = 'totalModule'> " + tmp[7] + " </td>\n";
+
+			res += tab + "<\tr>\n";
+		}
+
+
+		res += tab + "<tr>\n";
+		res += tab + "\t<td class = 'tdFinal' colspan = '2'> Total </td>";
+
+		for ( int cptHeureTot = 0; cptHeureTot < tabTotalFinal.length - 1; cptHeureTot++ )
+			res += tab + "\t<td class = 'tdFinal'> " + tabTotalFinal[cptHeureTot] + " </td>\n";
+
+		res += tab + "\t<td class = 'totalFinal'> " + tabTotalFinal[7] + " </td>\n";
+		res += tab + "</tr>\n";
+
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</tbody>\n";
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</table>\n\n";
+
+		return res;
+
+	}
+
+
+	private double[] genererTabHeures ( Intervenant inter, List<Affectation> lstAffectation )
+	{
+		double[]  tab = new double[8];
+		double tmp;
+
+		for ( int cpt = 0; cpt < 8; cpt ++ )
+			tab[cpt] = 0;
+
+
+		for ( Affectation a : lstAffectation )
+		{
+			if ( a.getIntervenant().equals(inter) )
+			{
+				if ( a.getNbHeure() != null )
+					tmp = a.getNbHeure();
+				else
+					tmp = a.getNbGroupe() * a.getNbSemaine() * a.getCategorieHeure().getCoef() * a.getModule().getNbHeureSemaine(a.getCategorieHeure().getNom());
+
+
+				switch ( a.getCategorieHeure().getNom())
+				{
+					case "CM"    -> { tab[0] += tmp; tab[7] += tmp; }
+					case "TD"    -> { tab[1] += tmp; tab[7] += tmp; }
+					case "TP"    -> { tab[2] += tmp; tab[7] += tmp; }
+					case "HT"    -> { tab[3] += tmp; tab[7] += tmp; }
+					case "REH"   -> { tab[4] += tmp; tab[7] += tmp; }
+					case "HSAE"  -> { tab[5] += tmp; tab[7] += tmp; }
+					case "HP"    -> { tab[6] += tmp; tab[7] += tmp; }
+				}
+			}
+
+		}
+
+		return tab;
+	}
+
 
 	/* -------------------------------- /
 	/ -------------------------------- /

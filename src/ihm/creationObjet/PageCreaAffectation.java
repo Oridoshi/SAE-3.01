@@ -220,6 +220,7 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 				Integer nbSemaine = 0;
 				Integer nbHeure   = 0;
 				Integer nbGroupe  = 0;
+
 				if(this.txtFNbSemaine.isEmpty())
 				{
 					nbHeure = this.txtFNbHeure.getValue();

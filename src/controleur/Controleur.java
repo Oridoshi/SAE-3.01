@@ -6,6 +6,7 @@ import java.util.List;
 
 import ihm.FrameIhm;
 import metier.model.*;
+import metier.model.Module;
 import metier.DB;
 import metier.IModifiable;
 
@@ -134,5 +135,10 @@ public class Controleur
 	public List<CategorieModule> getLstCategorieModule()
 	{
 		return CategorieModuleDB.list();
+	}
+
+	public List<Module> getLstModule()
+	{
+		return ModuleDB.list();
 	}
 }
