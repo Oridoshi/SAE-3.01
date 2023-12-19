@@ -39,8 +39,8 @@ public class ProgrammeItemDB {
 					CategorieHeureDB.getParNom(ligne.get("nomcath")),
 					ligne.get("codemodule"),
 					Integer.parseInt(ligne.get("nbhprogramme")),
-					Integer.parseInt(ligne.get("nbhpromo")),
-					Integer.parseInt(ligne.get("nbsemaine"))
+					Integer.parseInt(ligne.get("nbsemaine")),
+					Integer.parseInt(ligne.get("nbhpromo"))
 				));
 			}
 			init();

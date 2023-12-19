@@ -114,6 +114,7 @@ public class Module implements IModifiable
 	public Integer getTotalAffecteEqTd(){
 		int ret = 0;
 		List<Affectation> affectations = getLstAffectation();
+		if(affectations == null) return 0;
 		for ( Affectation affectation : affectations ){
 			ret += affectation.getNbEqTd();
 		}
@@ -126,6 +127,18 @@ public class Module implements IModifiable
 			item.sauvegarder();
 		}
 		return ModuleDB.save(this);
+	}
+
+	public int getTotalAffecteParTypeHeureEqTd(String typeHeure){
+		int h = 0;
+		List<Affectation> affectations = getLstAffectation();
+		if ( affectations == null ) return 0;
+		for ( Affectation affectation : affectations ){
+			if ( typeHeure.equals(affectation.getCategorieHeure().getNom())){
+				h+= affectation.getNbEqTd();
+			}
+		}
+		return h;
 	}
 
 	public boolean supprimer()

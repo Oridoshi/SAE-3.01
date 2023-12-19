@@ -1038,23 +1038,23 @@ public class PageEditionPpp extends JPanel implements ActionListener, FocusListe
 		{
 			if (aff.getCategorieHeure().getNom().equals("CM"))
 			{
-				this.nbTotAffHCm += aff.getNbHeure();
+				this.nbTotAffHCm += aff.getNbHeure() * this.ctrl.getCoefH("CM");
 			}
 			else if (aff.getCategorieHeure().getNom().equals("TD"))
 			{
-				this.nbTotAffHTd += aff.getNbHeure();
+				this.nbTotAffHTd += aff.getNbHeure() * this.ctrl.getCoefH("TD");
 			}
 			else if (aff.getCategorieHeure().getNom().equals("TP"))
 			{
-				this.nbTotAffHTp += aff.getNbHeure();
+				this.nbTotAffHTp += aff.getNbHeure() * this.ctrl.getCoefH("TP");
 			}
 			else if (aff.getCategorieHeure().getNom().equals("HT"))
 			{
-				this.nbTotAffHTut += aff.getNbHeure();
+				this.nbTotAffHTut += aff.getNbHeure() * this.ctrl.getCoefH("HT");
 			}
 			else
 			{
-				this.nbTotAffHPonctu += aff.getNbHeure();
+				this.nbTotAffHPonctu += aff.getNbHeure() * this.ctrl.getCoefH("HP");
 			}
 		}
 	}
@@ -1085,7 +1085,7 @@ public class PageEditionPpp extends JPanel implements ActionListener, FocusListe
 						tabDonnees[ligne][5] = lstAffectation.get(ligne).getNbHeure() * lstAffectation.get(ligne).getCategorieHeure().getCoef();
 					else
 					{
-						tabDonnees[ligne][5] = lstAffectation.get(ligne).getNbGroupe() * lstAffectation.get(ligne).getCategorieHeure().getCoef() * lstAffectation.get(ligne).getNbSemaine();
+						tabDonnees[ligne][5] = lstAffectation.get(ligne).getNbGroupe() * lstAffectation.get(ligne).getCategorieHeure().getCoef() * lstAffectation.get(ligne).getNbSemaine() * PageEditionPpp.this.getNbHeureSemaine(lstAffectation.get(ligne).getCategorieHeure().getNom());
 					}
 					tabDonnees[ligne][6] = lstAffectation.get(ligne).getCommentaire();
 				}
@@ -1124,5 +1124,29 @@ public class PageEditionPpp extends JPanel implements ActionListener, FocusListe
 		public int getColumnCount()                             {return 7;}
 		public String getColumnName (int col)                  {return this.tabEntetes[col];}
 		public Object getValueAt(int rowIndex, int columnIndex) {return this.tabDonnees[rowIndex][columnIndex];}
+	}
+
+	public Integer getNbHeureSemaine(String nom)
+	{
+		if(nom.equals("CM"))
+		{
+			return this.txtFNbHCmSem.getValue();
+		}
+		else if(nom.equals("TD"))
+		{
+			return this.txtFNbHTdSem.getValue();
+		}
+		else if(nom.equals("TP"))
+		{
+			return this.txtFNbHTpSem.getValue();
+		}
+		else if(nom.equals("HT"))
+		{
+			return this.txtFNbHTutSem.getValue();
+		}
+		else
+		{
+			return this.txtFNbHPonctuSem.getValue();
+		}
 	}
 }

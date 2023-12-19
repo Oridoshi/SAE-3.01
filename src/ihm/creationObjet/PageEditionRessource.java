@@ -1057,7 +1057,6 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 				return true;
 			}
 		}
-		return false;
 	}
 
 	private void majModule()
@@ -1128,35 +1127,23 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		this.nbTotAffHTp = 0;
 		this.nbTotAffHPonctu = 0;
 
-		for (Affectation aff : lstAffectation)
+		for (Affectation aff : this.lstAffectation)
 		{
 			if (aff.getCategorieHeure().getNom().equals("CM"))
 			{
-				if(aff.getNbHeure() != null)
-					this.nbTotAffHCm += aff.getNbHeure();
-				else
-					this.nbTotAffHCm += aff.getNbGroupe() * aff.getNbSemaine();
+				this.nbTotAffHCm += aff.getNbGroupe() * aff.getNbSemaine() * this.txtFNbHCmSem.getValue() * this.ctrl.getCoefH("CM");
 			}
 			else if (aff.getCategorieHeure().getNom().equals("TD"))
 			{
-				if(aff.getNbHeure() != null)
-					this.nbTotAffHTd += aff.getNbHeure();
-				else
-					this.nbTotAffHTd += aff.getNbGroupe() * aff.getNbSemaine();
+				this.nbTotAffHTd += aff.getNbGroupe() * aff.getNbSemaine() * this.txtFNbHTdSem.getValue() * this.ctrl.getCoefH("TD");
 			}
 			else if (aff.getCategorieHeure().getNom().equals("TP"))
 			{
-				if(aff.getNbHeure() != null)
-					this.nbTotAffHTp += aff.getNbHeure();
-				else
-					this.nbTotAffHTp += aff.getNbGroupe() * aff.getNbSemaine();
+				this.nbTotAffHTp += aff.getNbGroupe() * aff.getNbSemaine() * this.txtFNbHTpSem.getValue() * this.ctrl.getCoefH("TP");
 			}
 			else
 			{
-				if(aff.getNbHeure() != null)
-					this.nbTotAffHPonctu += aff.getNbHeure();
-				else
-					this.nbTotAffHPonctu += aff.getNbGroupe() * aff.getNbSemaine();
+				this.nbTotAffHPonctu += aff.getNbHeure() * this.ctrl.getCoefH("HP");
 			}
 		}
 	}
@@ -1187,7 +1174,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 						tabDonnees[ligne][5] = lstAffectation.get(ligne).getNbHeure() * lstAffectation.get(ligne).getCategorieHeure().getCoef();
 					else
 					{
-						tabDonnees[ligne][5] = lstAffectation.get(ligne).getNbGroupe() * lstAffectation.get(ligne).getCategorieHeure().getCoef() * lstAffectation.get(ligne).getNbSemaine();
+						tabDonnees[ligne][5] = lstAffectation.get(ligne).getNbGroupe() * lstAffectation.get(ligne).getCategorieHeure().getCoef() * lstAffectation.get(ligne).getNbSemaine() * PageEditionRessource.this.getNbHeureSemaine(lstAffectation.get(ligne).getCategorieHeure().getNom());
 					}
 					tabDonnees[ligne][6] = lstAffectation.get(ligne).getCommentaire();
 				}
@@ -1226,5 +1213,25 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		public int getColumnCount()                             {return 7;}
 		public String getColumnName (int col)                  {return this.tabEntetes[col];}
 		public Object getValueAt(int rowIndex, int columnIndex) {return this.tabDonnees[rowIndex][columnIndex];}
+	}
+
+	public Integer getNbHeureSemaine(String nom)
+	{
+		if(nom.equals("CM"))
+		{
+			return this.txtFNbHCmSem.getValue();
+		}
+		else if(nom.equals("TD"))
+		{
+			return this.txtFNbHTdSem.getValue();
+		}
+		else if(nom.equals("TP"))
+		{
+			return this.txtFNbHTpSem.getValue();
+		}
+		else
+		{
+			return this.txtFHPonctu1.getValue();
+		}
 	}
 }

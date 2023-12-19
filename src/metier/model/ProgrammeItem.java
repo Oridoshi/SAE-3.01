@@ -73,8 +73,11 @@ public class ProgrammeItem implements IModifiable{
         h = (int) (getCategorieHeure().getCoef() * h);
         if ( this.getCategorieHeure().getNom().equals("TP") ){
             h = h * module.getSemestre().getNbGroupeTp();
+        } 
+        if ( this.getCategorieHeure().getNom().equals("TD")){
+            h = h * module.getSemestre().getNbGroupeTd();
         }
-        if ( this.getCategorieHeure().getNom().equals("TD") ){
+        if ( this.getCategorieHeure().getNom().equals("HP")){
             h = h * module.getSemestre().getNbGroupeTd();
         }
         return h;
