@@ -32,6 +32,7 @@ INSERT INTO CategorieHeure VALUES
 INSERT INTO CategorieModule VALUES
 ('Ressource'  ),
 ('SAE'        ),
+('PPP'        ),
 ('Stage/Suivi');
 
 
@@ -112,6 +113,11 @@ INSERT INTO RemplirCategorieModule VALUES
 ( 'SAE', 'HT' ),
 ( 'SAE', 'HSAE'),
 ( 'Stage/Suivi', 'HT'  ),
+( 'PPP', 'HT'  ),
+( 'PPP', 'CM'  ),
+( 'PPP', 'TD'  ),
+( 'PPP', 'TP'  ),
+( 'PPP', 'HP'  ),
 ( 'Stage/Suivi', 'REH' );
 
 -- INSERT valeurs de REMPLIRPROGRAMME
@@ -297,7 +303,7 @@ INSERT INTO Intervenant ( codeCatIntervenant, nom, prenom) VALUES
 -- INSERT valeurs de AFFECTATION
 INSERT INTO Affectation (idIntervenant, nomCatHeure, nbH, nbSemaine, nbGrp, codeModule) VALUES
 	( 6, 'TD',  0, 14, 2, 'R1.01' ),
-	( 6, 'CM',  1, 6, 0, 'R1.01' ),
+	( 6, 'CM',  0, 6, 1, 'R1.01' ),
 	( 7, 'TD',  0, 14, 1, 'R1.01' ),
 	( 1, 'TP',  0, 14, 2, 'R1.01' ),
 	( 2, 'TP',  0, 14, 2, 'R1.01' ),
