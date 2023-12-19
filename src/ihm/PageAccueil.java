@@ -101,15 +101,8 @@ public class PageAccueil extends JPanel implements ActionListener
 		}
 		else if (e.getSource() == this.btnEtats)
 		{
-			Module mod = this.ctrl.getLstModule().get(0);
-			GenererPage.genererPageModule(mod);
-			ouvrirePageWeb("C:\\Users\\tom18\\OneDrive\\Bureau\\Ecole\\SAE-3.01\\" + mod.getCode() + ".html");
-			// this.mere.changerPage(new PageParametres(this.ctrl, this.mere));
+			this.mere.changerPage(new PageEtats(this.ctrl, this.mere));
 		}
-		// else
-		// {
-		// 	this.mere.changerPage(new PageEditionModule(this.ctrl, this.mere));
-		// }
 	}
 
 	private void ouvrirePageWeb(String url)
