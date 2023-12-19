@@ -1,6 +1,7 @@
 package metier.model;
 
 import metier.IModifiable;
+import metier.repo.ModuleDB;
 import metier.repo.ProgrammeItemDB;
 
 public class ProgrammeItem implements IModifiable{
@@ -66,8 +67,8 @@ public class ProgrammeItem implements IModifiable{
     }
 
     public Integer getPromoEqTd(){
-        return 0;
-        /* int h = this.nbHeure;
+        Module module = ModuleDB.getParCode(this.codeModule);
+        int h = this.nbHeure;
         if ( this.nbSemaine > 0 ) h = h * this.nbSemaine;
         h = (int) (getCategorieHeure().getCoef() * h);
         if ( this.getCategorieHeure().getNom().equals("TP") ){
@@ -76,7 +77,7 @@ public class ProgrammeItem implements IModifiable{
         if ( this.getCategorieHeure().getNom().equals("TD") ){
             h = h * module.getSemestre().getNbGroupeTd();
         }
-        return h; */
+        return h;
     }
 
     public boolean sauvegarder(){
