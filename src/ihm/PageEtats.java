@@ -17,22 +17,33 @@ public class PageEtats extends JPanel implements ActionListener
 {
 	private Controleur ctrl;
 
+	private FrameIhm mere;
+
+	private JButton btnAccueil;
+
+	private JPanel panelBtns;
+
 	private JComboBox<String> cbxIntervenant;
 	private JButton btnEtatIntervenant;
 
 	private JComboBox<String> cbxModule;
 	private JButton btnEtatModule;
 
-	private FrameIhm mere;
+	private JButton btnCSV;
 
 	public PageEtats(Controleur ctrl, FrameIhm mere)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
 
-		this.setLayout(new FlowLayout());
+		this.setLayout(new BorderLayout());
 		this.setBorder(new EmptyBorder(10, 10, 10, 10));
 
+		this.btnAccueil = new JButton("Accueil");
+		this.btnAccueil.setSize(10, 5);
+
+		this.panelBtns = new JPanel();
+		this.panelBtns.setLayout(new FlowLayout());
 
 		this.cbxIntervenant = new JComboBox<String>();
 		this.cbxIntervenant.addItem("Tous les intervenants");
@@ -54,14 +65,29 @@ public class PageEtats extends JPanel implements ActionListener
 		this.btnEtatModule = new JButton("Générer l'état du module");
 
 
-		this.add(this.cbxIntervenant);
-		this.add(this.btnEtatIntervenant);
+		this.btnCSV = new JButton("Générer le fichier CSV Intervenants");
 
-		this.add(this.cbxModule);
-		this.add(this.btnEtatModule);
+
+		this.add(this.btnAccueil, BorderLayout.NORTH);
+
+		this.panelBtns.add(this.cbxIntervenant);
+		this.panelBtns.add(this.btnEtatIntervenant);
+
+		this.panelBtns.add(this.cbxModule);
+		this.panelBtns.add(this.btnEtatModule);
+
+		this.panelBtns.add(this.btnCSV);
+
+
+
+		this.add(this.panelBtns, BorderLayout.CENTER);
+
+
+		this.btnAccueil.addActionListener(this);
 
 		this.btnEtatIntervenant.addActionListener(this);	
 		this.btnEtatModule.addActionListener(this);
+		this.btnCSV.addActionListener(this);
 	}
 
 	@Override
@@ -129,6 +155,16 @@ public class PageEtats extends JPanel implements ActionListener
 				//GenererPage.genererPageInter(intervenant);
 				
 			}
+		}
+
+		if (e.getSource() == this.btnCSV)
+		{
+			//générer CSV
+		}
+
+		if (e.getSource() == this.btnAccueil)
+		{
+			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
 		}
 	}
 
