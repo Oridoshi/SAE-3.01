@@ -12,11 +12,7 @@ import controleur.Controleur;
  */
 public class DB 
 {
-	// private static String chemin = "woody/dt220522";
-	// private static String identifiant = "dt220522";
-	// private static String motDePasse = "22555225Tt.";
 	private static Connection db;
-
 
 	static {
 		try {
@@ -26,6 +22,18 @@ public class DB
 			e.printStackTrace();
 		}
 
+		DB.connexion();
+	}
+
+	public static Connection getInstance(){
+		if(db == null)
+			DB.connexion();
+
+		return db;
+	}
+
+	private static void connexion()
+	{
 		try {
 			JSONObject fichierParamConnexion = Controleur.getJson();
 
@@ -37,10 +45,6 @@ public class DB
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static Connection getInstance(){
-		return db;
 	}
 
 	public static DBResult query(PreparedStatement ps){

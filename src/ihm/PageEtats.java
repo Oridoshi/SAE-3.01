@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import controleur.Controleur;
+import html.GenererCSV;
 import html.GenererPage;
 import metier.model.Intervenant;
 import metier.model.Module;
@@ -20,8 +21,6 @@ public class PageEtats extends JPanel implements ActionListener
 	private FrameIhm mere;
 
 	private JButton btnAccueil;
-
-	private JPanel panelBtns;
 
 	private JComboBox<String> cbxIntervenant;
 	private JButton btnEtatIntervenant;
@@ -40,10 +39,16 @@ public class PageEtats extends JPanel implements ActionListener
 		this.setBorder(new EmptyBorder(10, 10, 10, 10));
 
 		this.btnAccueil = new JButton("Accueil");
-		this.btnAccueil.setSize(10, 5);
 
-		this.panelBtns = new JPanel();
-		this.panelBtns.setLayout(new FlowLayout());
+		JPanel panelAccueil = new JPanel();
+		panelAccueil.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelAccueil.add(this.btnAccueil);
+
+
+		JPanel panelBtns = new JPanel();
+		panelBtns.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(5, 5, 5, 5);
 
 		this.cbxIntervenant = new JComboBox<String>();
 		this.cbxIntervenant.addItem("Tous les intervenants");
@@ -67,20 +72,32 @@ public class PageEtats extends JPanel implements ActionListener
 
 		this.btnCSV = new JButton("Générer le fichier CSV Intervenants");
 
+		//premiere ligne
+		gbc.anchor = GridBagConstraints.EAST;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panelBtns.add(this.cbxIntervenant, gbc);
+		gbc.gridx = 1;
+		panelBtns.add(this.btnEtatIntervenant, gbc);
 
-		this.add(this.btnAccueil, BorderLayout.NORTH);
+		//deuxieme ligne
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelBtns.add(this.cbxModule, gbc);
+		gbc.gridx = 1;
+		panelBtns.add(this.btnEtatModule, gbc);
 
-		this.panelBtns.add(this.cbxIntervenant);
-		this.panelBtns.add(this.btnEtatIntervenant);
-
-		this.panelBtns.add(this.cbxModule);
-		this.panelBtns.add(this.btnEtatModule);
-
-		this.panelBtns.add(this.btnCSV);
-
+		//troisieme ligne
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.gridwidth = 2;
+		panelBtns.add(this.btnCSV, gbc);
 
 
-		this.add(this.panelBtns, BorderLayout.CENTER);
+		this.add(panelAccueil, BorderLayout.NORTH);
+		this.add(panelBtns, BorderLayout.CENTER);
 
 
 		this.btnAccueil.addActionListener(this);
@@ -103,7 +120,7 @@ public class PageEtats extends JPanel implements ActionListener
 				{
 					GenererPage.genererPageInter(inter);
 						
-					String chemin = new File(inter.getId() + "_" + inter.getNom() + "_" + inter.getPrenom() + ".html").getAbsolutePath();
+					String chemin = "data/html/interv/" + inter.getId() + "_" + inter.getNom() + "_" + inter.getPrenom() + ".html";
 					ouvrirePageWeb(chemin);
 				}
 			}
@@ -115,13 +132,10 @@ public class PageEtats extends JPanel implements ActionListener
 					{
 						GenererPage.genererPageInter(inter);
 						
-						String chemin = new File(inter.getId() + "_" + inter.getNom() + "_" + inter.getPrenom() + ".html").getAbsolutePath();
+						String chemin = "data/html/interv/" + inter.getId() + "_" + inter.getNom() + "_" + inter.getPrenom() + ".html";
 						ouvrirePageWeb(chemin);
 					}
 				}
-
-				//GenererPage.genererPageInter(intervenant);
-				
 			}
 		}
 
@@ -135,7 +149,7 @@ public class PageEtats extends JPanel implements ActionListener
 				{
 					GenererPage.genererPageModule(module);
 						
-					String chemin = new File(module.getCode() + ".html").getAbsolutePath();
+					String chemin = "data/html/module/" + module.getCode() + ".html";
 					ouvrirePageWeb(chemin);
 				}
 			}
@@ -147,19 +161,16 @@ public class PageEtats extends JPanel implements ActionListener
 					{
 						GenererPage.genererPageModule(module);
 						
-						String chemin = new File(module.getCode() + ".html").getAbsolutePath();
+						String chemin = "data/html/module/" + module.getCode() + ".html";
 						ouvrirePageWeb(chemin);
 					}
 				}
-
-				//GenererPage.genererPageInter(intervenant);
-				
 			}
 		}
 
 		if (e.getSource() == this.btnCSV)
 		{
-			//générer CSV
+			new GenererCSV(this.ctrl.getLstIntervenants());
 		}
 
 		if (e.getSource() == this.btnAccueil)
@@ -170,6 +181,7 @@ public class PageEtats extends JPanel implements ActionListener
 
 	private void ouvrirePageWeb(String url)
 	{
+		System.out.println(url);
 		try
 		{
 			Desktop.getDesktop().browse((new File(url)).toURI());

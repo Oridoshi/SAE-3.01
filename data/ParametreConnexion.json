@@ -1,6 +1,1 @@
-{
-	"chemin" : "bernouy.com/sae301",
-	"identifiant" : "admin",
-	"motDePasse" : "Matthias76930!",
-	"resterConnecte" : true
-}
+{"motDePasse":"Matthias76930!","identifiant":"admin","resterConnecte":true,"chemin":"bernouy.com/sae301"}

@@ -1,19 +1,16 @@
 package html;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
-import controleur.Controleur;
 import metier.model.Intervenant;
-import metier.model.Module;
-import metier.repo.IntervenantDB;
-import metier.model.Affectation;
 import metier.model.CategorieIntervenant;
 
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
+
+import javax.swing.JFileChooser;
 
 
 
@@ -29,17 +26,25 @@ public class GenererCSV
 
 	public GenererCSV ( List<Intervenant> lstInter )
 	{
-		GenererCSV.nbFichierCSV ++;
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-		this.lstInter = lstInter;
-		this.fichier  = "intervenant_V" + String.format( "%02d", GenererCSV.nbFichierCSV ) + ".csv";
+		int result = fileChooser.showOpenDialog(null);
 
-		this.tabTotHeures = new double[18];
+		if (result == JFileChooser.APPROVE_OPTION)
+		{
+			GenererCSV.nbFichierCSV ++;
 
-		for ( int cpt = 0; cpt < this.tabTotHeures.length; cpt ++ )
-			this.tabTotHeures[cpt] = 0;
+			this.lstInter = lstInter;
+			this.fichier  = fileChooser.getSelectedFile().getAbsolutePath() + File.separator + "intervenant_V" + String.format( "%02d", GenererCSV.nbFichierCSV ) + ".csv";
 
-		this.genererFichier();
+			this.tabTotHeures = new double[18];
+
+			for ( int cpt = 0; cpt < this.tabTotHeures.length; cpt ++ )
+				this.tabTotHeures[cpt] = 0;
+
+			this.genererFichier();
+		}
 	}
 
 
@@ -66,7 +71,7 @@ public class GenererCSV
 
 			fichier.createNewFile();
 
-			PrintWriter pw = new PrintWriter(new FileWriter(fichier.getAbsoluteFile(), true));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fichier.getAbsoluteFile(), true), "UTF-8"));
 
 
 			for ( int i = 0 ; i < lstNomsCell.length - 1 ; i++ )

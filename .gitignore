@@ -2,3 +2,6 @@
 /bin
 *.jar
 *.xml
+*.iss
+*.log
+Astre.exe

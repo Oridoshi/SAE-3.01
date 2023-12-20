@@ -7,9 +7,7 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.Writer;
+import java.io.File;
 
 import controleur.Controleur;
 
@@ -126,8 +124,6 @@ public class PageAccueil extends JPanel implements ActionListener
 
 			try
 			{
-				String nomFichier = "./data/ParametreConnexion.json";
-
 				JSONObject json = Controleur.getJson();
 
 				json.put("chemin", "");
@@ -135,9 +131,11 @@ public class PageAccueil extends JPanel implements ActionListener
 				json.put("motDePasse", "");
 				json.put("resterConnecte", false);
 
-				Writer writer = new BufferedWriter(new FileWriter(nomFichier));
-				writer.write(json.toString());
-				writer.close();
+				File file = new File("data/ParametreConnexion.json");
+
+				java.io.FileOutputStream fos = new java.io.FileOutputStream(file);
+				fos.write(json.toString().getBytes("UTF-8"));
+				fos.close();
 
 			} catch (Exception ex){System.out.println(ex.getMessage());}
 

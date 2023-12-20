@@ -1,17 +1,16 @@
 package html;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import controleur.Controleur;
 import metier.model.Intervenant;
 import metier.model.Module;
-import metier.repo.IntervenantDB;
 import metier.model.Affectation;
+
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
 
 public class GenererPage
 {
@@ -22,9 +21,9 @@ public class GenererPage
 	private GenererPage ( int choix, Intervenant inter, Module module )
 	{
 		if ( choix == 1 )
-			this.fichier = inter.getId() + "_" + inter.getNom() + "_" + inter.getPrenom() + ".html";
+			this.fichier = "data/html/interv/" + inter.getId() + "_" + inter.getNom() + "_" + inter.getPrenom() + ".html";
 		else
-			this.fichier = module.getCode() + ".html";
+			this.fichier = "data/html/module/" + module.getCode() + ".html";
 
 
 		this.tabSemestre = new int[8];
@@ -60,7 +59,7 @@ public class GenererPage
 
 
 			// Création d'un PrintWriter pour écrire dans le fichier
-			PrintWriter pw = new PrintWriter(new FileWriter(fichier.getAbsoluteFile(), true));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fichier.getAbsoluteFile(), true), "UTF-8"));
 
 			pw.println( page.creerHead(1) + '\n' );
 
@@ -431,7 +430,7 @@ public class GenererPage
 
 
 			// Création d'un PrintWriter pour écrire dans le fichier
-			PrintWriter pw = new PrintWriter(new FileWriter(fichier.getAbsoluteFile(), true));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fichier.getAbsoluteFile(), true), "UTF-8"));
 
 			pw.println( page.creerHead(2) + '\n' );
 
@@ -594,8 +593,6 @@ public class GenererPage
 	{
 		String res = "";
 		String tab = "\t\t";
-
-		int tmp = 0;
 
 		res += tab + "<section>\n";
 		tab += "\t";
