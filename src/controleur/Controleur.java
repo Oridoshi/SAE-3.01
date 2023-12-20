@@ -4,6 +4,8 @@ import metier.repo.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import ihm.FrameIhm;
 import metier.model.*;
 import metier.model.Module;
@@ -17,14 +19,13 @@ public class Controleur
 	private List<IModifiable> listSauvegarder;
 	private List<IModifiable> listSuppression;
 
+	private static JSONObject fichierParamConnexion;
 
 	public Controleur()
 	{
-		DB.getInstance();
-
 		this.listSauvegarder = new ArrayList<>();
 		this.listSuppression = new ArrayList<>();
-		this.version = "v0.5.0";
+		this.version = "v1.0.0";
 
 		new FrameIhm(this);
 	}
@@ -135,6 +136,16 @@ public class Controleur
 	public List<CategorieModule> getLstCategorieModule()
 	{
 		return CategorieModuleDB.list();
+	}
+
+	public static void setJson(JSONObject json)
+	{
+		Controleur.fichierParamConnexion = json;
+	}
+
+	public static JSONObject getJson()
+	{
+		return Controleur.fichierParamConnexion;
 	}
 
 	public List<Module> getLstModule()

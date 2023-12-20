@@ -2,6 +2,10 @@ package metier;
 
 import java.sql.*;
 
+import org.json.JSONObject;
+
+import controleur.Controleur;
+
 /**
  * Classe permettant de faire des requetes sur la base de données
 
@@ -23,9 +27,9 @@ public class DB
 		}
 
 		try {
-			LectureDonneConnexion donneConnexion = new LectureDonneConnexion();
+			JSONObject fichierParamConnexion = Controleur.getJson();
 
-			db = DriverManager.getConnection("jdbc:postgresql://" + donneConnexion.getChemin(),donneConnexion.getIdentifiant(),donneConnexion.getMotDePasse());
+			db = DriverManager.getConnection("jdbc:postgresql://" + fichierParamConnexion.getString("chemin"), fichierParamConnexion.getString("identifiant"), fichierParamConnexion.getString("motDePasse"));
 		} 
 		catch (SQLException e) {
 			e.printStackTrace();

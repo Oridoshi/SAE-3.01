@@ -57,7 +57,7 @@ public class PageCreaIntervenant implements ActionListener
 		this.mere = mere;
 		this.lstIntervenant = lstIntervenant;
 
-		this.dial = new JDialog(this.mere, "Création D'une Afféctation", true);
+		this.dial = new JDialog(this.mere, "Création d'un Intervenant", true);
 		this.dial.setLayout(new BorderLayout());
 		this.dial.setSize(500, 500);
 		this.dial.setLocationRelativeTo(mere);

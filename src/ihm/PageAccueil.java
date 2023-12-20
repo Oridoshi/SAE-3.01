@@ -2,10 +2,14 @@ package ihm;
 
 import javax.swing.*;
 
+import org.json.JSONObject;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.Writer;
 
 import controleur.Controleur;
 
@@ -22,13 +26,15 @@ public class PageAccueil extends JPanel implements ActionListener
 
 	private FrameIhm mere;
 
+	private JButton btnDeconnexion;
+
 	public PageAccueil(Controleur ctrl, FrameIhm mere)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
 
-
-		this.setLayout(new GridBagLayout());
+		JPanel panelCentre = new JPanel();
+		panelCentre.setLayout(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints(); 
 		c.insets = new Insets(0, 0, 7, 7); 
@@ -40,12 +46,12 @@ public class PageAccueil extends JPanel implements ActionListener
 		lblTitre.setFont(new Font("Segoe UI", Font.BOLD, 36));
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		this.add(lblTitre, gbc);
+		panelCentre.add(lblTitre, gbc);
 
 		// lblVersion //
 		lblVersion = new JLabel(this.ctrl.getVersion());
 		gbc.gridy = 1;
-		this.add(lblVersion, gbc);
+		panelCentre.add(lblVersion, gbc);
 
 		JPanel panelBtn = new JPanel();
 		panelBtn.setLayout(new GridLayout(4, 1, 5, 0));
@@ -77,7 +83,22 @@ public class PageAccueil extends JPanel implements ActionListener
 		// panelBtn.add(btnTest, gbc);
 		
 		gbc.gridy = 2;
-		this.add(panelBtn, gbc);
+		panelCentre.add(panelBtn, gbc);
+
+
+		JPanel panelBtn2 = new JPanel();
+		panelBtn2.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+		// btnDeconnexion //
+		this.btnDeconnexion = new JButton("Déconnexion");
+		this.btnDeconnexion.addActionListener(this);
+		panelBtn2.add(btnDeconnexion);
+
+
+		this.setLayout(new BorderLayout());
+
+		this.add(panelCentre, BorderLayout.CENTER);
+		this.add(panelBtn2, BorderLayout.NORTH);
 	}
 
 	@Override
@@ -98,6 +119,29 @@ public class PageAccueil extends JPanel implements ActionListener
 		else if (e.getSource() == this.btnEtats)
 		{
 			this.mere.changerPage(new PageEtats(this.ctrl, this.mere));
+		}
+		else if (e.getSource() == this.btnDeconnexion)
+		{
+			this.ctrl.fermerConnexion();
+
+			try
+			{
+				String nomFichier = "./data/ParametreConnexion.json";
+
+				JSONObject json = Controleur.getJson();
+
+				json.put("chemin", "");
+				json.put("identifiant", "");
+				json.put("motDePasse", "");
+				json.put("resterConnecte", false);
+
+				Writer writer = new BufferedWriter(new FileWriter(nomFichier));
+				writer.write(json.toString());
+				writer.close();
+
+			} catch (Exception ex){System.out.println(ex.getMessage());}
+
+			this.mere.changerPage(PageConnexion.constructeurConnexion(this.ctrl, this.mere, true));
 		}
 	}
 }

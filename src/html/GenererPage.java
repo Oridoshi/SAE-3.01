@@ -65,17 +65,20 @@ public class GenererPage
 			pw.println( page.creerHead(1) + '\n' );
 
 			pw.println( "\t<body>" );
-			pw.println( "\t\t<h1> Fiche de l'intervenant <b>" + inter.getNom() + "</b> </h1>\n" );
+			pw.println( "\t\t<h1> Fiche de l'intervenant <b>" + inter.getPrenom() + " " + inter.getNom() + "</b> </h1>\n" );
+
+
+			pw.println( page.genererInfosGeneralesInter(inter) );
 
 
 			for ( int cptNbSemestres = 1; cptNbSemestres <= 6; cptNbSemestres ++ )
 				pw.print( page.creerTableauSemestres( cptNbSemestres, page.genererLstAffectations(cptNbSemestres, inter.getModulesOuIntervient() )));
 
-			pw.println( "\n\t\t<hr>\n\n" );
+			pw.println( "\n\n\t\t<hr>\n\n" );
 
 			pw.println( page.creerTableauRecapitulatif( inter ) );
 			pw.println( "\t</body>\n" );
-			pw.println( "</table>" );
+			pw.println( "</html>" );
 
 			pw.close();
 		}
@@ -195,14 +198,16 @@ public class GenererPage
 		String res = "";
 		String tab = "\t\t";
 
+		res += tab + "<section>\n";
+		tab += "\t";
+
+		res += tab + "<h2> Récapitulatif </h2>\n\n";
 
 		// PREMIER TABLEAU : RECAPITULATIF DE CHAQUE SEMESTRES
-
-		res += tab + "<h2> Récapitulatif </2>\n\n";
-		res += tab + "<table class = 'statsIntervenants tab1'>\n\n";
+		res += tab + "<table class = \"statsIntervenants tab1\">\n\n";
 		tab += '\t';
 
-		res += tab + "<thead>";
+		res += tab + "<thead>\n";
 		tab += '\t';
 
 		res += tab + "<tr>\n";
@@ -221,7 +226,7 @@ public class GenererPage
 		for ( int cptNbSemestres = 0; cptNbSemestres < this.tabSemestre.length; cptNbSemestres++ )
 		{
 			res += tab + "<tr>\n";
-			res += tab + "\t<td> S" + cptNbSemestres + 1    + " </td>\n";
+			res += tab + "\t<td> S" + (cptNbSemestres + 1)             + " </td>\n";
 			res += tab + "\t<td> "  + this.tabSemestre[cptNbSemestres] + " </td>\n";
 			res += tab + "</tr>\n\n";
 		}
@@ -233,16 +238,16 @@ public class GenererPage
 
 		tab = tab.substring(0, tab.length() - 1);
 
-		res += "</tbody>\n\n";
+		res += tab + "</tbody>\n\n";
 		tab  = tab.substring(0, tab.length() - 1);
 
-		res += "</table>\n\n\n";
+		res += tab + "</table>\n\n\n";
 
 
 
 
 		// DEUXIEME TABLEAU : RECAPITULATIF DU S1 S3 S5 et S2 S4 S6
-		res += tab + "<table class = 'statsIntervenants tab2'>\n\n";
+		res += tab + "<table class = \"statsIntervenants tab2\">\n\n";
 		tab += "\t";
 
 		res += tab + "<thead>\n";
@@ -255,8 +260,10 @@ public class GenererPage
 
 		tab = tab.substring(0, tab.length() - 1);
 
-		res += "</thead>\n\n";
-		res += "<tbody>\n";
+		res += tab + "</thead>\n\n";
+		res += tab + "<tbody>\n";
+
+		tab += "\t";
 
 
 		res += tab + "<tr>\n";
@@ -324,7 +331,7 @@ public class GenererPage
 					tmp = a.getNbHeure();
 				}
 				else
-					tmp = a.getNbGroupe() * a.getNbSemaine() * a.getCategorieHeure().getCoef();
+					tmp = a.getNbGroupe() * a.getNbSemaine() * a.getCategorieHeure().getCoef() * a.getModule().getNbHeureSemaine(a.getCategorieHeure().getNom());
 
 				System.out.println(a.getCategorieHeure().getNom());
 				switch ( a.getCategorieHeure().getNom())
@@ -342,6 +349,61 @@ public class GenererPage
 		}
 
 		return tab;
+	}
+
+
+	private String genererInfosGeneralesInter ( Intervenant inter )
+	{
+		String res = "";
+		String tab = "\t\t";
+
+		res += tab + "<section>\n";
+		tab += "\t";
+
+		res += tab + "<h2> Informations générales sur l'intervenant </h2>\n\n";
+		tab += "\t";
+
+		res += tab + "<table class = \"infosGeneralesInter\">\n\n";
+		tab += "\t";
+
+		res += tab + "<thead>\n";
+		tab += "\t";
+
+		res += tab + "<tr>\n";
+
+		res += tab + "\t<th> Heure min             </th>\n";
+		res += tab + "\t<th> Heure max             </th>\n";
+		res += tab + "\t<th> Type de l'intervenant </th>\n";
+
+		res += tab + "</tr>\n";
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</thead>\n\n";
+
+		res += tab + "<tbody>\n\n";
+		tab += "\t";
+
+		res += tab + "<tr>\n";
+
+		res += tab + "\t<td>" + inter.getCategorie().getMinH() + "</td>";
+		res += tab + "\t<td>" + inter.getCategorie().getMaxH() + "</td>";
+		res += tab + "\t<td>" + inter.getCategorie().getNom () + "</td>";
+
+		res += tab + "</tr>\n";
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</tbody>\n\n";
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</table>\n";
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</table>\n";
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</section>";
+
+		return res;
 	}
 
 
@@ -375,6 +437,8 @@ public class GenererPage
 
 			pw.println( "\t<body>" );
 			pw.println( "\t\t<h1> " + module.getCode() + " " + module.getLibelleLong() + " </h1>\n" );
+
+			pw.println( page.genererInfosGeneralesModule(module) );
 
 			pw.print( page.creerTableauInfosModules(module.getLstAffectation(), page.genererLstInter(module.getLstAffectation())) );
 
@@ -413,6 +477,10 @@ public class GenererPage
 		int[] tabTotalFinal = new int[8];
 
 
+		res += tab + "<section>\n";
+		tab += "\t";
+
+		res += tab + "<h2> Informations sur les intervenants de ce module </h2>\n\n";
 		res += tab + "<table class = \"infosModule\">\n";
 		tab += "\t";
 
@@ -447,11 +515,12 @@ public class GenererPage
 			res += tab + "\t<td> " + lst.get(cpt).getNom   () + " </td>\n";
 			res += tab + "\t<td> " + lst.get(cpt).getPrenom() + " </td>\n";
 
-			for ( int cptHeures = 0; cptHeures < tmp.length; cptHeures ++ )
+			for ( int cptHeures = 0; cptHeures < tmp.length - 1; cptHeures ++ )
 			{
 				res += tab + "\t<td> " + tmp[cptHeures] + " </td>\n";
 
 				tabTotalFinal[cptHeures] += tmp[cptHeures];
+				tabTotalFinal[7]         += tmp[cptHeures];
 			}
 
 			res += tab + "\t<td class = 'totalModule'> " + tmp[7] + " </td>\n";
@@ -466,7 +535,7 @@ public class GenererPage
 		for ( int cptHeureTot = 0; cptHeureTot < tabTotalFinal.length - 1; cptHeureTot++ )
 			res += tab + "\t<td class = 'tdFinal'> " + tabTotalFinal[cptHeureTot] + " </td>\n";
 
-		res += tab + "\t<td class = 'totalFinal'> " + tabTotalFinal[7] + " </td>\n";
+		res += tab + "\t<td class = 'totalFinalModule'> " + tabTotalFinal[7] + " </td>\n";
 		res += tab + "</tr>\n";
 
 		tab = tab.substring(0, tab.length() - 1);
@@ -475,6 +544,9 @@ public class GenererPage
 		tab = tab.substring(0, tab.length() - 1);
 
 		res += tab + "</table>\n\n";
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</section>\n";
 
 		return res;
 
@@ -518,6 +590,63 @@ public class GenererPage
 	}
 
 
+	private String genererInfosGeneralesModule ( Module module )
+	{
+		String res = "";
+		String tab = "\t\t";
+
+		int tmp = 0;
+
+		res += tab + "<section>\n";
+		tab += "\t";
+
+		res += tab + "<h2> Informations générales sur le module </h2>\n\n";
+		tab += "\t";
+
+		res += tab + "<table class = \"infosGeneralesModule\">\n\n";
+		tab += "\t";
+
+		res += tab + "<thead>\n";
+		tab += "\t";
+
+		res += tab + "<tr>\n";
+
+		res += tab + "\t<th> Heure programme </th>\n";
+		res += tab + "\t<th> Heure définie   </th>\n";
+		res += tab + "\t<th> Module validé   </th>\n";
+
+		res += tab + "</tr>\n";
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</thead>\n\n";
+
+		res += tab + "<tbody>\n\n";
+		tab += "\t";
+
+		res += tab + "<tr>\n";
+
+		res += tab + "\t<td>" + 12 + "</td>";
+		res += tab + "\t<td>" + 12 + "</td>";
+		res += tab + "\t<td>" + 12 + "</td>";
+
+		res += tab + "</tr>\n";
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</tbody>\n\n";
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</table>\n";
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</table>\n";
+		tab = tab.substring(0, tab.length() - 1);
+
+		res += tab + "</section>";
+
+		return res;
+	}
+
+
 	/* -------------------------------- /
 	/ -------------------------------- /
 	/            GENERER HEAD          /
@@ -529,7 +658,7 @@ public class GenererPage
 		String tab = "";
 
 
-		res += "<!DOCTYPE html>   \n";
+		res += "<!DOCTYPE html>\n";
 		res += "<html lang = 'fr'>\n";
 		tab += "\t";
 
@@ -537,9 +666,9 @@ public class GenererPage
 		tab += "\t";
 
 		if ( type == 1 )
-			res += tab + "<title> Fiche module </title>\n\n";
-		else
 			res += tab + "<title> Fiche intervenant </title>\n\n";
+		else
+			res += tab + "<title> Fiche module </title>\n\n";
 
 		res += tab + "<meta charset = 'utf-8'>\n";
 		res += tab + "<meta content = 'Author' lang = 'fr' name = 'BOULOCHE Eleonore'>\n\n";
