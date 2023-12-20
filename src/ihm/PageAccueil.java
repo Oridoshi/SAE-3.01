@@ -8,10 +8,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import controleur.Controleur;
-import html.GenererPage;
-import metier.model.Intervenant;
-import metier.model.Semestre;
-import metier.model.Module;
 
 public class PageAccueil extends JPanel implements ActionListener
 {
@@ -102,18 +98,6 @@ public class PageAccueil extends JPanel implements ActionListener
 		else if (e.getSource() == this.btnEtats)
 		{
 			this.mere.changerPage(new PageEtats(this.ctrl, this.mere));
-		}
-	}
-
-	private void ouvrirePageWeb(String url)
-	{
-		try
-		{
-			Desktop.getDesktop().browse((new File(url)).toURI());
-		}
-		catch (java.io.IOException e)
-		{
-			System.out.println(e.getMessage());
 		}
 	}
 }

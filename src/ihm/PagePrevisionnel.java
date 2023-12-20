@@ -10,7 +10,6 @@ import ihm.creationObjet.PageEditionPpp;
 import ihm.creationObjet.PageEditionRessource;
 import ihm.creationObjet.PageEditionSae;
 import ihm.creationObjet.PageEditionStage;
-import metier.model.Affectation;
 import metier.model.CategorieModule;
 import metier.model.Module;
 import metier.model.Semestre;
@@ -333,13 +332,13 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 
 	private class ModelAffichageTableau extends AbstractTableModel
 	{
-		private Controleur ctrl;
+		// private Controleur ctrl;
 
 		private Object[][] tabDonnees;
 
 		public ModelAffichageTableau(Controleur ctrl, List<Module> lstRessource)
 		{
-			this.ctrl = ctrl;
+			// this.ctrl = ctrl;
 
 			int nbCol = 4;
 			if(lstRessource != null && lstRessource.size() > 0)

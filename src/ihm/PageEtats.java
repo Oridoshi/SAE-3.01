@@ -11,7 +11,6 @@ import java.io.File;
 import controleur.Controleur;
 import html.GenererPage;
 import metier.model.Intervenant;
-import metier.model.Semestre;
 import metier.model.Module;
 
 public class PageEtats extends JPanel implements ActionListener

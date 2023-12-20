@@ -53,8 +53,11 @@ public class GenererPage
 			File fichier = new File (page.fichier);
 
 			// Vérifier si le fichier existe
-			if ( !fichier.exists() )
-				fichier.createNewFile();
+			if ( fichier.exists() )
+				fichier.delete();
+
+			fichier.createNewFile();
+
 
 			// Création d'un PrintWriter pour écrire dans le fichier
 			PrintWriter pw = new PrintWriter(new FileWriter(fichier.getAbsoluteFile(), true));
@@ -70,7 +73,7 @@ public class GenererPage
 
 			pw.println( "\n\t\t<hr>\n\n" );
 
-			// pw.println( page.creerTableauRecapitulatif( inter ) );
+			pw.println( page.creerTableauRecapitulatif( inter ) );
 			pw.println( "\t</body>\n" );
 			pw.println( "</table>" );
 
@@ -82,6 +85,9 @@ public class GenererPage
 
 	private String creerTableauSemestres ( int semestre, List<Affectation> lstAffectation )
 	{
+		if ( lstAffectation.size() == 0 ) return "";
+
+
 		String   res = "";
 		String   tab = "\t\t";
 		String   tmp;
@@ -355,8 +361,12 @@ public class GenererPage
 			File fichier = new File (page.fichier);
 
 			// Vérifier si le fichier existe
-			if ( !fichier.exists() )
-				fichier.createNewFile();
+			// Vérifier si le fichier existe
+			if ( fichier.exists() )
+				fichier.delete();
+
+			fichier.createNewFile();
+
 
 			// Création d'un PrintWriter pour écrire dans le fichier
 			PrintWriter pw = new PrintWriter(new FileWriter(fichier.getAbsoluteFile(), true));
@@ -364,12 +374,12 @@ public class GenererPage
 			pw.println( page.creerHead(2) + '\n' );
 
 			pw.println( "\t<body>" );
-			pw.println( "\t\t<h1> " + module.getCode() + " </h1>\n" );
+			pw.println( "\t\t<h1> " + module.getCode() + " " + module.getLibelleLong() + " </h1>\n" );
 
 			pw.print( page.creerTableauInfosModules(module.getLstAffectation(), page.genererLstInter(module.getLstAffectation())) );
 
 			pw.println( "\t</body>\n" );
-			pw.println( "</table>" );
+			pw.println( "</html>" );
 
 			pw.close();
 		}
@@ -444,9 +454,9 @@ public class GenererPage
 				tabTotalFinal[cptHeures] += tmp[cptHeures];
 			}
 
-			res += tab + "\t<tr class = 'totalModule'> " + tmp[7] + " </td>\n";
+			res += tab + "\t<td class = 'totalModule'> " + tmp[7] + " </td>\n";
 
-			res += tab + "<\tr>\n";
+			res += tab + "</tr>\n";
 		}
 
 

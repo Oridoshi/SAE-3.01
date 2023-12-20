@@ -1,5 +1,6 @@
 {
 	"chemin" : "bernouy.com/sae301",
 	"identifiant" : "admin",
-	"motDePasse" : "Matthias76930!"
+	"motDePasse" : "Matthias76930!",
+	"resterConnecte" : true
 }
