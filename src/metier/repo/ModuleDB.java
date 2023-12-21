@@ -124,7 +124,6 @@ public class ModuleDB {
 		}
 
 	}
-	// ANAS 
 	private static void init(){
 		for ( Module module : modules ){
 			modulesParIdSemestre.putIfAbsent(module.getSemestre().getId(), new ArrayList<>());

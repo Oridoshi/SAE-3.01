@@ -697,7 +697,6 @@ public class PageEditionStage extends JPanel implements ActionListener, FocusLis
 				int rep = JOptionPane.showConfirmDialog(this.mere, "Voulez-vous vraiment supprimer cette Affectation ?", "Suppression", JOptionPane.YES_NO_OPTION);
 				if(rep == JOptionPane.YES_OPTION)
 				{
-					// ANAS
 					this.lstAffectationSupp.add(this.lstAffectation.get(this.tableAffectation.getSelectedRow()));
 					this.ctrl.ajouterSuppAttente(this.lstAffectation.get(this.tableAffectation.getSelectedRow()));
 					this.lstAffectation.remove(this.tableAffectation.getSelectedRow());

@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import controleur.Controleur;
 
 /**
- * Classe permettant de faire des requetes sur la base de données ANAS
+ * Classe permettant de faire des requetes sur la base de données
  */
 public class DB 
 {
