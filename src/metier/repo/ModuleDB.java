@@ -86,14 +86,15 @@ public class ModuleDB {
 	public static boolean save(Module module){
 		if ( modules.contains(module) ){
 			try{
-				psUpdate.setString(1, module.getCode());
-				psUpdate.setInt(2, module.getSemestre().getId());
-				psUpdate.setString(3, module.getCategorieModule().getNom());
+				psUpdate.setString (1, module.getCode());
+				psUpdate.setInt    (2, module.getSemestre().getId());
+				psUpdate.setString (3, module.getCategorieModule().getNom());
 				psUpdate.setBoolean(4, module.isValider());
-				psUpdate.setString(5, module.getLibelleCourt());
-				psUpdate.setString(6, module.getLibelleLong());
-				psUpdate.setString(7, module.getCodeOrigine());
-				if ( DB.update(psUpdate) == 1 ){
+				psUpdate.setString (5, module.getLibelleCourt());
+				psUpdate.setString (6, module.getLibelleLong());
+				psUpdate.setString (7, module.getCodeOrigine());
+				if ( DB.update(psUpdate) == 1 )
+				{
 					module.setCodeOrigine(module.getCode());
 					return true;
 				} else {
@@ -123,7 +124,7 @@ public class ModuleDB {
 		}
 
 	}
-
+	// ANAS 
 	private static void init(){
 		for ( Module module : modules ){
 			modulesParIdSemestre.putIfAbsent(module.getSemestre().getId(), new ArrayList<>());

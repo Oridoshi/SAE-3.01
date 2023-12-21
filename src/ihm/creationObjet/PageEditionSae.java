@@ -693,7 +693,7 @@ public class PageEditionSae extends JPanel implements ActionListener, FocusListe
 		{
 			if(this.tableAffectation.getSelectedRow() != -1 && this.lstAffectation.size() > 0)
 			{
-				int rep = JOptionPane.showConfirmDialog(this.mere, "Voulez-vous vraiment supprimer cette ressource ?", "Suppression", JOptionPane.YES_NO_OPTION);
+				int rep = JOptionPane.showConfirmDialog(this.mere, "Voulez-vous vraiment supprimer cette Affectation ?", "Suppression", JOptionPane.YES_NO_OPTION);
 				if(rep == JOptionPane.YES_OPTION)
 				{
 					this.lstAffectationSupp.add(this.lstAffectation.get(this.tableAffectation.getSelectedRow()));
@@ -733,6 +733,12 @@ public class PageEditionSae extends JPanel implements ActionListener, FocusListe
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
+			else if(this.txtFHProSomme.getValue() < this.txtFSom1.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure total que vous avez défini est supérieur au nombre d'heure total programme !", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+
 			//Verification des heures affecté par rapport au heures défini
 			else if(this.txtFNbHSaeSem.getValue() < this.txtFTotHSaeAff.getValue())
 			{
@@ -762,6 +768,12 @@ public class PageEditionSae extends JPanel implements ActionListener, FocusListe
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure SAE que vous avez défini est inférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
+			else if(this.txtFHProSomme.getValue() < this.txtFSom1.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure total que vous avez défini est supérieur au nombre d'heure total programme !", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+
 			else if(this.txtFHProHTut.getValue() < this.txtFNbHTutSem.getValue()) 
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est supérieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
@@ -770,6 +782,11 @@ public class PageEditionSae extends JPanel implements ActionListener, FocusListe
 			else if(this.txtFHProHTut.getValue() > this.txtFNbHTutSem.getValue()) 
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT que vous avez défini est inférieur au nombre d'heure programme!", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if(this.txtFHProSomme.getValue() > this.txtFSom1.getValue())
+			{
+				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure total que vous avez défini est inférieur au nombre d'heure total programme !", "ERREUR HEURE PROGRAMME", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 			//Verification des heures affecté par rapport au heures défini

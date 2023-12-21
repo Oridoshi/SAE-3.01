@@ -268,6 +268,8 @@ public class PageParametres extends JPanel implements ActionListener
 			{
 				categorieHeure.setCoef(hashCateHeurModi.get(categorieHeure));
 			}
+
+			this.hashCateHeurModi.clear();
 		}
 
 		public void majTab()

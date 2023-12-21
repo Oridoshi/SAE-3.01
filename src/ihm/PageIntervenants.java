@@ -9,6 +9,7 @@ import javax.swing.table.TableColumnModel;
 
 import controleur.Controleur;
 import ihm.creationObjet.PageCreaIntervenant;
+import ihm.creationObjet.PageEditionIntervenant;
 import metier.model.Intervenant;
 
 import java.awt.BorderLayout;
@@ -18,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class PageIntervenants extends JPanel implements ActionListener, ListSelectionListener
@@ -37,16 +39,22 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 	private JPanel panelBoutonsTableau;
 	private JButton btnAjouter;
 	private JButton btnSupprimer;
+	private JButton btnModifier;
+	private JButton btnAcceuil;
 
 	private FrameIhm mere;
 
 	private ArrayList<Intervenant> lstIntervenantsLocal;
+
+	private HashMap<Intervenant, Intervenant> hashInterModif;
 
 
 	public PageIntervenants(Controleur ctrl, FrameIhm mere)
 	{
 		this.ctrl = ctrl;
 		this.mere = mere;
+
+		this.hashInterModif = new HashMap<Intervenant, Intervenant>();
 
 		this.lstIntervenantsLocal = new ArrayList<Intervenant>();
 		for (Intervenant intervenant : this.ctrl.getLstIntervenants())
@@ -60,16 +68,12 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 		this.setBorder(new EmptyBorder(15, 30, 15, 30));
 		this.mere.setTitle("Intervenants");
 
-
-
 		this.panelBoutons = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 		this.panelBoutons.setBorder(new EmptyBorder(30, 0, 0, 0));
 		this.btnEnregistrer = new JButton("Enregistrer");
 		this.btnEnregistrer.addActionListener(this);
 		this.btnAnnuler = new JButton("Annuler");
 		this.btnAnnuler.addActionListener(this);
-
-
 
 		/*------------------*/
 		//   panelTableau   //
@@ -85,7 +89,7 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 
 		for (int i = 3; i <= 14; i++)
 		{
-			(model.getColumn(i)).setPreferredWidth(5);
+			(model.getColumn(i)).setPreferredWidth(6);
 		}
 
 		spTableauIntervenants = new JScrollPane(this.tableIntervenants);
@@ -101,12 +105,22 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 		this.btnSupprimer = new JButton("supprimer");
 		this.btnSupprimer.addActionListener(this);
 		this.btnSupprimer.setEnabled(false); // Désactiver le bouton au démarrage
+		this.btnModifier = new JButton("modifier");
+		this.btnModifier.addActionListener(this);
+		this.btnModifier.setEnabled(false); // Désactiver le bouton au démarrage
 
 		this.panelBoutonsTableau.add(this.btnAjouter);
 		this.panelBoutonsTableau.add(this.btnSupprimer);
+		this.panelBoutonsTableau.add(this.btnModifier);
 
 
+		JPanel panelAcceuil = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+		this.btnAcceuil = new JButton("Acceuil");
+		this.btnAcceuil.addActionListener(this);
+		panelAcceuil.add(this.btnAcceuil);
 
+
+		this.panelTableau.add(panelAcceuil, BorderLayout.NORTH);
 		this.panelTableau.add(this.spTableauIntervenants, BorderLayout.CENTER);
 		this.panelTableau.add(this.panelBoutonsTableau, BorderLayout.SOUTH);
 		this.add(this.panelTableau, BorderLayout.CENTER);
@@ -142,8 +156,10 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 	public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting() && this.tableIntervenants.getSelectedRow() != -1) {
 			this.btnSupprimer.setEnabled(true); // Activer le bouton
+			this.btnModifier.setEnabled(true);
 		} else {
 			this.btnSupprimer.setEnabled(false); // Désactiver le bouton si aucune ligne n'est sélectionnée
+			this.btnModifier.setEnabled(false);
 		}
 	}
 
@@ -153,7 +169,24 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 		if (e.getSource() == this.btnAnnuler)
 		{
 			this.ctrl.annuler();
-			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
+
+			this.lstIntervenantsLocal = new ArrayList<Intervenant>();
+			for (Intervenant intervenant : this.ctrl.getLstIntervenants())
+			{
+				this.lstIntervenantsLocal.add(intervenant);
+			}
+
+			for (Intervenant intervenant : hashInterModif.keySet())
+			{
+				intervenant.setCategorie(hashInterModif.get(intervenant).getCategorie());
+				intervenant.setNom(hashInterModif.get(intervenant).getNom());
+				intervenant.setPrenom(hashInterModif.get(intervenant).getPrenom());
+				intervenant.setHMin(hashInterModif.get(intervenant).getHMin());
+				intervenant.sethMax(hashInterModif.get(intervenant).gethMax());
+				intervenant.setCoefTP(hashInterModif.get(intervenant).getCoefTP());
+			}
+
+			this.hashInterModif.clear();
 		}
 		else if(e.getSource() == btnSupprimer)
 		{
@@ -186,6 +219,20 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 		else if(e.getSource() == btnEnregistrer)
 		{
 			this.ctrl.sauvegarder();
+		}
+		else if(e.getSource() == btnModifier)
+		{
+			Intervenant inter = this.lstIntervenantsLocal.get(this.tableIntervenants.getSelectedRow());
+
+			if(!this.hashInterModif.containsKey(inter))
+				this.hashInterModif.put(inter, new Intervenant(inter.getId(), inter.getCategorie(), inter.getNom(), inter.getPrenom(), inter.getHMin(), inter.gethMax(), inter.getCoefTP()));
+
+
+			new PageEditionIntervenant(this.mere, ctrl, inter);
+			this.majTab();
+		}
+		else if(e.getSource() == btnAcceuil)
+		{
 			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
 		}
 

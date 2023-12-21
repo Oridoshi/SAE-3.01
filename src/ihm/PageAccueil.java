@@ -120,8 +120,6 @@ public class PageAccueil extends JPanel implements ActionListener
 		}
 		else if (e.getSource() == this.btnDeconnexion)
 		{
-			this.ctrl.fermerConnexion();
-
 			try
 			{
 				JSONObject json = Controleur.getJson();
@@ -139,6 +137,7 @@ public class PageAccueil extends JPanel implements ActionListener
 
 			} catch (Exception ex){System.out.println(ex.getMessage());}
 
+			this.ctrl.fermerConnexion();
 			this.mere.changerPage(PageConnexion.constructeurConnexion(this.ctrl, this.mere, true));
 		}
 	}

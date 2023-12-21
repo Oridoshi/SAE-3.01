@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import db.Initialisation;
 import ihm.FrameIhm;
 import metier.model.*;
 import metier.model.Module;
@@ -25,7 +26,7 @@ public class Controleur
 	{
 		this.listSauvegarder = new ArrayList<>();
 		this.listSuppression = new ArrayList<>();
-		this.version = "v1.0.0";
+		this.version = "v1.0.1";
 
 		new FrameIhm(this);
 	}
@@ -151,5 +152,10 @@ public class Controleur
 	public List<Module> getLstModule()
 	{
 		return ModuleDB.list();
+	}
+
+	public void initialiserTable()
+	{
+		Initialisation.initialisationBD();
 	}
 }

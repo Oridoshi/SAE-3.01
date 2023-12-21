@@ -1,16 +1,16 @@
 package html;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import metier.model.Intervenant;
 import metier.model.Module;
+import metier.model.ProgrammeItem;
 import metier.model.Affectation;
-
-import java.io.OutputStreamWriter;
-import java.io.FileOutputStream;
 
 public class GenererPage
 {
@@ -126,7 +126,7 @@ public class GenererPage
 			tmp = (tabClasseEnTete[cptEnTete] == null) ? "" : "class = '" + tabClasseEnTete[cptEnTete] + "'";
 
 			res += tab + "<th " + String.format("%-19s", tmp)      + "> " +
-			       String.format("%-14s", tabNomEnTete[cptEnTete]) + " </th>\n";
+				   String.format("%-14s", tabNomEnTete[cptEnTete]) + " </th>\n";
 		}
 
 		tab = tab.substring(0, tab.length() - 1);
@@ -169,7 +169,7 @@ public class GenererPage
 
 
 		res += tab + "<tr class = 'final'>\n";
-		res += tab + "\t<td class = 'tdFinal' colspan = '2'> Total pour le semestre " + semestre + " </td>";
+		res += tab + "\t<td class = 'tdFinal' colspan = '2'> Total pour le semestre " + semestre + " </td>\n";
 
 		for ( int cptHeureComp = 0; cptHeureComp < tabTotalHeures.length; cptHeureComp ++ )
 			res += tab + "\t<td class = 'tdFinal'> " + tabTotalHeures[cptHeureComp] + " </td>\n";
@@ -222,7 +222,7 @@ public class GenererPage
 		res += tab + "<tbody>\n";
 		tab += "\t";
 
-		for ( int cptNbSemestres = 0; cptNbSemestres < this.tabSemestre.length; cptNbSemestres++ )
+		for ( int cptNbSemestres = 0; cptNbSemestres < 6; cptNbSemestres++ )
 		{
 			res += tab + "<tr>\n";
 			res += tab + "\t<td> S" + (cptNbSemestres + 1)             + " </td>\n";
@@ -290,7 +290,7 @@ public class GenererPage
 		res += tab + "</table>\n";
 
 		tab = tab.substring(0, tab.length() - 1);
-		res += tab + "</section>\n";
+		res += tab + "</section>\n\n";
 
 		return res;
 	}
@@ -360,8 +360,6 @@ public class GenererPage
 		tab += "\t";
 
 		res += tab + "<h2> Informations générales sur l'intervenant </h2>\n\n";
-		tab += "\t";
-
 		res += tab + "<table class = \"infosGeneralesInter\">\n\n";
 		tab += "\t";
 
@@ -384,9 +382,9 @@ public class GenererPage
 
 		res += tab + "<tr>\n";
 
-		res += tab + "\t<td>" + inter.getCategorie().getMinH() + "</td>";
-		res += tab + "\t<td>" + inter.getCategorie().getMaxH() + "</td>";
-		res += tab + "\t<td>" + inter.getCategorie().getNom () + "</td>";
+		res += tab + "\t<td>" + inter.getCategorie().getMinH() + "</td>\n";
+		res += tab + "\t<td>" + inter.getCategorie().getMaxH() + "</td>\n";
+		res += tab + "\t<td>" + inter.getCategorie().getNom () + "</td>\n";
 
 		res += tab + "</tr>\n";
 		tab = tab.substring(0, tab.length() - 1);
@@ -397,10 +395,7 @@ public class GenererPage
 		res += tab + "</table>\n";
 		tab = tab.substring(0, tab.length() - 1);
 
-		res += tab + "</table>\n";
-		tab = tab.substring(0, tab.length() - 1);
-
-		res += tab + "</section>";
+		res += tab + "</section>\n\n\n";
 
 		return res;
 	}
@@ -529,7 +524,7 @@ public class GenererPage
 
 
 		res += tab + "<tr>\n";
-		res += tab + "\t<td class = 'tdFinal' colspan = '2'> Total </td>";
+		res += tab + "\t<td class = 'tdFinal' colspan = '2'> Total </td>\n";
 
 		for ( int cptHeureTot = 0; cptHeureTot < tabTotalFinal.length - 1; cptHeureTot++ )
 			res += tab + "\t<td class = 'tdFinal'> " + tabTotalFinal[cptHeureTot] + " </td>\n";
@@ -598,8 +593,6 @@ public class GenererPage
 		tab += "\t";
 
 		res += tab + "<h2> Informations générales sur le module </h2>\n\n";
-		tab += "\t";
-
 		res += tab + "<table class = \"infosGeneralesModule\">\n\n";
 		tab += "\t";
 
@@ -608,9 +601,9 @@ public class GenererPage
 
 		res += tab + "<tr>\n";
 
-		res += tab + "\t<th> Heure programme </th>\n";
-		res += tab + "\t<th> Heure définie   </th>\n";
-		res += tab + "\t<th> Module validé   </th>\n";
+		res += tab + "\t<th> Heure programme Total</th>\n";
+		res += tab + "\t<th> Heure définie Total  </th>\n";
+		res += tab + "\t<th> Module validé        </th>\n";
 
 		res += tab + "</tr>\n";
 		tab = tab.substring(0, tab.length() - 1);
@@ -622,9 +615,9 @@ public class GenererPage
 
 		res += tab + "<tr>\n";
 
-		res += tab + "\t<td>" + 12 + "</td>";
-		res += tab + "\t<td>" + 12 + "</td>";
-		res += tab + "\t<td>" + 12 + "</td>";
+		res += tab + "\t<td>" + totalHeureProgramme(module)          + "</td>\n";
+		res += tab + "\t<td>" + totalHeureDefinie  (module)          + "</td>\n";
+		res += tab + "\t<td>" + (module.isValider() ? "oui" : "non") + "</td>\n";
 
 		res += tab + "</tr>\n";
 		tab = tab.substring(0, tab.length() - 1);
@@ -635,10 +628,41 @@ public class GenererPage
 		res += tab + "</table>\n";
 		tab = tab.substring(0, tab.length() - 1);
 
-		res += tab + "</table>\n";
-		tab = tab.substring(0, tab.length() - 1);
+		res += tab + "</section>\n\n\n";
 
-		res += tab + "</section>";
+		return res;
+	}
+
+
+	private int totalHeureProgramme ( Module module )
+	{
+		int res = 0;
+
+		for (ProgrammeItem pi : module.getProgramme().listProgrammeItems())
+			if(pi.getCategorieHeure().getNom().equals("CM"))
+				res += pi.getNbHPn() * pi.getCategorieHeure().getCoef();
+			else if(pi.getCategorieHeure().getNom().equals("TP"))
+				res += pi.getNbHPn() * pi.getCategorieHeure().getCoef() * module.getSemestre().getNbGroupeTp();
+			else
+				res += pi.getNbHPn() * pi.getCategorieHeure().getCoef() * module.getSemestre().getNbGroupeTd();
+
+		return res;
+	}
+
+
+	private int totalHeureDefinie ( Module module )
+	{
+		int res = 0;
+
+		for ( ProgrammeItem pi : module.getProgramme().listProgrammeItems() )
+		{
+			if(pi.getCategorieHeure().getNom().equals("CM"))
+				res += pi.getNbSemaine() == 0 ? pi.getNbHeure() * pi.getCategorieHeure().getCoef() : pi.getNbHeure() * pi.getNbSemaine() * pi.getCategorieHeure().getCoef();
+			else if(pi.getCategorieHeure().getNom().equals("TP"))
+				res += pi.getNbSemaine() == 0 ? pi.getNbHeure() * pi.getCategorieHeure().getCoef() * module.getSemestre().getNbGroupeTp() : pi.getNbHeure() * pi.getNbSemaine() * pi.getCategorieHeure().getCoef() * module.getSemestre().getNbGroupeTp();
+			else
+				res += pi.getNbSemaine() == 0 ? pi.getNbHeure() * pi.getCategorieHeure().getCoef() * module.getSemestre().getNbGroupeTd() : pi.getNbHeure() * pi.getNbSemaine() * pi.getCategorieHeure().getCoef() * module.getSemestre().getNbGroupeTd();
+		}
 
 		return res;
 	}

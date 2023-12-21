@@ -1,5 +1,6 @@
 package ihm;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -158,11 +159,43 @@ public class PageConnexion extends JPanel implements ActionListener
 			fichierCheminFichierLocal.put("motDePasse", mdp);
 			fichierCheminFichierLocal.put("resterConnecte", this.cbResterConnecte.isSelected());
 
-			System.out.println(fichierCheminFichierLocal.toString());
-
 			Controleur.setJson(fichierCheminFichierLocal);
 
 			DB.getInstance().isReadOnly();
+
+			ArrayList<String> listTable = new ArrayList<>();
+			listTable.add("semestre");
+			listTable.add("categorieintervenant");
+			listTable.add("categorieheure");
+			listTable.add("categoriemodule");
+			listTable.add("module");
+			listTable.add("remplirprogramme");
+			listTable.add("remplircategoriemodule");
+			listTable.add("intervenant");
+			listTable.add("affectation");
+
+			boolean manqueTable = false;
+			for (String table : listTable)
+			{
+				if(!DB.tableExiste(table))
+				{
+					manqueTable = true;
+				}
+			}
+
+			if(manqueTable)
+			{
+				int rep = JOptionPane.showConfirmDialog(this.mere, "Une ou plusieur tables n'éxiste pas voulez-vous les crée ?", "Suppression", JOptionPane.YES_NO_OPTION);
+				if(rep == JOptionPane.YES_OPTION)
+				{
+					this.ctrl.initialiserTable();
+				}
+				else
+				{
+					this.mere.changerPage(new PageConnexion(this.ctrl, this.mere));
+					return;
+				}
+			}
 
 			//si on veut se connecter avec les paramètres de connexion enregistrés a la prochaine connexion
 			if(this.cbResterConnecte.isSelected())

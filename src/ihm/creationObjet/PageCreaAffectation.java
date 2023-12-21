@@ -8,8 +8,6 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.List;
 import java.util.Vector;
 
@@ -32,7 +30,7 @@ import metier.model.CategorieHeure;
 import metier.model.Intervenant;
 import metier.model.Module;
 
-public class PageCreaAffectation implements FocusListener, ActionListener
+public class PageCreaAffectation implements ActionListener
 {
 
 	private Controleur ctrl;
@@ -100,7 +98,6 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 		// Nombre d'heure \\
 		JLabel lblNbHeure = new JLabel("Nombre d'heure : ");
 		this.txtFNbHeure = new JIntegerTextField(5);
-		this.txtFNbHeure.addFocusListener(this);
 		this.txtFNbHeure.setAllowsInvalid(false);
 
 		gbc.gridx = 0;
@@ -112,7 +109,6 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 		// Nombre de semaine \\
 		JLabel lblNbSemaine = new JLabel("Nombre de semaine : ");
 		this.txtFNbSemaine = new JIntegerTextField(5);
-		this.txtFNbSemaine.addFocusListener(this);
 		this.txtFNbSemaine.setAllowsInvalid(false);
 		
 		gbc.gridx = 0;
@@ -124,7 +120,6 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 		// Nombre de groupe \\
 		JLabel lblNbGroupe = new JLabel("Nombre de groupe : ");
 		this.txtFNbGroupe = new JIntegerTextField(5);
-		this.txtFNbGroupe.addFocusListener(this);
 		this.txtFNbGroupe.setAllowsInvalid(false);
 		
 		gbc.gridx = 0;
@@ -169,11 +164,13 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 
 		if(((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP") || this.module.getCategorieModule().getNom().equals("SAE") || this.module.getCategorieModule().getNom().equals("PPP") || this.module.getCategorieModule().getNom().equals("Stage/Suivi"))
 		{
+			this.txtFNbHeure.setEditable(true);
 			this.txtFNbSemaine.setEditable(false);
 			this.txtFNbGroupe.setEditable(false);
 		}
 		else
 		{
+			this.txtFNbHeure.setEditable(false);
 			this.txtFNbSemaine.setEditable(true);
 			this.txtFNbGroupe.setEditable(true);
 		}
@@ -192,7 +189,7 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 			if (value instanceof Intervenant)
 			{
 				Intervenant inter = (Intervenant) value;
-				setText(inter.getNom());
+				setText(inter.getNom() + " " + inter.getPrenom());
 			}
 			if(value instanceof CategorieHeure)
 			{
@@ -268,11 +265,13 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 		{
 			if(((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP") || this.module.getCategorieModule().getNom().equals("SAE") || this.module.getCategorieModule().getNom().equals("PPP") || this.module.getCategorieModule().getNom().equals("Stage/Suivi"))
 			{
+				this.txtFNbHeure.setEditable(true);
 				this.txtFNbSemaine.setEditable(false);
 				this.txtFNbGroupe.setEditable(false);
 			}
 			else
 			{
+				this.txtFNbHeure.setEditable(false);
 				this.txtFNbSemaine.setEditable(true);
 				this.txtFNbGroupe.setEditable(true);
 			}
@@ -280,40 +279,6 @@ public class PageCreaAffectation implements FocusListener, ActionListener
 			this.txtFNbGroupe.setText("");
 			this.txtFNbSemaine.setText("");
 			this.txtFNbHeure.setText("");
-		}
-	}
-
-	@Override
-	public void focusGained(FocusEvent e)
-	{
-		if(e.getSource() == this.txtFNbHeure || ((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP") || this.module.getCategorieModule().getNom().equals("SAE") || this.module.getCategorieModule().getNom().equals("PPP") || this.module.getCategorieModule().getNom().equals("Stage/Suivi"))
-		{
-			this.txtFNbSemaine.setEditable(false);
-			this.txtFNbGroupe.setEditable(false);
-		}
-		else if(e.getSource() == this.txtFNbSemaine || e.getSource() == this.txtFNbGroupe)
-		{
-			this.txtFNbHeure.setEditable(false);
-		}
-	}
-
-	@Override
-	public void focusLost(FocusEvent e)
-	{
-		if(e.getSource() == this.txtFNbHeure)
-		{
-			if(this.txtFNbHeure.getText().equals("") && !((CategorieHeure) this.cbCategorieHeure.getSelectedItem()).getNom().equals("HP") || !this.module.getCategorieModule().getNom().equals("SAE") || !this.module.getCategorieModule().getNom().equals("PPP") || !this.module.getCategorieModule().getNom().equals("Stage/Suivi"))
-			{
-				this.txtFNbSemaine.setEditable(true);
-				this.txtFNbGroupe.setEditable(true);
-			}
-		}
-		else if(e.getSource() == this.txtFNbSemaine  || e.getSource() == this.txtFNbGroupe)
-		{
-			if(this.txtFNbSemaine.getText().equals("") && this.txtFNbGroupe.getText().equals(""))
-			{
-				this.txtFNbHeure.setEditable(true);
-			}
 		}
 	}
 }

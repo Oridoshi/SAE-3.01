@@ -158,7 +158,7 @@ table.infosGeneralesInter, table.infosGeneralesModule {
 	margin-left : calc( (100% - 60%) / 2 );
 }
 
-table.infosGeneralesInter, table.infosGeneralesModule th {
+table.infosGeneralesInter th, table.infosGeneralesModule th {
 	width : calc( 100% / 3 );
 }
 
