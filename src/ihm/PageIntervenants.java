@@ -299,7 +299,7 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 		
 
 		public int getRowCount()                                {return this.tabDonnees.length;}
-		public int getColumnCount()                             {return this.tabDonnees[0].length;}
+		public int getColumnCount()                             {return 15;}
 		public String getColumnName (int col)                  {return this.tabEntetes[col];}
 		public Object getValueAt(int rowIndex, int columnIndex) {return this.tabDonnees[rowIndex][columnIndex];}
 	}

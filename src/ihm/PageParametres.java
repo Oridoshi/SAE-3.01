@@ -349,7 +349,7 @@ public class PageParametres extends JPanel implements ActionListener
 		}
 
 		public int getRowCount()                                {return this.tabDonnees.length;}
-		public int getColumnCount()                             {return this.tabDonnees[0].length;}
+		public int getColumnCount()                             {return 5;}
 		public Object getValueAt(int rowIndex, int columnIndex) {return this.tabDonnees[rowIndex][columnIndex];}
 	}
 
@@ -390,7 +390,7 @@ public class PageParametres extends JPanel implements ActionListener
 		}
 
 		public int getRowCount()                                {return this.tabDonnees.length;}
-		public int getColumnCount()                             {return this.tabDonnees[0].length;}
+		public int getColumnCount()                             {return 2;}
 		public Object getValueAt(int rowIndex, int columnIndex) {return this.tabDonnees[rowIndex][columnIndex];}
 	}
 }

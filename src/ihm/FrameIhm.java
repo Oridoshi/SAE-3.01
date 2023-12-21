@@ -1,5 +1,7 @@
 package ihm;
 
+import java.io.File;
+
 import javax.swing.*;
 import controleur.Controleur;
 
@@ -18,7 +20,7 @@ public class FrameIhm extends JFrame
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.add(PageConnexion.constructeurConnexion(this.ctrl, this, false));
-		this.setIconImage(new ImageIcon(getClass().getResource("/data/icon/ASTRE_Logo.png")).getImage());
+		this.setIconImage(new ImageIcon(new File("data/icon/ASTRE_Logo.png").getAbsolutePath()).getImage());
 		this.setResizable(false);
 		this.setVisible(true);
 
