@@ -273,9 +273,9 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 				tabDonnees[ligne][12] = lstIntervenants.get(ligne).getHParSemestre(6);
 				tabDonnees[ligne][13] = lstIntervenants.get(ligne).getTotalParPair();
 				tabDonnees[ligne][14] = lstIntervenants.get(ligne).getTotal();
-				
-				this.tabEntetes = new String[]{"Catégorie", "Nom", "Prénom", "hServ", "hMax", "Coef TP", "S1", "S3", "S5", "sTot", "S2", "S4", "S6", "sTot", "sTotal"};
 			}
+
+			this.tabEntetes = new String[]{"Catégorie", "Nom", "Prénom", "hServ", "hMax", "Coef TP", "S1", "S3", "S5", "sTot", "S2", "S4", "S6", "sTot", "sTotal"};
 		}
 
 		@Override

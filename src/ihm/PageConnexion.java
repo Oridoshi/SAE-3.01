@@ -185,7 +185,7 @@ public class PageConnexion extends JPanel implements ActionListener
 
 			if(manqueTable)
 			{
-				int rep = JOptionPane.showConfirmDialog(this.mere, "Une ou plusieur tables n'éxiste pas voulez-vous les crée ?", "Suppression", JOptionPane.YES_NO_OPTION);
+				int rep = JOptionPane.showConfirmDialog(this.mere, "Une ou plusieurs tables n'éxiste pas, voulez-vous les créer ?", "Suppression", JOptionPane.YES_NO_OPTION);
 				if(rep == JOptionPane.YES_OPTION)
 				{
 					this.ctrl.initialiserTable();
