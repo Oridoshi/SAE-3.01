@@ -64,14 +64,13 @@ public class GenererCSV
 		try
 		{
 			File fichier = new File (this.fichier);
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fichier.getAbsoluteFile(), true), "UTF-8"));
 
 			// Vérifier si le fichier existe
 			if ( fichier.exists() )
 				fichier.delete();
 
 			fichier.createNewFile();
-
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fichier.getAbsoluteFile(), true), "UTF-8"));
 
 
 			for ( int i = 0 ; i < lstNomsCell.length - 1 ; i++ )
@@ -106,14 +105,15 @@ public class GenererCSV
 
 			// Obtenir le service dû
 			res += catInter.getMinH() + ",";
+			this.tabTotHeures[0] += catInter.getMinH();
 
 			// Obtenir le max d'heures autorisés
 			res += catInter.getMaxH() + ",";
-			this.tabTotHeures[0] += catInter.getMaxH();
+			this.tabTotHeures[1] += catInter.getMaxH();
 
 			// Obtenir le coeff TP
-			res += catInter.getCoefTp() + ",";
-			this.tabTotHeures[1] += catInter.getCoefTp();
+			res += inter.getCoefTP() + ",";
+			this.tabTotHeures[2] += catInter.getCoefTp();
 
 
 			// Nombre d'heures par SEMESTRES IMPAIRS
@@ -122,14 +122,14 @@ public class GenererCSV
 				res += inter.getHParSemestre(cptSemestres) + ",";
 				res += inter.getHParSemestre(cptSemestres) * catInter.getCoefTp() + ",";
 
-				this.tabTotHeures[cptSemestres + 1] += inter.getHParSemestre(cptSemestres);
-				this.tabTotHeures[cptSemestres + 2] += inter.getHParSemestre(cptSemestres) * catInter.getCoefTp();
+				this.tabTotHeures[cptSemestres + 2] += inter.getHParSemestre(cptSemestres);
+				this.tabTotHeures[cptSemestres + 3] += inter.getHParSemestre(cptSemestres) * catInter.getCoefTp();
 			}
 
 
 			// Nombre d'heures total par SEMESTRES IMPAIRS
 			res += inter.getTotalParImpair() + ",";
-			this.tabTotHeures[8] += inter.getTotalParImpair();
+			this.tabTotHeures[9] += inter.getTotalParImpair();
 
 
 			// Nombre d'heures par SEMESTRES PAIRS
@@ -138,23 +138,28 @@ public class GenererCSV
 				res += inter.getHParSemestre(cptSemestres) + ",";
 				res += inter.getHParSemestre(cptSemestres) * catInter.getCoefTp() + ",";
 
-				this.tabTotHeures[cptSemestres + 6]+= inter.getHParSemestre(cptSemestres);
-				this.tabTotHeures[cptSemestres + 7] += inter.getHParSemestre(cptSemestres) * catInter.getCoefTp();
+				this.tabTotHeures[cptSemestres + 7]+= inter.getHParSemestre(cptSemestres);
+				this.tabTotHeures[cptSemestres + 8] += inter.getHParSemestre(cptSemestres) * catInter.getCoefTp();
 			}
 
 			// Nombre d'heures total par SEMESTRES PAIRS
 			res += inter.getTotalParPair() + ",";
-			this.tabTotHeures[14] += inter.getTotalParPair();
+			this.tabTotHeures[16] += inter.getTotalParPair();
 
 			res += inter.getTotal() + "\n";
-			this.tabTotHeures[15] += inter.getTotal();
+			this.tabTotHeures[17] += inter.getTotal();
 		}
 
 
 		res += "Total,,,";
 
-		for ( int cpt = 0; cpt < this.tabTotHeures.length; cpt++ )
+		// System.out.print( this.tabTotHeures[0] );
+
+		for ( int cpt = 0; cpt < this.tabTotHeures.length - 1; cpt++ ) {
 			res += this.tabTotHeures[cpt] + ",";
+		}
+
+		res += this.tabTotHeures[this.tabTotHeures.length - 1] + "";
 
 		return res;
 	}

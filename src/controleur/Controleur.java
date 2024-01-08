@@ -26,7 +26,7 @@ public class Controleur
 	{
 		this.listSauvegarder = new ArrayList<>();
 		this.listSuppression = new ArrayList<>();
-		this.version = "v1.0.1";
+		this.version = "v1.0.2";
 
 		new FrameIhm(this);
 	}

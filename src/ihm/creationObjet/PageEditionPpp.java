@@ -842,17 +842,17 @@ public class PageEditionPpp extends JPanel implements ActionListener, FocusListe
 			}
 
 			//Verification des heures affecté par rapport au heures défini
-			else if(this.txtFNbHCmSem.getValue() < this.txtFTotHCmAff.getValue())
+			else if(this.txtFTotEqTdHProCm.getValue() < this.txtFTotHCmAff.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFNbHTdSem.getValue() < this.txtFTotHTdAff.getValue())
+			else if(this.txtFTotEqTdHProTd.getValue() < this.txtFTotHTdAff.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFNbHTpSem.getValue() < this.txtFTotHTpAff.getValue())
+			else if(this.txtFTotEqTdHProTp.getValue() < this.txtFTotHTpAff.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
@@ -928,17 +928,17 @@ public class PageEditionPpp extends JPanel implements ActionListener, FocusListe
 			}
 
 			//Verification des heures affecté par rapport au heures défini
-			else if(this.txtFNbHCmSem.getValue() < this.txtFTotHCmAff.getValue())
+			else if(this.txtFTotEqTdHProCm.getValue() < this.txtFTotHCmAff.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFNbHTdSem.getValue() < this.txtFTotHTdAff.getValue())
+			else if(this.txtFTotEqTdHProTd.getValue() < this.txtFTotHTdAff.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFNbHTpSem.getValue() < this.txtFTotHTpAff.getValue())
+			else if(this.txtFTotEqTdHProTp.getValue() < this.txtFTotHTpAff.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
@@ -959,17 +959,17 @@ public class PageEditionPpp extends JPanel implements ActionListener, FocusListe
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TUT affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFNbHCmSem.getValue() > this.txtFTotHCmAff.getValue())
+			else if(this.txtFTotEqTdHProCm.getValue() > this.txtFTotHCmAff.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFNbHTdSem.getValue() > this.txtFTotHTdAff.getValue())
+			else if(this.txtFTotEqTdHProTd.getValue() > this.txtFTotHTdAff.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFNbHTpSem.getValue() > this.txtFTotHTpAff.getValue())
+			else if(this.txtFTotEqTdHProTp.getValue() > this.txtFTotHTpAff.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
