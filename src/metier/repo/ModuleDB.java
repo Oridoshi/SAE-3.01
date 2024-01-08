@@ -27,6 +27,9 @@ public class ModuleDB {
 	private static PreparedStatement psDeleteDependance;
 
 	static{
+		reset();
+	}
+	public static void reset(){
 		modules = new ArrayList<>();
 		modulesParIdSemestre = new HashMap<>();
 		try{

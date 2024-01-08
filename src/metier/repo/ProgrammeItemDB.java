@@ -25,6 +25,9 @@ public class ProgrammeItemDB {
 	private static PreparedStatement psCreate;
 
 	static{
+		reset();
+	}
+	public static void reset(){
 		programmeItems = new ArrayList<>();
 		programmeItemsParCodeModule = new HashMap<>();
 		try{

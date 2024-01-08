@@ -24,6 +24,9 @@ public class PatternCategorieModuleItemDB {
 	private static PreparedStatement psCreate;
 
 	static{
+		reset();
+	}
+	public static void reset(){
 		patternCategorieModuleItems = new ArrayList<>();
 		patternCategorieModuleItemsParNomCatModule = new HashMap<>();
 		try{

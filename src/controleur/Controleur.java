@@ -158,4 +158,15 @@ public class Controleur
 	{
 		Initialisation.initialisationBD();
 	}
+
+	public void reset(){
+		AffectationDB.reset();
+		CategorieHeureDB.reset();
+		CategorieIntervenantDB.reset();
+		CategorieModuleDB.reset();
+		IntervenantDB.reset();
+		ModuleDB.reset();
+		PatternCategorieModuleItemDB.reset();
+		SemestreDB.reset();
+	}
 }

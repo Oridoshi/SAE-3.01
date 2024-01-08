@@ -23,12 +23,15 @@ public class IntervenantDB {
 	private static PreparedStatement psCreate;
 
 	static{
+		reset();
+	}
+	public static void reset(){
 		intervenants = new ArrayList<>();
 		try{
 			psGetAll = db.prepareStatement("SELECT * FROM Intervenant");
 			psDelete = db.prepareStatement("DELETE FROM Intervenant WHERE id = ?");
-			psUpdate = db.prepareStatement("UPDATE Intervenant SET codeCatIntervenant = ?, nom = ?, prenom = ?, hMax = ? WHERE id = ?");
-			psCreate = db.prepareStatement("INSERT INTO Intervenant (codeCatIntervenant, nom, prenom, hMax) VALUES (?, ?, ?, ?)");
+			psUpdate = db.prepareStatement("UPDATE Intervenant SET codeCatIntervenant = ?, nom = ?, prenom = ?, hMax = ?, hMin = ?, coeftp = ? WHERE id = ?");
+			psCreate = db.prepareStatement("INSERT INTO Intervenant (codeCatIntervenant, nom, prenom, hMax, hMin, coeftp) VALUES (?, ?, ?, ?, ?, ?)");
 			DBResult result = new DBResult(psGetAll.executeQuery());
 			for ( Map<String, String> ligne : result.getLignes() ){
 				intervenants.add(new Intervenant(
@@ -86,7 +89,10 @@ public class IntervenantDB {
 				psUpdate.setString(3, intervenant.getPrenom());
 				// getHMax va poser problème
 				psUpdate.setInt(4, intervenant.gethMax());
-				psUpdate.setInt(5, intervenant.getId());
+				psUpdate.setInt(5, intervenant.getHMin());
+				psUpdate.setDouble(6, intervenant.getCoefTP());
+				psUpdate.setInt(7, intervenant.getId());
+
 				return DB.update(psUpdate) == 1;
 			} catch ( SQLException e){
 				return false;
@@ -98,6 +104,8 @@ public class IntervenantDB {
 				psCreate.setString(3, intervenant.getPrenom());
 				// getHMax va poser problème
 				psCreate.setInt(4, intervenant.gethMax());
+				psCreate.setInt(5, intervenant.getHMin());
+				psCreate.setDouble(6, intervenant.getCoefTP());
 				if ( DB.update(psCreate) == 1 ){
 					intervenants.add(intervenant);
 					return true;

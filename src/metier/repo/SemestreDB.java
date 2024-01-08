@@ -23,6 +23,9 @@ public class SemestreDB {
 	private static PreparedStatement psCreate;
 
 	static{
+		reset();
+	}
+	public static void reset(){
 		semestres = new ArrayList<>();
 		try{
 			psGetAll = db.prepareStatement("SELECT * FROM Semestre");

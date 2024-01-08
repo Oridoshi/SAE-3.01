@@ -23,6 +23,9 @@ public class CategorieHeureDB {
 	private static PreparedStatement psCreate;
 
 	static{
+		reset();
+	}
+	public static void reset(){
 		categorieHeures = new ArrayList<>();
 		try{
 			psGetAll = db.prepareStatement("SELECT * FROM CategorieHeure");

@@ -110,9 +110,9 @@ public class Initialisation
 
 			try{
 				ps.executeUpdate();
-				System.out.println("DEBUG : CRÉATION DES TABLES RÉUSSIE");
+				// System.out.println("DEBUG : CRÉATION DES TABLES RÉUSSIE");
 			} catch ( SQLException e ){
-				System.out.println("DEBUG : " + e);
+				// System.out.println("DEBUG : " + e);
 			}
 
 			ps = db.prepareStatement
@@ -128,9 +128,9 @@ public class Initialisation
 
 			try{
 				ps.executeUpdate();
-				System.out.println("DEBUG : INSERTION DES DONNÉES RÉUSSIE IL Y A EU " + String.format("%2d",ps.getUpdateCount()) + " INSERTIONS");
+				// System.out.println("DEBUG : INSERTION DES DONNÉES RÉUSSIE IL Y A EU " + String.format("%2d",ps.getUpdateCount()) + " INSERTIONS");
 			} catch ( SQLException e ){
-				System.out.println("DEBUG : " + e);
+				// System.out.println("DEBUG : " + e);
 			}
 
 			ps = db.prepareStatement
@@ -147,9 +147,9 @@ public class Initialisation
 
 			try{
 				ps.executeUpdate();
-				System.out.println("DEBUG : INSERTION DES DONNÉES RÉUSSIE IL Y A EU " + String.format("%2d",ps.getUpdateCount()) + " INSERTIONS");
+				// System.out.println("DEBUG : INSERTION DES DONNÉES RÉUSSIE IL Y A EU " + String.format("%2d",ps.getUpdateCount()) + " INSERTIONS");
 			} catch ( SQLException e ){
-				System.out.println("DEBUG : " + e);
+				// System.out.println("DEBUG : " + e);
 			}
 
 			ps = db.prepareStatement
@@ -163,9 +163,9 @@ public class Initialisation
 
 			try{
 				ps.executeUpdate();
-				System.out.println("DEBUG : INSERTION DES DONNÉES RÉUSSIE IL Y A EU " + String.format("%2d",ps.getUpdateCount()) + " INSERTIONS");
+				// System.out.println("DEBUG : INSERTION DES DONNÉES RÉUSSIE IL Y A EU " + String.format("%2d",ps.getUpdateCount()) + " INSERTIONS");
 			} catch ( SQLException e ){
-				System.out.println("DEBUG : " + e);
+				// System.out.println("DEBUG : " + e);
 			}
 
 			ps = db.prepareStatement
@@ -188,14 +188,14 @@ public class Initialisation
 
 			try{
 				ps.executeUpdate();
-				System.out.println("DEBUG : INSERTION DES DONNÉES RÉUSSIE IL Y A EU " + String.format("%2d",ps.getUpdateCount()) + " INSERTIONS");
+				// System.out.println("DEBUG : INSERTION DES DONNÉES RÉUSSIE IL Y A EU " + String.format("%2d",ps.getUpdateCount()) + " INSERTIONS");
 			} catch ( SQLException e ){
-				System.out.println("DEBUG : " + e);
+				// System.out.println("DEBUG : " + e);
 			}
 		}
 		catch (Exception e)
 		{
-			System.out.println("DEBUG : " + e);
+			// System.out.println("DEBUG : " + e);
 		}
 	}
 }

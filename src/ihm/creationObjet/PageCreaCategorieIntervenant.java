@@ -34,6 +34,7 @@ public class PageCreaCategorieIntervenant implements ActionListener
 	private JDoubleTextField textFieldCoefTP;
 	private JIntegerTextField textFieldMinH;
 	private JIntegerTextField textFieldMaxH;
+	private CategorieIntervenant categorieIntervenantModif;
 
 	public PageCreaCategorieIntervenant(FrameIhm mere, Controleur ctrl, List<CategorieIntervenant> lstCategorieIntervenant)
 	{
@@ -41,6 +42,7 @@ public class PageCreaCategorieIntervenant implements ActionListener
 		this.mere = mere;
 
 		this.lstCategorieIntervenant = lstCategorieIntervenant;
+		this.categorieIntervenantModif = null;
 
 		this.dial = new JDialog(this.mere, "Création d'une catégorie d'intervenant", true);
 		this.dial.setLayout(new BorderLayout());
@@ -118,6 +120,92 @@ public class PageCreaCategorieIntervenant implements ActionListener
 		this.dial.setVisible(true);
 	}
 
+	public PageCreaCategorieIntervenant(FrameIhm mere, Controleur ctrl, CategorieIntervenant categorieIntervenantModif, List<CategorieIntervenant> lstCategorieIntervenant)
+	{
+		this.ctrl = ctrl;
+		this.mere = mere;
+
+		this.categorieIntervenantModif = categorieIntervenantModif;
+		this.lstCategorieIntervenant = lstCategorieIntervenant;
+
+		this.dial = new JDialog(this.mere, "Création d'une catégorie d'intervenant", true);
+		this.dial.setLayout(new BorderLayout());
+		this.dial.setSize(500, 500);
+		this.dial.setLocationRelativeTo(mere);
+		
+		// Ajout du Button Ajouter
+		JButton ajout = new JButton("Ajouter");
+		ajout.addActionListener(this);
+		
+		this.dial.add(ajout, BorderLayout.SOUTH);
+		
+
+		/*----------Formulaire----------*/
+		JPanel panelFormulaire = new JPanel();
+		panelFormulaire.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(5, 5, 5, 5); // Marge autour des composants
+
+		// Code \\
+		JLabel lblCode = new JLabel("Code de la catégorie : ");
+		this.textFieldCode = new JTextField(15);
+		this.textFieldCode.setText(this.categorieIntervenantModif.getCode());
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panelFormulaire.add(lblCode, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(this.textFieldCode, gbc);
+
+		// Nom \\
+		JLabel lblNom = new JLabel("Nom de la catégorie : ");
+		this.textFieldNom = new JTextField(15);
+		this.textFieldNom.setText(this.categorieIntervenantModif.getNom());
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelFormulaire.add(lblNom, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(this.textFieldNom, gbc);
+
+		// minH \\
+		JLabel lblMinH = new JLabel("Min. d'heures : ");
+		this.textFieldMinH = new JIntegerTextField(15, this.categorieIntervenantModif.getMinH());
+		this.textFieldMinH.setAllowsInvalid(false);
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		panelFormulaire.add(lblMinH, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(this.textFieldMinH, gbc);
+
+		// maxH \\
+		JLabel lblMaxH = new JLabel("Max. d'heures : ");
+		this.textFieldMaxH = new JIntegerTextField(15, this.categorieIntervenantModif.getMaxH());
+		this.textFieldMaxH.setAllowsInvalid(false);
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		panelFormulaire.add(lblMaxH, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(this.textFieldMaxH, gbc);
+
+		// CoefTP \\
+		JLabel lblCoefTP = new JLabel("Coefficient TP : ");
+		this.textFieldCoefTP = new JDoubleTextField(15, this.categorieIntervenantModif.getCoefTp());
+		this.textFieldCoefTP.setAllowsInvalid(false);
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		panelFormulaire.add(lblCoefTP, gbc);
+		gbc.gridx = 1;
+		panelFormulaire.add(this.textFieldCoefTP, gbc);
+
+
+		// Ajout du panelFormulaire au panel principal \\
+		this.dial.add(panelFormulaire, BorderLayout.CENTER);
+		/*----------Fin Formulaire----------*/
+
+		this.dial.setResizable(false);
+		this.dial.setVisible(true);
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
@@ -129,13 +217,20 @@ public class PageCreaCategorieIntervenant implements ActionListener
 		{
 			for (CategorieIntervenant categorieIntervenant : lstCategorieIntervenant)
 			{
-				if(categorieIntervenant.getCode().equals(this.textFieldCode.getText().trim()))
-				{
-					JOptionPane.showMessageDialog(this.dial, "Ce code est déja pris", "ERREUR CODE", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
+				if(categorieIntervenantModif == null)
+					if(categorieIntervenant.getCode().equals(this.textFieldCode.getText().trim()))
+					{
+						JOptionPane.showMessageDialog(this.dial, "Ce code est déja pris", "ERREUR CODE", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+				else
+					if(categorieIntervenant.getCode().equals(this.textFieldCode.getText().trim()) && !categorieIntervenantModif.getCode().equals(this.textFieldCode.getText().trim()))
+					{
+						JOptionPane.showMessageDialog(this.dial, "Ce code est déja pris", "ERREUR CODE", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 			}
-
+				
 			if(this.textFieldMinH.getValue() > this.textFieldMaxH.getValue())
 			{
 				JOptionPane.showMessageDialog(this.dial, "Le nombre d'heures minimum ne peut pas être supérieur au nombre d'heures maximum", "ERREUR HEURES", JOptionPane.ERROR_MESSAGE);
@@ -148,10 +243,22 @@ public class PageCreaCategorieIntervenant implements ActionListener
 				return;
 			}
 
-			CategorieIntervenant categorieIntervenant = new CategorieIntervenant(this.textFieldCode.getText().trim(), this.textFieldNom.getText().trim(), this.textFieldMinH.getValue(), this.textFieldMaxH.getValue(), this.textFieldCoefTP.getValue());
-			this.lstCategorieIntervenant.add(categorieIntervenant);
-			this.ctrl.ajouterSauvAttente(categorieIntervenant);
-	
+			if(categorieIntervenantModif == null)
+			{
+				CategorieIntervenant categorieIntervenant = new CategorieIntervenant(this.textFieldCode.getText().trim(), this.textFieldNom.getText().trim(), this.textFieldMinH.getValue(), this.textFieldMaxH.getValue(), this.textFieldCoefTP.getValue());
+				this.lstCategorieIntervenant.add(categorieIntervenant);
+				this.ctrl.ajouterSauvAttente(categorieIntervenant);
+			}
+			else
+			{
+				this.categorieIntervenantModif.setCode(this.textFieldCode.getText().trim());
+				this.categorieIntervenantModif.setNom(this.textFieldNom.getText());
+				this.categorieIntervenantModif.setMinH(this.textFieldMinH.getValue());
+				this.categorieIntervenantModif.setMaxH(this.textFieldMaxH.getValue());
+				this.categorieIntervenantModif.setCoefTp(this.textFieldCoefTP.getValue());
+				this.ctrl.ajouterSauvAttente(this.categorieIntervenantModif);
+			}
+
 			this.dial.dispose();
 		}
 	}

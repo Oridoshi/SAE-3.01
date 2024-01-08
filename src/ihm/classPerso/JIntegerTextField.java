@@ -140,14 +140,14 @@ public class JIntegerTextField extends JTextField implements KeyListener, FocusL
 
 		if (this.autoriserCaractereInvalide)
 			try {
-				Integer.parseInt(this.getText());
+				Integer.parseInt(this.getText().replace(" ", ""));
 			} catch (Exception err) {
 				this.setText("");
 			}
 
 
 		NumberFormat numberFormat = NumberFormat.getInstance();
-		String nombreAvecEspace = numberFormat.format(Integer.parseInt(this.getText()));
+		String nombreAvecEspace = numberFormat.format(Integer.parseInt(this.getText().replace(" ", "")));
 		this.setText(nombreAvecEspace);
 	}
 

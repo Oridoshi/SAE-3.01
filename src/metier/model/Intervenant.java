@@ -85,11 +85,17 @@ public class Intervenant implements IModifiable
 
 	public Integer getHMin()
 	{
+		if(this.hMin == 0)
+			return this.categorieIntervenant.getMinH();
+
 		return this.hMin;
 	}
 
 	public double getCoefTP()
 	{
+		if(this.coefTP == 0)
+			return this.categorieIntervenant.getCoefTp();
+
 		return this.coefTP;
 	}
 

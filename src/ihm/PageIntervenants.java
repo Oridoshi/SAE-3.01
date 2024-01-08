@@ -8,6 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
 import controleur.Controleur;
+import ihm.classPerso.ModelLignePerso;
 import ihm.creationObjet.PageCreaIntervenant;
 import ihm.creationObjet.PageEditionIntervenant;
 import metier.model.Intervenant;
@@ -85,6 +86,7 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 		this.tableIntervenants = new JTable( new ModelAffichageTableau(this.ctrl, this.lstIntervenantsLocal) );
 		this.tableIntervenants.setFillsViewportHeight(true);
 		this.tableIntervenants.setRowHeight(25);
+		this.tableIntervenants.setDefaultRenderer(Object.class, new ModelLignePerso(this.lstIntervenantsLocal));
 		TableColumnModel model = this.tableIntervenants.getColumnModel();
 
 		for (int i = 3; i <= 14; i++)
@@ -93,9 +95,6 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 		}
 
 		spTableauIntervenants = new JScrollPane(this.tableIntervenants);
-
-
-
 
 		this.panelBoutonsTableau = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 		this.panelBoutonsTableau.setBorder(new EmptyBorder(15, 0, 0, 0));

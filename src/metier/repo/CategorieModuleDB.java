@@ -23,6 +23,9 @@ public class CategorieModuleDB {
 	private static PreparedStatement psCreate;
 
 	static{
+		reset();
+	}
+	public static void reset(){
 		categoriesModule = new ArrayList<>();
 		try{
 			psGetAll = db.prepareStatement("SELECT * FROM CategorieModule");

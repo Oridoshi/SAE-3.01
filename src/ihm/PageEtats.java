@@ -30,6 +30,8 @@ public class PageEtats extends JPanel implements ActionListener
 
 	private JButton btnCSV;
 
+	private JButton btnResetData;
+
 	public PageEtats(Controleur ctrl, FrameIhm mere)
 	{
 		this.ctrl = ctrl;
@@ -72,6 +74,8 @@ public class PageEtats extends JPanel implements ActionListener
 
 		this.btnCSV = new JButton("Générer le fichier CSV Intervenants");
 
+		this.btnResetData = new JButton("Reset Data");
+
 		//premiere ligne
 		gbc.anchor = GridBagConstraints.EAST;
 		gbc.gridx = 0;
@@ -95,6 +99,13 @@ public class PageEtats extends JPanel implements ActionListener
 		gbc.gridwidth = 2;
 		panelBtns.add(this.btnCSV, gbc);
 
+		//quatrieme ligne
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		gbc.gridwidth = 2;
+		panelBtns.add(this.btnResetData, gbc);
+
 
 		this.add(panelAccueil, BorderLayout.NORTH);
 		this.add(panelBtns, BorderLayout.CENTER);
@@ -105,6 +116,7 @@ public class PageEtats extends JPanel implements ActionListener
 		this.btnEtatIntervenant.addActionListener(this);	
 		this.btnEtatModule.addActionListener(this);
 		this.btnCSV.addActionListener(this);
+		this.btnResetData.addActionListener(this);
 	}
 
 	@Override
@@ -176,6 +188,16 @@ public class PageEtats extends JPanel implements ActionListener
 		if (e.getSource() == this.btnAccueil)
 		{
 			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
+		}
+
+		if (e.getSource() == this.btnResetData)
+		{
+			int rep = JOptionPane.showConfirmDialog(this.mere, "Vous êtes sur le point de supprimer tout les données de vos tables et de les remettre par défault, voulez-vous continuez ?", "Suppression", JOptionPane.YES_NO_OPTION);
+			if(rep == JOptionPane.YES_OPTION)
+			{
+				this.ctrl.initialiserTable();
+				this.ctrl.reset();
+			}
 		}
 	}
 

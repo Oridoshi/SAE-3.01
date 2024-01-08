@@ -319,10 +319,10 @@ public class GenererPage
 		for ( int cpt = 0; cpt < 8; cpt ++ )
 			tab[cpt] = 0;
 
-		System.out.println(lstAffectation.size());
+		// System.out.println(lstAffectation.size());
 		for ( Affectation a : lstAffectation )
 		{
-			System.out.println(a.getIntervenant().getNom() + " " + a.getModule().getCode());
+			// System.out.println(a.getIntervenant().getNom() + " " + a.getModule().getCode());
 			if ( a.getModule().equals(module) )
 			{
 				if ( a.getNbHeure() != null )
@@ -332,7 +332,7 @@ public class GenererPage
 				else
 					tmp = a.getNbGroupe() * a.getNbSemaine() * a.getCategorieHeure().getCoef() * a.getModule().getNbHeureSemaine(a.getCategorieHeure().getNom());
 
-				System.out.println(a.getCategorieHeure().getNom());
+				// System.out.println(a.getCategorieHeure().getNom());
 				switch ( a.getCategorieHeure().getNom())
 				{
 					case "CM"    -> { tab[0] += tmp; tab[7] += tmp; }

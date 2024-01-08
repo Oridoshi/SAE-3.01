@@ -113,7 +113,7 @@ public class JDoubleTextField extends JTextField implements KeyListener, FocusLi
 
 		if (this.autoriserCaractereInvalide)
 			try {
-				Integer.parseInt(this.getText());
+				Double.parseDouble(this.getText().replace(" ", ""));
 			} catch (Exception err) {
 				this.setText("");
 			}

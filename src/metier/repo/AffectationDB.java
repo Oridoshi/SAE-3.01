@@ -33,6 +33,9 @@ public class AffectationDB {
 	private static int dernierId;
 
 	static{
+		reset();
+	}
+	public static void reset(){
 		affectations = new ArrayList<>();
 		affectationsParIntervenant = new HashMap<>();
 		affectationsParModule = new HashMap<>();
@@ -155,5 +158,4 @@ public class AffectationDB {
 				modulesParIntervenant.get(affectation.getIntervenant()).add(affectation.getModule());
 		}
 	}
-	
 }

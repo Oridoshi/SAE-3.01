@@ -23,6 +23,9 @@ public class CategorieIntervenantDB {
 	private static PreparedStatement psCreate;
 
 	static{
+		reset();
+	}
+	public static void reset(){
 		categoriesIntervenant = new ArrayList<>();
 		try{
 			psGetAll = db.prepareStatement("SELECT * FROM CategorieIntervenant");

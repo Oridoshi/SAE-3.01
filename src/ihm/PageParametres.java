@@ -26,13 +26,17 @@ public class PageParametres extends JPanel implements ActionListener
 	private Controleur ctrl;
 
 	private JPanel panelBoutons;
+
 	private JButton btnEnregistrer;
 	private JButton btnAnnuler;
+	private JButton btnAcceuil;
 
 	private FrameIhm mere;
 	private JTabbedPane tabbedPane;
 
-	private PanelCategoriesHeure panelIntervenant;
+	private PanelCategoriesIntervenant panelCateIntervenant;
+	private PanelCategoriesHeure panelCateHeur;
+
 
 	public PageParametres(Controleur ctrl, FrameIhm mere) 
 	{
@@ -46,26 +50,34 @@ public class PageParametres extends JPanel implements ActionListener
 		// Ajout du tabbedPane
 		this.tabbedPane = new JTabbedPane();
 		this.tabbedPane.setBorder(new EmptyBorder(0, 0, 15, 0));
-		this.tabbedPane.addTab("Catégories d'intervenants", new PanelCategoriesIntervenant(ctrl, this.mere, this.ctrl.getLstCategorieIntervenant()));
-		this.panelIntervenant = new PanelCategoriesHeure(ctrl, this.mere, this.ctrl.getLstCategorieHeure());
-		this.tabbedPane.addTab("Catégories d'heures", this.panelIntervenant);
+		this.panelCateIntervenant = new PanelCategoriesIntervenant(ctrl, this.mere, this.ctrl.getLstCategorieIntervenant());
+		this.tabbedPane.addTab("Catégories d'intervenants", panelCateIntervenant);
+		this.panelCateHeur = new PanelCategoriesHeure(ctrl, this.mere, this.ctrl.getLstCategorieHeure());
+		this.tabbedPane.addTab("Catégories d'heures", this.panelCateHeur);
 		
 		this.add(this.tabbedPane, BorderLayout.CENTER);
 
 
-		// Ajout du panel de boutons général
+		// Config du panel de boutons général
 		this.panelBoutons = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 		this.btnEnregistrer = new JButton("Enregistrer");
 		this.btnAnnuler = new JButton("Annuler");
 
+		// Config du panel acceuil
+		JPanel panelAccueil = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		this.btnAcceuil = new JButton("Accueil");
+		panelAccueil.add(this.btnAcceuil);
+
 		// Ajout des boutons
 		this.add(panelBoutons, BorderLayout.SOUTH);
+		this.add(panelAccueil, BorderLayout.NORTH);
 		this.panelBoutons.add(this.btnEnregistrer);
 		this.panelBoutons.add(this.btnAnnuler);
 
 		// Ajout des listeners
 		this.btnEnregistrer.addActionListener(this);
 		this.btnAnnuler.addActionListener(this);
+		this.btnAcceuil.addActionListener(this);
 	}
 
 	@Override
@@ -74,13 +86,21 @@ public class PageParametres extends JPanel implements ActionListener
 		if (e.getSource() == this.btnEnregistrer)
 		{
 			this.ctrl.sauvegarder();
-			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
+			this.panelCateIntervenant.setLstInitial();
+			// this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
 		}
 		
 		if (e.getSource() == this.btnAnnuler)
 		{
 			this.ctrl.annuler();
-			this.panelIntervenant.refreshHeure();
+			this.panelCateHeur.refreshHeure();
+			this.panelCateIntervenant.resetLst();
+			// this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
+		}
+
+		if (e.getSource() == this.btnAcceuil)
+		{
+			this.ctrl.annuler();
 			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
 		}
 	}
@@ -102,15 +122,19 @@ public class PageParametres extends JPanel implements ActionListener
 		private JTable tableCategorieIntervenant;
 		private JScrollPane spTableauCategorieIntervenant;
 		private ListSelectionModel selectionModel;
+		private List<CategorieIntervenant> lstLocalInitial;
+		private JButton btnModifier;
 
 		public PanelCategoriesIntervenant(Controleur ctrl, FrameIhm mere, List<CategorieIntervenant> lstCategorieIntervenant)
 		{
 			this.ctrl = ctrl;
 
 			this.lstCategorieIntervenantLocal = new ArrayList<CategorieIntervenant>();
+			this.lstLocalInitial = new ArrayList<CategorieIntervenant>();
 			for (CategorieIntervenant categorieIntervenant : lstCategorieIntervenant)
 			{
 				this.lstCategorieIntervenantLocal.add(categorieIntervenant);
+				this.lstLocalInitial.add(categorieIntervenant);
 			}
 
 			this.setLayout(new BorderLayout());
@@ -120,6 +144,7 @@ public class PageParametres extends JPanel implements ActionListener
 			this.tableCategorieIntervenant.setRowHeight(25);
 			this.tableCategorieIntervenant.setShowVerticalLines(false); // pour ne pas afficher les lignes verticales dans le tableau
 			this.tableCategorieIntervenant.setTableHeader(null); // pour être sur qu'il n'y ait pas d'entête
+
 
 			spTableauCategorieIntervenant = new JScrollPane(this.tableCategorieIntervenant);
 			this.add(this.spTableauCategorieIntervenant, BorderLayout.CENTER);
@@ -134,10 +159,13 @@ public class PageParametres extends JPanel implements ActionListener
 
 			this.btnAjouter = new JButton("ajouter");
 			this.btnSupprimer = new JButton("supprimer");
+			this.btnModifier = new JButton("modifier");
 
 			this.panelBoutonsTableau.add(this.btnAjouter);
 			this.panelBoutonsTableau.add(this.btnSupprimer);
+			this.panelBoutonsTableau.add(this.btnModifier);
 			this.btnSupprimer.setEnabled(false);
+			this.btnModifier.setEnabled(false);
 
 			this.add(this.panelBoutonsTableau, BorderLayout.SOUTH);
 
@@ -145,6 +173,26 @@ public class PageParametres extends JPanel implements ActionListener
 			// Ajout des listeners
 			this.btnAjouter.addActionListener(this);
 			this.btnSupprimer.addActionListener(this);
+			this.btnModifier.addActionListener(this);
+		}
+
+		public void resetLst()
+		{
+			this.lstCategorieIntervenantLocal = new ArrayList<CategorieIntervenant>();
+			for (CategorieIntervenant categorieIntervenant : lstLocalInitial)
+			{
+				this.lstCategorieIntervenantLocal.add(categorieIntervenant);
+			}
+			this.majTab();
+		}
+
+		public void setLstInitial()
+		{
+			this.lstLocalInitial = new ArrayList<CategorieIntervenant>();
+			for (CategorieIntervenant categorieIntervenant : lstCategorieIntervenantLocal)
+			{
+				this.lstLocalInitial.add(categorieIntervenant);
+			}
 		}
 
 		public void majTab()
@@ -186,6 +234,12 @@ public class PageParametres extends JPanel implements ActionListener
 				}
 			}
 
+			if (e.getSource() == this.btnModifier)
+			{
+				CategorieIntervenant cateIntervenantModif = this.lstCategorieIntervenantLocal.get(this.tableCategorieIntervenant.getSelectedRow());
+				new PageCreaCategorieIntervenant(this.mere, ctrl, cateIntervenantModif, this.lstCategorieIntervenantLocal);
+			}
+
 			this.majTab();
 		}
 
@@ -194,8 +248,10 @@ public class PageParametres extends JPanel implements ActionListener
 			// Vérifier si une ligne est sélectionnée
 			if (!e.getValueIsAdjusting() && this.tableCategorieIntervenant.getSelectedRow() != -1) {
 				this.btnSupprimer.setEnabled(true); // Activer le bouton
+				this.btnModifier.setEnabled(true);
 			} else {
 				this.btnSupprimer.setEnabled(false); // Désactiver le bouton si aucune ligne n'est sélectionnée
+				this.btnModifier.setEnabled(false);
 			}
 		}
 
