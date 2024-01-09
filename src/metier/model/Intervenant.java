@@ -43,7 +43,7 @@ public class Intervenant implements IModifiable
 		return this.categorieIntervenant;
 	}
 	public Integer gethMax(){
-		if ( this.hMax > 0 ){
+		if ( this.hMax > -1 ){
 			return this.hMax;
 		} else {
 			return getCategorie().getMaxH();
@@ -85,7 +85,7 @@ public class Intervenant implements IModifiable
 
 	public Integer getHMin()
 	{
-		if(this.hMin == 0)
+		if(this.hMin == -1)
 			return this.categorieIntervenant.getMinH();
 
 		return this.hMin;
@@ -93,7 +93,7 @@ public class Intervenant implements IModifiable
 
 	public double getCoefTP()
 	{
-		if(this.coefTP == 0)
+		if(this.coefTP == -1)
 			return this.categorieIntervenant.getCoefTp();
 
 		return this.coefTP;

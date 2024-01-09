@@ -74,6 +74,7 @@ public class CategorieIntervenantDB {
 	public static boolean save(CategorieIntervenant categorieIntervenant){
 		if ( categoriesIntervenant.contains(categorieIntervenant) ){
 			try{
+				System.out.println(categorieIntervenant.getCode() + "-------" + categorieIntervenant.getCodeOrigine());
 				psUpdate.setString(1, categorieIntervenant.getCode());
 				psUpdate.setString(2, categorieIntervenant.getNom());
 				psUpdate.setInt(3, categorieIntervenant.getMinH());

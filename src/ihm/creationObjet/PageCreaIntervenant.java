@@ -50,6 +50,9 @@ public class PageCreaIntervenant implements ActionListener
 	private JDoubleTextField txtFCoefTP;
 
 	private List<Intervenant> lstIntervenant;
+	private JLabel lblHServDefault;
+	private JLabel lblHMaxDefault;
+	private JLabel lblCoefTPDefault;
 
 	public PageCreaIntervenant(FrameIhm mere, Controleur ctrl, List<Intervenant> lstIntervenant)
 	{
@@ -74,6 +77,8 @@ public class PageCreaIntervenant implements ActionListener
 		this.cbIntervenant = new JComboBox<CategorieIntervenant>((new Vector<>(this.ctrl.getLstCategorieIntervenant())));
 		this.cbIntervenant.setRenderer(new Renderer());
 		this.cbIntervenant.addActionListener(this);
+
+		CategorieIntervenant cateInter = (CategorieIntervenant) cbIntervenant.getSelectedItem();
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -105,34 +110,43 @@ public class PageCreaIntervenant implements ActionListener
 		JLabel lblHServ = new JLabel("hServ : ");
 		this.txtFHServ = new JIntegerTextField(15);
 		this.txtFHServ.setAllowsInvalid(false);
+		this.lblHServDefault = new JLabel(cateInter.getMinH() + "h");
 
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		panelFormulaire.add(lblHServ, gbc);
 		gbc.gridx = 1;
 		panelFormulaire.add(txtFHServ, gbc);
+		gbc.gridx = 2;
+		panelFormulaire.add(lblHServDefault, gbc);
 
 		// hMax \\
 		JLabel lblHMax = new JLabel("hMax : ");
 		this.txtFHMax = new JIntegerTextField(15);
 		this.txtFHMax.setAllowsInvalid(false);
+		this.lblHMaxDefault = new JLabel(cateInter.getMaxH() + "h");
 		
 		gbc.gridx = 0;
 		gbc.gridy = 4;
 		panelFormulaire.add(lblHMax, gbc);
 		gbc.gridx = 1;
 		panelFormulaire.add(txtFHMax, gbc);
+		gbc.gridx = 2;
+		panelFormulaire.add(lblHMaxDefault, gbc);
 
 		// CoefTP \\
 		JLabel lblCoefTP = new JLabel("CoefTP : ");
 		this.txtFCoefTP = new JDoubleTextField(15);
 		this.txtFCoefTP.setAllowsInvalid(false);
+		this.lblCoefTPDefault = new JLabel(cateInter.getCoefTp() + "");
 
 		gbc.gridx = 0;
 		gbc.gridy = 5;
 		panelFormulaire.add(lblCoefTP, gbc);
 		gbc.gridx = 1;
 		panelFormulaire.add(txtFCoefTP, gbc);
+		gbc.gridx = 2;
+		panelFormulaire.add(lblCoefTPDefault, gbc);
 
 		// Ajout du panelFormulaire au panel principal \\
 		this.dial.add(panelFormulaire, BorderLayout.CENTER);
@@ -185,15 +199,15 @@ public class PageCreaIntervenant implements ActionListener
 		if(e.getSource() == cbIntervenant)
 		{
 			CategorieIntervenant cateInter = (CategorieIntervenant) cbIntervenant.getSelectedItem();
-			this.txtFCoefTP.setValue(cateInter.getCoefTp());
-			this.txtFHMax.setValue(cateInter.getMaxH());
-			this.txtFHServ.setValue(cateInter.getMinH());
+			this.lblCoefTPDefault.setText(cateInter.getCoefTp() + "");
+			this.lblHMaxDefault.setText(cateInter.getMaxH() + "h");
+			this.lblHServDefault.setText(cateInter.getMinH() + "h");
 		}
 		else if( e.getSource() == this.btnValider)
 		{
-			if(this.txtFNom.getText().isEmpty() || this.txtFPrenom.getText().isEmpty() || this.txtFHServ.isEmpty() || this.txtFHMax.isEmpty() || this.txtFCoefTP.isEmpty())
+			if(this.txtFNom.getText().isEmpty() || this.txtFPrenom.getText().isEmpty())
 			{
-				JOptionPane.showMessageDialog(this.dial, "Veuillez remplir tous les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this.dial, "Veuillez remplir les champs Nom et Prenom", "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
 			else
 			{
@@ -204,7 +218,7 @@ public class PageCreaIntervenant implements ActionListener
 				else
 				{
 					CategorieIntervenant cateInter = (CategorieIntervenant) cbIntervenant.getSelectedItem();
-					Intervenant inter = new Intervenant(this.ctrl.getIdNouvIntervenant(), cateInter, txtFNom.getText(), this.txtFPrenom.getText(), this.txtFHServ.getValue(), this.txtFHMax.getValue(), this.txtFCoefTP.getValue());
+					Intervenant inter = new Intervenant(this.ctrl.getIdNouvIntervenant(), cateInter, txtFNom.getText(), this.txtFPrenom.getText(), this.txtFHServ.isEmpty()?-1:this.txtFHServ.getValue(), this.txtFHMax.isEmpty()?-1:this.txtFHServ.getValue(), this.txtFCoefTP.isEmpty()?-1:this.txtFHServ.getValue());
 					this.lstIntervenant.add(inter);
 					this.ctrl.ajouterSauvAttente(inter);
 					this.dial.dispose();

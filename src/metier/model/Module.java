@@ -56,7 +56,7 @@ public class Module implements IModifiable
 	public boolean setCode(String code) {
 		if ( ModuleDB.getParCode(code) != null && !code.equals(this.code)) return false;
 		this.code = code;
-		this.codeOrigine = code;
+		// this.codeOrigine = code;
 		for ( ProgrammeItem item : this.programme.listProgrammeItems()){
 			item.setCodeModule(code);
 		}

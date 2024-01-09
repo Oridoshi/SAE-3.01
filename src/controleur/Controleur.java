@@ -53,6 +53,7 @@ public class Controleur
 	}
 
 	public void sauvegarder(){
+		
 		for ( IModifiable i : listSauvegarder )
 			i.sauvegarder();
 		for ( IModifiable i : listSuppression )

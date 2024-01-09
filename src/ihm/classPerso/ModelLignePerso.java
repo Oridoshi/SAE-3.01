@@ -39,7 +39,6 @@ public class ModelLignePerso extends DefaultTableCellRenderer
 		// Si un intervenant a trop peu d'heures
 		else if(intervenantActu.getTotal() < intervenantActu.getHMin())
 		{
-			System.out.println("Trop peu d'heures");
 			component.setBackground(COULEUR_PAS_ASSEZ_HEURES);
 			// component.setForeground(COULEUR_FONT);
 		}

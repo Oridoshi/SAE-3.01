@@ -70,8 +70,8 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 		this.cbCategorieModule = new JComboBox<CategorieModule>((new Vector<>(this.ctrl.getLstCategorieModule())));
 		this.cbCategorieModule.setRenderer(new Renderer());
 		this.btnCreaModule     = new JButton("Créer Module");
-		this.btnModif         = new JButton("Modifier");
-		this.btnSupp          = new JButton("Supprimer");
+		this.btnModif          = new JButton("Modifier");
+		this.btnSupp           = new JButton("Supprimer");
 
 		this.btnCreaModule   .addActionListener(this);
 		this.btnModif        .addActionListener(this);
@@ -158,6 +158,7 @@ public class PagePrevisionnel extends JPanel implements ActionListener
 					if(rep == JOptionPane.YES_OPTION)
 					{
 						int emplacement = this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getSelectedIndex();
+						System.out.println(this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getModuleSelectedRow().getCode() + "-------" + this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getModuleSelectedRow().getCodeOrigine());
 						this.ctrl.ajouterSuppAttente(this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).getModuleSelectedRow());
 						this.ctrl.sauvegarder();
 						this.lstPanelInfoSemestre.get(this.tabbedPane.getSelectedIndex()).updateTable();

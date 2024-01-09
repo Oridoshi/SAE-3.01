@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import controleur.Controleur;
+import db.CreationAnnee;
 import html.GenererCSV;
 import html.GenererPage;
 import metier.model.Intervenant;
@@ -31,6 +32,8 @@ public class PageEtats extends JPanel implements ActionListener
 	private JButton btnCSV;
 
 	private JButton btnResetData;
+
+	private JButton btnCreeAnnee;
 
 	public PageEtats(Controleur ctrl, FrameIhm mere)
 	{
@@ -76,6 +79,8 @@ public class PageEtats extends JPanel implements ActionListener
 
 		this.btnResetData = new JButton("Reset Data");
 
+		this.btnCreeAnnee = new JButton("Créer une année");
+
 		//premiere ligne
 		gbc.anchor = GridBagConstraints.EAST;
 		gbc.gridx = 0;
@@ -104,6 +109,13 @@ public class PageEtats extends JPanel implements ActionListener
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		gbc.gridwidth = 2;
+		panelBtns.add(this.btnCreeAnnee, gbc);
+
+		//cinquieme ligne
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		gbc.gridwidth = 2;
 		panelBtns.add(this.btnResetData, gbc);
 
 
@@ -112,10 +124,10 @@ public class PageEtats extends JPanel implements ActionListener
 
 
 		this.btnAccueil.addActionListener(this);
-
 		this.btnEtatIntervenant.addActionListener(this);	
 		this.btnEtatModule.addActionListener(this);
 		this.btnCSV.addActionListener(this);
+		this.btnCreeAnnee.addActionListener(this);
 		this.btnResetData.addActionListener(this);
 	}
 
@@ -188,6 +200,18 @@ public class PageEtats extends JPanel implements ActionListener
 		if (e.getSource() == this.btnAccueil)
 		{
 			this.mere.changerPage(new PageAccueil(this.ctrl, this.mere));
+		}
+
+		if(e.getSource() == this.btnCreeAnnee)
+		{
+			String nomAnnee = JOptionPane.showInputDialog(this.mere, "Veuillez entrer le nom de l'année", "Création d'une année", JOptionPane.QUESTION_MESSAGE);
+			if (nomAnnee != null)
+			{
+				if(nomAnnee.equals(""))
+					new CreationAnnee("NoName", this.mere, this.ctrl);
+				else
+					new CreationAnnee(nomAnnee, this.mere, this.ctrl);
+			}
 		}
 
 		if (e.getSource() == this.btnResetData)
