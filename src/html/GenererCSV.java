@@ -21,8 +21,6 @@ public class GenererCSV
 	private List<Intervenant> lstInter;
 	private String fichier;
 
-	private double[] tabTotHeures;
-
 
 	public GenererCSV ( List<Intervenant> lstInter )
 	{
@@ -38,11 +36,6 @@ public class GenererCSV
 			this.lstInter = lstInter;
 			this.fichier  = fileChooser.getSelectedFile().getAbsolutePath() + File.separator + "intervenant_V" + String.format( "%02d", GenererCSV.nbFichierCSV ) + ".csv";
 
-			this.tabTotHeures = new double[18];
-
-			for ( int cpt = 0; cpt < this.tabTotHeures.length; cpt ++ )
-				this.tabTotHeures[cpt] = 0;
-
 			this.genererFichier();
 		}
 	}
@@ -50,8 +43,8 @@ public class GenererCSV
 
 	private void genererFichier ()
 	{
-		String[] lstNomsCell = { "Catégorie" , "Nom"                , "Prénom"        ,
-		                         "Service dû", "Max heures autorisées", "Coefficient TP",
+		String[] lstNomsCell = { "Catégorie"    , "Nom"                         , "Prénom"        ,
+		                         "Service dû"   , "Max heures autorisées"       , "Coefficient TP",
 		                         "S1 théoriques", "S1 réelles", "S3 théoriques" , "S3 réelles",
 		                         "S5 théoriques", "S5 réelles", "Total Semestres Impairs",
 		                         "S2 théoriques", "S2 réelles", "S4 théoriques" , "S4 réelles",
@@ -63,12 +56,14 @@ public class GenererCSV
 
 		try
 		{
-			File fichier = new File (this.fichier);
+			File fichier1 = new File (this.fichier);
+			File fichier = new File (fichier1.getAbsolutePath());
+			System.out.println(this.fichier + "\n" + fichier1.getAbsolutePath());
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fichier.getAbsoluteFile(), true), "UTF-8"));
 
 			// Vérifier si le fichier existe
 			if ( fichier.exists() )
-				fichier.delete();
+				System.out.println(fichier.delete());
 
 			fichier.createNewFile();
 
@@ -105,61 +100,38 @@ public class GenererCSV
 
 			// Obtenir le service dû
 			res += catInter.getMinH() + ",";
-			this.tabTotHeures[0] += catInter.getMinH();
 
 			// Obtenir le max d'heures autorisés
 			res += catInter.getMaxH() + ",";
-			this.tabTotHeures[1] += catInter.getMaxH();
 
 			// Obtenir le coeff TP
 			res += inter.getCoefTP() + ",";
-			this.tabTotHeures[2] += catInter.getCoefTp();
 
 
 			// Nombre d'heures par SEMESTRES IMPAIRS
 			for ( int cptSemestres = 1; cptSemestres < 6; cptSemestres += 2 )
 			{
 				res += inter.getHParSemestre(cptSemestres) + ",";
-				res += inter.getHParSemestre(cptSemestres) * catInter.getCoefTp() + ",";
-
-				this.tabTotHeures[cptSemestres + 2] += inter.getHParSemestre(cptSemestres);
-				this.tabTotHeures[cptSemestres + 3] += inter.getHParSemestre(cptSemestres) * catInter.getCoefTp();
+				res += String.format("%.02f",(inter.getHParSemestre(cptSemestres) * catInter.getCoefTp())).replace(",", ".") + ",";
 			}
 
 
 			// Nombre d'heures total par SEMESTRES IMPAIRS
 			res += inter.getTotalParImpair() + ",";
-			this.tabTotHeures[9] += inter.getTotalParImpair();
 
 
 			// Nombre d'heures par SEMESTRES PAIRS
 			for ( int cptSemestres = 2; cptSemestres <= 6; cptSemestres += 2 )
 			{
 				res += inter.getHParSemestre(cptSemestres) + ",";
-				res += inter.getHParSemestre(cptSemestres) * catInter.getCoefTp() + ",";
-
-				this.tabTotHeures[cptSemestres + 7]+= inter.getHParSemestre(cptSemestres);
-				this.tabTotHeures[cptSemestres + 8] += inter.getHParSemestre(cptSemestres) * catInter.getCoefTp();
+				res += String.format("%.02f",(inter.getHParSemestre(cptSemestres) * catInter.getCoefTp())).replace(",", ".") + ",";
 			}
 
 			// Nombre d'heures total par SEMESTRES PAIRS
 			res += inter.getTotalParPair() + ",";
-			this.tabTotHeures[16] += inter.getTotalParPair();
 
 			res += inter.getTotal() + "\n";
-			this.tabTotHeures[17] += inter.getTotal();
 		}
-
-
-		res += "Total,,,";
-
-		// System.out.print( this.tabTotHeures[0] );
-
-		for ( int cpt = 0; cpt < this.tabTotHeures.length - 1; cpt++ ) {
-			res += this.tabTotHeures[cpt] + ",";
-		}
-
-		res += this.tabTotHeures[this.tabTotHeures.length - 1] + "";
 
 		return res;
 	}

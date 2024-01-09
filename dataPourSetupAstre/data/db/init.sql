@@ -17,7 +17,8 @@ CREATE TABLE Semestre (
 );
 
 CREATE TABLE CategorieIntervenant (
-	code VARCHAR(255) PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
+	code VARCHAR(255) NOT NULL,
 	nom VARCHAR(255) NOT NULL,
 	minH INT NOT NULL,
 	maxH INT NOT NULL,
@@ -25,16 +26,19 @@ CREATE TABLE CategorieIntervenant (
 );
 
 CREATE TABLE CategorieHeure (
-	nom VARCHAR(50) PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
+	nom VARCHAR(50),
 	coeffCat DECIMAL(5, 2) NOT NULL default 1
 );
 
 CREATE TABLE CategorieModule(
-	nom VARCHAR(50) PRIMARY KEY
+	id SERIAL PRIMARY KEY,
+	nom VARCHAR(50)
 );
 
 CREATE TABLE Module (
-	code VARCHAR(30) PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
+	code VARCHAR(30),
 	forceValider boolean NOT NULL,
 	idSemestre INT NOT NULL,
 	nomCatModule VARCHAR(50) NOT NULL,
@@ -45,6 +49,7 @@ CREATE TABLE Module (
 );
 
 CREATE TABLE RemplirProgramme(
+	id SERIAL PRIMARY KEY,
 	nomCatModule VARCHAR(50) NOT NULL,
 	nomCatH VARCHAR(50) NOT NULL,
 	codeModule VARCHAR(50) NOT NULL,
@@ -54,15 +59,14 @@ CREATE TABLE RemplirProgramme(
 	FOREIGN KEY (nomCatModule) REFERENCES CategorieModule(nom),
 	FOREIGN KEY (nomCatH) REFERENCES CategorieHeure(nom),
 	FOREIGN KEY (codeModule) REFERENCES Module(code),
-	PRIMARY KEY(nomCatModule, nomCatH, codeModule)
 );
 
 CREATE TABLE RemplirCategorieModule (
+	id SERIAL PRIMARY KEY,
 	nomCatModule VARCHAR(50) NOT NULL,
 	nomCatH VARCHAR(50) NOT NULL,
 	FOREIGN KEY (nomCatModule) REFERENCES CategorieModule(nom),
 	FOREIGN KEY (nomCatH) REFERENCES CategorieHeure(nom),
-	PRIMARY KEY(nomCatModule, nomCatH)
 );
 
 CREATE TABLE Intervenant (

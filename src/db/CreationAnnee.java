@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 
 import controleur.Controleur;
 import ihm.FrameIhm;
+import metier.model.CategorieHeure;
 import metier.model.CategorieIntervenant;
 import metier.model.Semestre;
 
@@ -70,11 +71,11 @@ public class CreationAnnee
 
 			System.out.println("DEBUG : Création du fichier de l'année " + nomAnnee + " réussi");
 
-			/***********************/
-			/*insertion des données*/
-			/***********************/
+			/*********/
+			/*données*/
+			/*********/
 
-			//insertion des semestres
+			// semestres
 			String txt = null;
 			for (int cpt = 1; cpt <= 6; cpt++)
 			{
@@ -86,7 +87,7 @@ public class CreationAnnee
 			}
 			pw.println("INSERT INTO Semestre VALUES " + txt + ";");
 
-			//insertion des catégories d'intervenants
+			// catégories d'intervenants
 			txt = null;
 			for (CategorieIntervenant ci : this.ctrl.getLstCategorieIntervenant())
 			{
@@ -95,9 +96,18 @@ public class CreationAnnee
 				else
 					txt = "('" + ci.getCode() + "', '" + ci.getNom() + "', " + ci.getMinH() + ", " + ci.getMaxH() + ", " + ci.getCoefTp() + ")";
 			}
+			pw.println("INSERT INTO CategorieIntervenant VALUES " + txt + ";");
 
-			//insertion des catégories d'heures
+			// catégories d'heures
 			txt = null;
+			for (CategorieHeure ch : this.ctrl.getLstCategorieHeure())
+			{
+				if(txt != null)
+					txt += ",('" + ch.getNom() + "', " + ch.getCoef() + ")";
+				else
+					txt = "('" + ch.getNom() + "', " + ch.getCoef() + ")";
+			}
+			pw.println("INSERT INTO CategorieHeure VALUES " + txt + ";");
 			
 			pw.close();
 		}
