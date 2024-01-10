@@ -9,6 +9,7 @@ import metier.repo.AffectationDB;
  */
 public class Affectation implements IModifiable
 {
+	private int id;
 	private Intervenant intervenant;
 	private CategorieHeure categorieHeure;
 	private int nbGroupe;
@@ -16,7 +17,6 @@ public class Affectation implements IModifiable
 	private int nbHeure;
 	private String commentaire;
 	private Module module;
-	private int id;
 
 	public Affectation(int id, Intervenant intervenant, CategorieHeure categorieHeure, int nbGroupe, int nbSemaine, int nbHeure, String commentaire,
 			Module module) {
@@ -32,6 +32,11 @@ public class Affectation implements IModifiable
 
 	public int getId() {
 		return this.id;
+	}
+
+	public Affectation setId(int id){
+		this.id = id;
+		return this;
 	}
 
 	public Intervenant getIntervenant(){

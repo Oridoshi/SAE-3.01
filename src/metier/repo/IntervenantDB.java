@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +24,8 @@ public class IntervenantDB {
 	private static PreparedStatement psUpdate;
 	private static PreparedStatement psCreate;
 
+	private static int dernierId = 1;
+
 	static{
 		reset();
 	}
@@ -30,18 +34,22 @@ public class IntervenantDB {
 		try{
 			psGetAll = db.prepareStatement("SELECT * FROM Intervenant");
 			psDelete = db.prepareStatement("DELETE FROM Intervenant WHERE id = ?");
-			psUpdate = db.prepareStatement("UPDATE Intervenant SET codeCatIntervenant = ?, nom = ?, prenom = ?, hMax = ?, hMin = ?, coeftp = ? WHERE id = ?");
-			psCreate = db.prepareStatement("INSERT INTO Intervenant (codeCatIntervenant, nom, prenom, hMax, hMin, coeftp) VALUES (?, ?, ?, ?, ?, ?)");
+			psUpdate = db.prepareStatement("UPDATE Intervenant SET idcatintervenant = ?, nom = ?, prenom = ?, hMax = ?, hMin = ?, coeftp = ? WHERE id = ?");
+			psCreate = db.prepareStatement("INSERT INTO Intervenant VALUES (?, ?, ?, ?, ?, ?, ?)");
 			DBResult result = new DBResult(psGetAll.executeQuery());
 			for ( Map<String, String> ligne : result.getLignes() ){
-				intervenants.add(new Intervenant(
+				Intervenant intervenant = new Intervenant(
 					Integer.parseInt(ligne.get("id")),
-					CategorieIntervenantDB.getParCode(ligne.get("codecatintervenant")),
+					CategorieIntervenantDB.getParId(Integer.parseInt(ligne.get("idcatintervenant"))),
 					ligne.get("nom"), 
 					ligne.get("prenom"), 
 					Integer.parseInt(ligne.get("hmin")),
 					Integer.parseInt(ligne.get("hmax")),
-					Double.parseDouble(ligne.get("coeftp"))));
+					Double.parseDouble(ligne.get("coeftp")));
+				intervenants.add(intervenant);
+				int id = Integer.parseInt(ligne.get("id"));
+				intervenant.setId(id);
+				if ( dernierId < id ) dernierId = id;
 			}
 			init();
 		} catch ( Exception e ){
@@ -72,6 +80,7 @@ public class IntervenantDB {
 			psDelete.setInt(1, intervenant.getId());
 			if ( DB.update(psDelete) == 1){
 				intervenants.remove(intervenant);
+				init();
 				return true;
 			} else {
 				return false;
@@ -84,30 +93,37 @@ public class IntervenantDB {
 	public static boolean save(Intervenant intervenant){
 		if ( intervenants.contains(intervenant) ){
 			try{
-				psUpdate.setString(1, intervenant.getCategorie().getCode());
+				psUpdate.setInt(1, intervenant.getCategorie().getId());
 				psUpdate.setString(2, intervenant.getNom());
 				psUpdate.setString(3, intervenant.getPrenom());
-				// getHMax va poser problème
 				psUpdate.setInt(4, intervenant.gethMax());
 				psUpdate.setInt(5, intervenant.getHMin());
 				psUpdate.setDouble(6, intervenant.getCoefTP());
 				psUpdate.setInt(7, intervenant.getId());
 
-				return DB.update(psUpdate) == 1;
+				if ( DB.update(psUpdate) == 1 ){
+					init();
+					return true;
+				} else {
+					return false;
+				}
 			} catch ( SQLException e){
 				return false;
 			}
 		} else {
 			try{
-				psCreate.setString(1, intervenant.getCategorie().getCode());
-				psCreate.setString(2, intervenant.getNom());
-				psCreate.setString(3, intervenant.getPrenom());
+				psCreate.setInt(1, ++dernierId);
+				psCreate.setInt(2, intervenant.getCategorie().getId());
+				psCreate.setString(3, intervenant.getNom());
+				psCreate.setString(4, intervenant.getPrenom());
 				// getHMax va poser problème
-				psCreate.setInt(4, intervenant.gethMax());
-				psCreate.setInt(5, intervenant.getHMin());
-				psCreate.setDouble(6, intervenant.getCoefTP());
+				psCreate.setInt(5, intervenant.gethMax());
+				psCreate.setInt(6, intervenant.getHMin());
+				psCreate.setDouble(7, intervenant.getCoefTP());
 				if ( DB.update(psCreate) == 1 ){
 					intervenants.add(intervenant);
+					intervenant.setId(dernierId);
+					init();
 					return true;
 				} else {
 					return false;
@@ -128,7 +144,6 @@ public class IntervenantDB {
 			{
 				if(inters == null)
 					inters = new ArrayList<>();
-
 				inters.add(intervenant);
 			}
 		}
@@ -137,6 +152,7 @@ public class IntervenantDB {
 	}
 
 	private static void init(){
+		Collections.sort(intervenants, Comparator.comparing(Intervenant::getNom).thenComparing(Intervenant::getPrenom));
 		// for ( Intervenant intervenant : intervenants ){
 		// 	// empty
 		// }

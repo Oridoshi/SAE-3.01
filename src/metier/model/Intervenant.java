@@ -34,6 +34,10 @@ public class Intervenant implements IModifiable
 		this.hMin = hMin;
 		this.coefTP = coefTP;
 	}
+	public Intervenant setId(int id){
+		this.id = id;
+		return this;
+	}
 
 	public int getId() {return id;}
 	public String getNom()    { return nom;    }
@@ -133,8 +137,6 @@ public class Intervenant implements IModifiable
 	}
 
 	public boolean setHMin(Integer hMin) {
-		if ( hMin < 0 ) return false;
-		if ( hMin > this.hMax ) return false;
 		this.hMin = hMin;
 		return true;
 	}
@@ -145,7 +147,6 @@ public class Intervenant implements IModifiable
 	return true;
 	}
 	public boolean sethMax(Integer hMax){
-		if ( this.hMin > hMax ) return false;
 		this.hMax = hMax;
 		return true;
 	}

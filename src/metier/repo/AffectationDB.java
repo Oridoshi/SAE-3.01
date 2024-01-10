@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -50,12 +52,12 @@ public class AffectationDB {
 				affectations.add(new Affectation(
 					Integer.parseInt(ligne.get("id")),
 					IntervenantDB.getParId(Integer.parseInt(ligne.get("idintervenant"))),
-					CategorieHeureDB.getParNom(ligne.get("nomcatheure")),
+					CategorieHeureDB.getParId(Integer.parseInt(ligne.get("idcatheure"))),
 					Integer.parseInt(ligne.get("nbgrp")),
 					Integer.parseInt(ligne.get("nbsemaine")),
 					Integer.parseInt(ligne.get("nbh")),
 					ligne.get("commentaire"),
-					ModuleDB.getParCode(ligne.get("codemodule"))
+					ModuleDB.getParId(Integer.parseInt(ligne.get("idmodule")))
 				));
 			}
 			int max = 0;
@@ -88,6 +90,12 @@ public class AffectationDB {
 		return modulesParIntervenant.get(intervenant);
 	}
 
+	public static Affectation getParId(int id){
+		for ( Affectation affectation : affectations )
+			if ( affectation.getId() == id ) return affectation;
+		return null;
+	}
+
 	public static boolean delete(Affectation affectation){
 		try{
 			psDeleteAffectation.setInt(1, affectation.getId());
@@ -111,7 +119,12 @@ public class AffectationDB {
 				psUpdateAffectation.setInt(3, affectation.getNbHeure() == null?0:affectation.getNbHeure());
 				psUpdateAffectation.setString(4, affectation.getCommentaire());
 				psUpdateAffectation.setInt(5, affectation.getId());
-				return DB.update(psGetAffectations) == 1;
+				if ( DB.update(psUpdateAffectation) == 1 ){
+					init();
+					return true;
+				} else {
+					return false;
+				}
 			} catch ( SQLException e) {
 				return false;
 			}
@@ -119,10 +132,10 @@ public class AffectationDB {
 			try{
 				psCreateAffectation.setInt(1, affectation.getId());
 				psCreateAffectation.setInt(2, affectation.getIntervenant().getId());
-				psCreateAffectation.setString(3, affectation.getCategorieHeure().getNom());
+				psCreateAffectation.setInt(3, affectation.getCategorieHeure().getId());
 				psCreateAffectation.setInt(4, affectation.getNbHeure() == null?0:affectation.getNbHeure());
 				psCreateAffectation.setInt(5, affectation.getNbGroupe() == null?0:affectation.getNbGroupe());
-				psCreateAffectation.setString(6, affectation.getModule().getCode());
+				psCreateAffectation.setInt(6, affectation.getModule().getId());
 				psCreateAffectation.setString(7, affectation.getCommentaire());
 				psCreateAffectation.setInt(8, affectation.getNbSemaine() == null?0:affectation.getNbSemaine());
 				if ( DB.update(psCreateAffectation) == 1 ){
@@ -140,6 +153,9 @@ public class AffectationDB {
 	}
 
 	private static void init(){
+		Collections.sort(affectations, Comparator
+		.<Affectation, String>comparing(affectation -> affectation.getIntervenant().getNom())
+		.thenComparing(affectation -> affectation.getIntervenant().getPrenom()));
 		for ( Affectation affectation : affectations ){
 
 			// On place dans l'array AffectationParIntervenant

@@ -1,26 +1,43 @@
 package metier.model;
 
 import metier.IModifiable;
-import metier.repo.ModuleDB;
 import metier.repo.ProgrammeItemDB;
 
 public class ProgrammeItem implements IModifiable{
 
+    private int id;
     private Integer nbHPn;
     private Integer nbSemaine;
     private Integer nbHeure;
     private CategorieModule categorieModule;
     private CategorieHeure categorieHeure;
-    private String codeModule;
+    private Module module;
 
-    public ProgrammeItem(CategorieModule categorieModule, CategorieHeure categorieHeure, String codeModule, Integer nbHPn, Integer nbSemaine, Integer nbHeure) {
+    public ProgrammeItem(CategorieModule categorieModule, CategorieHeure categorieHeure, Module module, Integer nbHPn, Integer nbSemaine, Integer nbHeure) {
         this.nbHPn = nbHPn;
         this.nbHeure = nbHeure;
         this.nbSemaine = nbSemaine;
         this.categorieHeure = categorieHeure;
         this.categorieModule = categorieModule;
-        this.codeModule = codeModule;
+        this.module = module;
     }
+
+    public int getId() {
+		return this.id;
+	}
+
+    public void setModule(Module module) {
+        this.module = module;
+    }
+
+    public Module getModule() {
+        return module;
+    }
+
+	public ProgrammeItem setId(int id){
+		this.id = id;
+		return this;
+	}
 
     public void setNbHPn(int i){
         this.nbHPn = i;
@@ -33,11 +50,7 @@ public class ProgrammeItem implements IModifiable{
     public void setNbHeure(Integer nbHeure) {
         this.nbHeure = nbHeure;
     }
-
-    void setCodeModule(String code){
-        this.codeModule = code;
-    } 
-
+    
     public CategorieModule getCategorieModule() {
         return categorieModule;
     }
@@ -47,7 +60,7 @@ public class ProgrammeItem implements IModifiable{
     }
 
     public String getCodeModule() {
-        return codeModule;
+        return this.module.getCode();
     }
 
     public Integer getNbHPn() {
@@ -67,7 +80,6 @@ public class ProgrammeItem implements IModifiable{
     }
 
     public Integer getPromoEqTd(){
-        Module module = ModuleDB.getParCode(this.codeModule);
         int h = this.nbHeure;
         if ( this.nbSemaine > 0 ) h = h * this.nbSemaine;
         h = (int) (getCategorieHeure().getCoef() * h);

@@ -9,6 +9,7 @@ import metier.repo.CategorieIntervenantDB;
  */
 public class CategorieIntervenant implements IModifiable
 {
+	private int id;
 	private String codeOrigine;
 	private String code;
 	private String nom;
@@ -24,6 +25,15 @@ public class CategorieIntervenant implements IModifiable
 		this.minH   = minH;
 		this.maxH   = maxH;
 		this.coefTp = coefTp;
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public CategorieIntervenant setId(int id){
+		this.id = id;
+		return this;
 	}
 
 	public String getCode  () { return code;   }

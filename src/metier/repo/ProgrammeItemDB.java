@@ -18,11 +18,14 @@ public class ProgrammeItemDB {
 
 	private static List<ProgrammeItem> programmeItems;
 	private static Map<String, List<ProgrammeItem>> programmeItemsParCodeModule;
+	private static Map<Integer, List<ProgrammeItem>> programmeItemsParIdModule;
 
 	private static PreparedStatement psGetAll;
 	private static PreparedStatement psDelete;
 	private static PreparedStatement psUpdate;
 	private static PreparedStatement psCreate;
+
+	private static int dernierId = 1;
 
 	static{
 		reset();
@@ -30,21 +33,26 @@ public class ProgrammeItemDB {
 	public static void reset(){
 		programmeItems = new ArrayList<>();
 		programmeItemsParCodeModule = new HashMap<>();
+		programmeItemsParIdModule = new HashMap<>();
 		try{
 			psGetAll = db.prepareStatement("SELECT * FROM RemplirProgramme");
-			psDelete = db.prepareStatement("DELETE FROM RemplirProgramme WHERE nomCatModule = ? AND nomCatH = ? AND codeModule = ?");
-			psUpdate = db.prepareStatement("UPDATE RemplirProgramme SET nbHProgramme = ?, nbHPromo = ?, nbSemaine = ? WHERE nomCatModule = ? AND nomCatH = ? AND codeModule = ?");
-			psCreate = db.prepareStatement("INSERT INTO RemplirProgramme VALUES (?, ?, ?, ?, ?, ?)");
+			psDelete = db.prepareStatement("DELETE FROM RemplirProgramme WHERE id = ?");
+			psUpdate = db.prepareStatement("UPDATE RemplirProgramme SET nbHProgramme = ?, nbHPromo = ?, nbSemaine = ? WHERE id = ?");
+			psCreate = db.prepareStatement("INSERT INTO RemplirProgramme VALUES (?, ?, ?, ?, ?, ?, ?)");
 			DBResult result = new DBResult(psGetAll.executeQuery());
 			for ( Map<String, String> ligne : result.getLignes() ){
-				programmeItems.add(new ProgrammeItem(
-					CategorieModuleDB.getParNom(ligne.get("nomcatmodule")),
-					CategorieHeureDB.getParNom(ligne.get("nomcath")),
-					ligne.get("codemodule"),
+				ProgrammeItem programmeItem = new ProgrammeItem(
+					CategorieModuleDB.getParId(Integer.parseInt(ligne.get("idcatmodule"))),
+					CategorieHeureDB.getParId(Integer.parseInt(ligne.get("idcath"))),
+					ModuleDB.getParId(Integer.parseInt(ligne.get("idmodule"))),
 					Integer.parseInt(ligne.get("nbhprogramme")),
 					Integer.parseInt(ligne.get("nbsemaine")),
 					Integer.parseInt(ligne.get("nbhpromo"))
-				));
+				);
+				int id = Integer.parseInt(ligne.get("id"));
+				programmeItem.setId(id);
+				if ( dernierId < id ) dernierId = id;
+				programmeItems.add(programmeItem);
 			}
 			init();
 		} catch ( Exception e ){
@@ -60,11 +68,19 @@ public class ProgrammeItemDB {
 		return programmeItemsParCodeModule.get(code);
 	}
 
+	public static List<ProgrammeItem> listParIdModule(int id){
+		return programmeItemsParIdModule.get(id);
+	}
+
+	public static ProgrammeItem getParId(int id){
+		for ( ProgrammeItem programmeItem : programmeItems )
+			if ( programmeItem.getId() == id ) return programmeItem;
+		return null;
+	}
+
 	public static boolean delete(ProgrammeItem programmeItem){
 		try{
-			psDelete.setString(1, programmeItem.getCategorieModule().getNom());
-			psDelete.setString(2, programmeItem.getCategorieHeure().getNom());
-			psDelete.setString(3, programmeItem.getCodeModule());
+			psDelete.setInt(1, programmeItem.getId());
 			if ( DB.update(psDelete) == 1){
 				programmeItems.remove(programmeItem);
 				init();
@@ -83,23 +99,23 @@ public class ProgrammeItemDB {
 				psUpdate.setInt(1, programmeItem.getNbHPn());
 				psUpdate.setInt(2, programmeItem.getNbHeure());
 				psUpdate.setInt(3, programmeItem.getNbSemaine());
-				psUpdate.setString(4, programmeItem.getCategorieModule().getNom());
-				psUpdate.setString(5, programmeItem.getCategorieHeure().getNom());
-				psUpdate.setString(6, programmeItem.getCodeModule());
+				psUpdate.setInt(4, programmeItem.getId());
 				return DB.update(psUpdate) == 1;
 			} catch ( SQLException e){
 				return false;
 			}
 		} else {
 			try{
-				psCreate.setString(1, programmeItem.getCategorieModule().getNom());
-				psCreate.setString(2, programmeItem.getCategorieHeure().getNom());
-				psCreate.setString(3, programmeItem.getCodeModule());
-				psCreate.setInt(4, programmeItem.getNbHPn());
-				psCreate.setInt(5, programmeItem.getNbHeure());
-				psCreate.setInt(6, programmeItem.getNbSemaine());
+				psCreate.setInt(1, ++dernierId);
+				psCreate.setInt(2, programmeItem.getCategorieModule().getId());
+				psCreate.setInt(3, programmeItem.getCategorieHeure().getId());
+				psCreate.setInt(4, ModuleDB.getParCode(programmeItem.getCodeModule()).getId());
+				psCreate.setInt(5, programmeItem.getNbHPn());
+				psCreate.setInt(6, programmeItem.getNbHeure());
+				psCreate.setInt(7, programmeItem.getNbSemaine());
 				if ( DB.update(psCreate) == 1 ){
 					programmeItems.add(programmeItem);
+					programmeItem.setId(dernierId);
 					init();
 					return true;
 				} else {
@@ -115,6 +131,10 @@ public class ProgrammeItemDB {
 		for ( ProgrammeItem programmeItem : programmeItems ){
 			programmeItemsParCodeModule.putIfAbsent(programmeItem.getCodeModule(), new ArrayList<>());
 			programmeItemsParCodeModule.get(programmeItem.getCodeModule()).add(programmeItem);
+		}
+		for ( ProgrammeItem programmeItem : programmeItems ){
+			programmeItemsParIdModule.putIfAbsent(programmeItem.getModule().getId(), new ArrayList<>());
+			programmeItemsParIdModule.get(programmeItem.getModule().getId()).add(programmeItem);
 		}
 	}
 	

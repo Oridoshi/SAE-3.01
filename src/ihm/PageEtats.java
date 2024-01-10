@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import controleur.Controleur;
+import db.ChargerAnnee;
 import db.CreationAnnee;
 import html.GenererCSV;
 import html.GenererPage;
@@ -34,6 +35,8 @@ public class PageEtats extends JPanel implements ActionListener
 	private JButton btnResetData;
 
 	private JButton btnCreeAnnee;
+
+	private JButton btnChargerAnnee;
 
 	public PageEtats(Controleur ctrl, FrameIhm mere)
 	{
@@ -80,6 +83,7 @@ public class PageEtats extends JPanel implements ActionListener
 		this.btnResetData = new JButton("Reset Data");
 
 		this.btnCreeAnnee = new JButton("Créer une année");
+		this.btnChargerAnnee = new JButton("Charger une année");	
 
 		//premiere ligne
 		gbc.anchor = GridBagConstraints.EAST;
@@ -114,7 +118,21 @@ public class PageEtats extends JPanel implements ActionListener
 		//cinquieme ligne
 		gbc.anchor = GridBagConstraints.CENTER;
 		gbc.gridx = 0;
+		gbc.gridy = 4;
+		gbc.gridwidth = 2;
+		panelBtns.add(this.btnChargerAnnee, gbc);
+
+		//sixieme ligne
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.gridx = 0;
 		gbc.gridy = 5;
+		gbc.gridwidth = 2;
+		panelBtns.add(new JLabel(""), gbc);
+
+		//septieme ligne
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.gridx = 0;
+		gbc.gridy = 6;
 		gbc.gridwidth = 2;
 		panelBtns.add(this.btnResetData, gbc);
 
@@ -128,6 +146,7 @@ public class PageEtats extends JPanel implements ActionListener
 		this.btnEtatModule.addActionListener(this);
 		this.btnCSV.addActionListener(this);
 		this.btnCreeAnnee.addActionListener(this);
+		this.btnChargerAnnee.addActionListener(this);
 		this.btnResetData.addActionListener(this);
 	}
 
@@ -204,7 +223,7 @@ public class PageEtats extends JPanel implements ActionListener
 
 		if(e.getSource() == this.btnCreeAnnee)
 		{
-			String nomAnnee = JOptionPane.showInputDialog(this.mere, "Veuillez entrer le nom de l'année", "Création d'une année", JOptionPane.QUESTION_MESSAGE);
+			String nomAnnee = JOptionPane.showInputDialog(this.mere, "Veuillez entrer le nom de l'année sur la quelle vous être entrains de travailler afin de la sauvegarder", "Création d'une année", JOptionPane.QUESTION_MESSAGE);
 			if (nomAnnee != null)
 			{
 				if(nomAnnee.equals(""))
@@ -212,6 +231,11 @@ public class PageEtats extends JPanel implements ActionListener
 				else
 					new CreationAnnee(nomAnnee, this.mere, this.ctrl);
 			}
+		}
+
+		if(e.getSource() == this.btnChargerAnnee)
+		{
+			new ChargerAnnee(this.ctrl, this.mere);
 		}
 
 		if (e.getSource() == this.btnResetData)

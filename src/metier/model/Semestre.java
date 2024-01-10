@@ -28,6 +28,11 @@ public class Semestre implements IModifiable
 		this.nbSemaine = nbSemaine;
 	}
 
+	public Semestre setId(int id){
+		this.id = id;
+		return this;
+	}
+
 	public int getId()                     {return id;}
 	public int getNbGroupeTd()             {return nbGroupeTd;}
 	public int getNbGroupeTp()             {return nbGroupeTp;}

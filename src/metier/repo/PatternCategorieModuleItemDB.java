@@ -23,21 +23,30 @@ public class PatternCategorieModuleItemDB {
 	private static PreparedStatement psDelete;
 	private static PreparedStatement psCreate;
 
+	private static int dernierId = 1;
+
 	static{
 		reset();
 	}
+
 	public static void reset(){
 		patternCategorieModuleItems = new ArrayList<>();
 		patternCategorieModuleItemsParNomCatModule = new HashMap<>();
 		try{
+			System.out.println("TEST");
 			psGetAll = db.prepareStatement("SELECT * FROM RemplirCategorieModule");
-			psDelete = db.prepareStatement("DELETE FROM RemplirCategorieModule WHERE nomCatHeure = ? AND nomCatModule = ?");
-			psCreate = db.prepareStatement("INSERT INTO RemplirCategorieModule VALUES (?, ?)");
+			psDelete = db.prepareStatement("DELETE FROM RemplirCategorieModule WHERE id = ?");
+			psCreate = db.prepareStatement("INSERT INTO RemplirCategorieModule VALUES (?, ?, ?)");
 			DBResult result = new DBResult(psGetAll.executeQuery());
 			for ( Map<String, String> ligne : result.getLignes() ){
-				patternCategorieModuleItems.add(new PatternCategorieModuleItem(
-					CategorieHeureDB.getParNom(ligne.get("nomcath")), 
-					CategorieModuleDB.getParNom(ligne.get("nomcatmodule"))));
+				PatternCategorieModuleItem patternCategorieModuleItem = new PatternCategorieModuleItem(
+					CategorieHeureDB.getParId(Integer.parseInt(ligne.get("idcath"))), 
+					CategorieModuleDB.getParId(Integer.parseInt(ligne.get("idcatmodule"))));
+				int id = Integer.parseInt(ligne.get("id"));
+				if ( dernierId < id ) dernierId = id;
+				patternCategorieModuleItem.setId(id);
+				patternCategorieModuleItems.add(patternCategorieModuleItem);
+
 			}
 			init();
 		} catch ( Exception e ){
@@ -53,10 +62,16 @@ public class PatternCategorieModuleItemDB {
 		return patternCategorieModuleItemsParNomCatModule.get(nom);
 	}
 
+
+	public static PatternCategorieModuleItem getParId(int id){
+		for ( PatternCategorieModuleItem patternCategorieModuleItem : patternCategorieModuleItems )
+			if ( patternCategorieModuleItem.getId() == id ) return patternCategorieModuleItem;
+		return null;
+	}
+
 	public static boolean delete(PatternCategorieModuleItem patternCategorieModuleItem){
 		try{
-			psDelete.setString(1, patternCategorieModuleItem.getCategorieHeure().getNom());
-			psDelete.setString(2, patternCategorieModuleItem.getCategorieModule().getNom());
+			psDelete.setInt(1, patternCategorieModuleItem.getId());
 			if ( DB.update(psDelete) == 1){
 				patternCategorieModuleItems.remove(patternCategorieModuleItem);
 				init();
@@ -74,8 +89,9 @@ public class PatternCategorieModuleItemDB {
 			return false;
 		} else {
 			try{
-				psCreate.setString(1, patternCategorieModuleItem.getCategorieHeure().getNom());
-				psCreate.setString(2, patternCategorieModuleItem.getCategorieModule().getNom());
+				psCreate.setInt(1, ++dernierId);
+				psCreate.setInt(2, patternCategorieModuleItem.getCategorieHeure().getId());
+				psCreate.setInt(3, patternCategorieModuleItem.getCategorieModule().getId());
 				if ( DB.update(psCreate) == 1 ){
 					patternCategorieModuleItems.add(patternCategorieModuleItem);
 					init();

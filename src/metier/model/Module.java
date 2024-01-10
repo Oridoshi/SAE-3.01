@@ -14,6 +14,7 @@ import metier.repo.ProgrammeItemDB;
  */
 public class Module implements IModifiable
 {
+	private int id;
 	private String codeOrigine;
 	private String   code;
 	private Semestre semestre;
@@ -31,20 +32,16 @@ public class Module implements IModifiable
 		this.valider = valider;
 		this.libelleCourt = libelleCourt;
 		this.libelleLong = libelleLong;
-		Programme programme = new Programme();
-		this.programme = programme;
-		if ( ProgrammeItemDB.listParCodeModule(this.code) == null ) {
-			for ( PatternCategorieModuleItem pattern : this.categorieModule.getCategorieHeures() ){
-				programme.addItem(new ProgrammeItem(this.categorieModule, pattern.getCategorieHeure(), this.code, 0, 0, 0));
-			}
-		} else {
-			for ( ProgrammeItem item : ProgrammeItemDB.listParCodeModule(this.code)){
-				programme.addItem(item);
-			}
-		}
 	}
 
-	
+	public Module setId(int id){
+		this.id = id;
+		return this;
+	}
+	public int getId() {
+		return this.id;
+	}
+
 	public String getCodeOrigine() {
 		return codeOrigine;
 	}
@@ -58,7 +55,7 @@ public class Module implements IModifiable
 		this.code = code;
 		// this.codeOrigine = code;
 		for ( ProgrammeItem item : this.programme.listProgrammeItems()){
-			item.setCodeModule(code);
+			item.setModule(this);
 		}
 		return true;
 	}
@@ -82,6 +79,18 @@ public class Module implements IModifiable
 	}
 
 	public Programme getProgramme(){
+		if ( this.programme != null ) return this.programme;
+		Programme programme = new Programme();
+		this.programme = programme;
+		if ( ProgrammeItemDB.listParIdModule(this.id) == null ) {
+			for ( PatternCategorieModuleItem pattern : this.categorieModule.getCategorieHeures() ){
+				programme.addItem(new ProgrammeItem(this.categorieModule, pattern.getCategorieHeure(), this, 0, 0, 0));
+			}
+		} else {
+			for ( ProgrammeItem item : ProgrammeItemDB.listParIdModule(this.id)){
+				programme.addItem(item);
+			}
+		}
 		return programme;
 	}
 

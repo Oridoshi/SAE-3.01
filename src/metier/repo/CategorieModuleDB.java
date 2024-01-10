@@ -22,6 +22,8 @@ public class CategorieModuleDB {
 	private static PreparedStatement psUpdate;
 	private static PreparedStatement psCreate;
 
+	private static int dernierId = 1;
+
 	static{
 		reset();
 	}
@@ -29,12 +31,16 @@ public class CategorieModuleDB {
 		categoriesModule = new ArrayList<>();
 		try{
 			psGetAll = db.prepareStatement("SELECT * FROM CategorieModule");
-			psDelete = db.prepareStatement("DELETE FROM CategorieModule WHERE nom = ?");
-			psUpdate = db.prepareStatement("UPDATE CategorieModule SET nom = ? WHERE nom = ?");
-			psCreate = db.prepareStatement("INSERT INTO CategorieModule VALUES (?)");
+			psDelete = db.prepareStatement("DELETE FROM CategorieModule WHERE id = ?");
+			psUpdate = db.prepareStatement("UPDATE CategorieModule SET nom = ? WHERE id = ?");
+			psCreate = db.prepareStatement("INSERT INTO CategorieModule VALUES (?, ?)");
 			DBResult result = new DBResult(psGetAll.executeQuery());
 			for ( Map<String, String> ligne : result.getLignes() ){
-				categoriesModule.add(new CategorieModule(ligne.get("nom")));
+				CategorieModule categorieModule = new CategorieModule(ligne.get("nom"));
+				int id = Integer.parseInt(ligne.get("id"));
+				categorieModule.setId(id);
+				categoriesModule.add(categorieModule);
+				if ( dernierId < id  ) dernierId = id;
 			}
 			init();
 		} catch ( Exception e ){
@@ -52,9 +58,15 @@ public class CategorieModuleDB {
 		return null;
 	}
 
+	public static CategorieModule getParId(int id){
+		for ( CategorieModule categorieModule : categoriesModule )
+			if ( categorieModule.getId() == id ) return categorieModule;
+		return null;
+	}
+
 	public static boolean delete(CategorieModule categorieModule){
 		try{
-			psDelete.setString(1, categorieModule.getNom());
+			psDelete.setInt(1, categorieModule.getId());
 			if ( DB.update(psDelete) == 1){
 				categoriesModule.remove(categorieModule);
 				return true;
@@ -70,9 +82,8 @@ public class CategorieModuleDB {
 		if ( categoriesModule.contains(categorieModule) ){
 			try{
 				psUpdate.setString(1, categorieModule.getNom());
-				psUpdate.setString(2, categorieModule.getNomOrigine());
+				psUpdate.setInt(2, categorieModule.getId());
 				if ( DB.update(psUpdate) == 1 ){
-					categorieModule.setNomOrigine(categorieModule.getNom());
 					return true;
 				} else {
 					return false;
@@ -82,9 +93,11 @@ public class CategorieModuleDB {
 			}
 		} else {
 			try{
-				psCreate.setString(1, categorieModule.getNom());
+				psCreate.setInt(1, ++dernierId);
+				psCreate.setString(2, categorieModule.getNom());
 				if ( DB.update(psCreate) == 1 ){
 					categoriesModule.add(categorieModule);
+					categorieModule.setId(dernierId);
 					return true;
 				} else {
 					return false;

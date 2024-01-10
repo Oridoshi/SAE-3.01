@@ -9,7 +9,8 @@ import metier.repo.CategorieHeureDB;
  */
 public class CategorieHeure implements IModifiable
 {
-	
+
+	private int id;
 	private String nomOrigine;
 	private String nom;
 	private double coef;
@@ -19,6 +20,15 @@ public class CategorieHeure implements IModifiable
 		this.nomOrigine = nom;
 		this.nom = nom;
 		this.coef = coef;
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public CategorieHeure setId(int id){
+		this.id = id;
+		return this;
 	}
 
 	public String getNom()  { return this.nom;  }

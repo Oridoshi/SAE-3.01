@@ -8,6 +8,7 @@ import metier.repo.PatternCategorieModuleItemDB;
 
 public class CategorieModule implements IModifiable {
 
+    private int id;
     private String nomOrigine;
     private String nom;
 
@@ -15,6 +16,15 @@ public class CategorieModule implements IModifiable {
         nomOrigine = nom;
         this.nom = nom;
     }
+
+    public int getId() {
+		return this.id;
+	}
+
+	public CategorieModule setId(int id){
+		this.id = id;
+		return this;
+	}
 
     public String getNom() {
         return nom;

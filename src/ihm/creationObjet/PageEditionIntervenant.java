@@ -49,6 +49,9 @@ public class PageEditionIntervenant implements ActionListener
 	private JDoubleTextField txtFCoefTP;
 
 	private Intervenant inter;
+	private JLabel lblHServDefault;
+	private JLabel lblHMaxDefault;
+	private JLabel lblCoefTPDefault;
 
 	public PageEditionIntervenant(FrameIhm mere, Controleur ctrl, Intervenant inter)
 	{
@@ -74,6 +77,8 @@ public class PageEditionIntervenant implements ActionListener
 		this.cbIntervenant.setRenderer(new Renderer());
 		this.cbIntervenant.setSelectedItem(inter.getCategorie());
 		this.cbIntervenant.addActionListener(this);
+
+		CategorieIntervenant cateInter = (CategorieIntervenant) cbIntervenant.getSelectedItem();
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -105,8 +110,11 @@ public class PageEditionIntervenant implements ActionListener
 
 		// hServ \\
 		JLabel lblHServ = new JLabel("hServ : ");
-		this.txtFHServ = new JIntegerTextField(15, inter.getHMin());
+		this.txtFHServ = new JIntegerTextField(15);
+		if(inter.getHMin() != cateInter.getMinH())
+			this.txtFHServ.setValue(inter.getHMin());
 		this.txtFHServ.setAllowsInvalid(false);
+		this.lblHServDefault = new JLabel(cateInter.getMinH() + "h");
 
 
 		gbc.gridx = 0;
@@ -114,28 +122,40 @@ public class PageEditionIntervenant implements ActionListener
 		panelFormulaire.add(lblHServ, gbc);
 		gbc.gridx = 1;
 		panelFormulaire.add(txtFHServ, gbc);
+		gbc.gridx = 2;
+		panelFormulaire.add(lblHServDefault, gbc);
 
 		// hMax \\
 		JLabel lblHMax = new JLabel("hMax : ");
-		this.txtFHMax = new JIntegerTextField(15, inter.gethMax());
+		this.txtFHMax = new JIntegerTextField(15);
+		if(inter.gethMax() != cateInter.getMaxH())
+			this.txtFHMax.setValue(inter.gethMax());
 		this.txtFHMax.setAllowsInvalid(false);
+		this.lblHMaxDefault = new JLabel(cateInter.getMaxH() + "h");
 		
 		gbc.gridx = 0;
 		gbc.gridy = 4;
 		panelFormulaire.add(lblHMax, gbc);
 		gbc.gridx = 1;
 		panelFormulaire.add(txtFHMax, gbc);
+		gbc.gridx = 2;
+		panelFormulaire.add(lblHMaxDefault, gbc);
 
 		// CoefTP \\
 		JLabel lblCoefTP = new JLabel("CoefTP : ");
-		this.txtFCoefTP = new JDoubleTextField(15, inter.getCoefTP());
+		this.txtFCoefTP = new JDoubleTextField(15);
+		if(inter.getCoefTP() != cateInter.getCoefTp())
+			this.txtFCoefTP.setValue(inter.getCoefTP());
 		this.txtFCoefTP.setAllowsInvalid(false);
+		this.lblCoefTPDefault = new JLabel(cateInter.getCoefTp() + "");
 
 		gbc.gridx = 0;
 		gbc.gridy = 5;
 		panelFormulaire.add(lblCoefTP, gbc);
 		gbc.gridx = 1;
 		panelFormulaire.add(txtFCoefTP, gbc);
+		gbc.gridx = 2;
+		panelFormulaire.add(lblCoefTPDefault, gbc);
 
 		// Ajout du panelFormulaire au panel principal \\
 		this.dial.add(panelFormulaire, BorderLayout.CENTER);
@@ -188,15 +208,15 @@ public class PageEditionIntervenant implements ActionListener
 		if(e.getSource() == cbIntervenant)
 		{
 			CategorieIntervenant cateInter = (CategorieIntervenant) cbIntervenant.getSelectedItem();
-			this.txtFCoefTP.setValue(cateInter.getCoefTp());
-			this.txtFHMax.setValue(cateInter.getMaxH());
-			this.txtFHServ.setValue(cateInter.getMinH());
+			this.lblCoefTPDefault.setText(cateInter.getCoefTp() + "");
+			this.lblHMaxDefault.setText(cateInter.getMaxH() + "h");
+			this.lblHServDefault.setText(cateInter.getMinH() + "h");
 		}
 		else if( e.getSource() == this.btnValider)
 		{
-			if(this.txtFNom.getText().isEmpty() || this.txtFPrenom.getText().isEmpty() || this.txtFHServ.isEmpty() || this.txtFHMax.isEmpty() || this.txtFCoefTP.isEmpty())
+			if(this.txtFNom.getText().isEmpty() || this.txtFPrenom.getText().isEmpty())
 			{
-				JOptionPane.showMessageDialog(this.dial, "Veuillez remplir tous les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this.dial, "Veuillez remplir les champs Nom et Prenom", "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
 			else
 			{
@@ -211,9 +231,9 @@ public class PageEditionIntervenant implements ActionListener
 
 					this.inter.setNom(this.txtFNom.getText());
 					this.inter.setPrenom(this.txtFPrenom.getText());
-					this.inter.setHMin(this.txtFHServ.getValue());
-					this.inter.sethMax(this.txtFHMax.getValue());
-					this.inter.setCoefTP(this.txtFCoefTP.getValue());
+					this.inter.sethMax(this.txtFHMax.isEmpty()?-1:this.txtFHMax.getValue());
+					this.inter.setHMin(this.txtFHServ.isEmpty()?-1:this.txtFHServ.getValue());
+					this.inter.setCoefTP(this.txtFCoefTP.isEmpty()?-1:this.txtFCoefTP.getValue());
 
 					this.ctrl.ajouterSauvAttente(inter);
 					this.dial.dispose();

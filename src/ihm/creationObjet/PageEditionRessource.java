@@ -970,7 +970,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFHPonctu1.getValue() < this.txtFHPonctu3.getValue())
+			else if(this.txtFHPonctu2.getValue() < this.txtFHPonctu3.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure Ponctuelle affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
@@ -1041,7 +1041,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFHPonctu1.getValue() < this.txtFHPonctu3.getValue())
+			else if(this.txtFHPonctu2.getValue() < this.txtFHPonctu3.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure Ponctuelle affecté est supérieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
@@ -1061,8 +1061,8 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
-			}
-			else if(this.txtFHPonctu1.getValue() > this.txtFHPonctu3.getValue())
+			}	
+			else if(this.txtFHPonctu2.getValue() > this.txtFHPonctu3.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure Ponctuelle affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;

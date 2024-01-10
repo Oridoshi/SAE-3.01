@@ -22,6 +22,8 @@ public class CategorieIntervenantDB {
 	private static PreparedStatement psUpdate;
 	private static PreparedStatement psCreate;
 
+	private static int dernierId = 1;
+
 	static{
 		reset();
 	}
@@ -29,17 +31,21 @@ public class CategorieIntervenantDB {
 		categoriesIntervenant = new ArrayList<>();
 		try{
 			psGetAll = db.prepareStatement("SELECT * FROM CategorieIntervenant");
-			psDelete = db.prepareStatement("DELETE FROM CategorieIntervenant WHERE code = ?");
-			psUpdate = db.prepareStatement("UPDATE CategorieIntervenant SET code = ?, nom = ?, minh = ?, maxh = ?, coeftp = ? WHERE code = ?");
-			psCreate = db.prepareStatement("INSERT INTO CategorieIntervenant VALUES (?, ?, ?, ?, ?)");
+			psDelete = db.prepareStatement("DELETE FROM CategorieIntervenant WHERE id = ?");
+			psUpdate = db.prepareStatement("UPDATE CategorieIntervenant SET code = ?, nom = ?, minh = ?, maxh = ?, coeftp = ? WHERE id = ?");
+			psCreate = db.prepareStatement("INSERT INTO CategorieIntervenant VALUES (?, ?, ?, ?, ?, ?)");
 			DBResult result = new DBResult(psGetAll.executeQuery());
 			for ( Map<String, String> ligne : result.getLignes() ){
-				categoriesIntervenant.add(new CategorieIntervenant(
+				CategorieIntervenant categorieIntervenant = new CategorieIntervenant(
 					ligne.get("code"), 
 					ligne.get("nom"), 
 					Integer.parseInt(ligne.get("minh")), 
 					Integer.parseInt(ligne.get("maxh")), 
-					Double.parseDouble(ligne.get("coeftp"))));
+					Double.parseDouble(ligne.get("coeftp")));
+				int id = Integer.parseInt(ligne.get("id"));
+				categorieIntervenant.setId(id);
+				categoriesIntervenant.add(categorieIntervenant);
+				if ( dernierId < id ) dernierId = id;
 			}
 			init();
 		} catch ( Exception e ){
@@ -57,9 +63,15 @@ public class CategorieIntervenantDB {
 		return null;
 	}
 
+	public static CategorieIntervenant getParId(int id){
+		for ( CategorieIntervenant categorieIntervenant : categoriesIntervenant )
+			if ( categorieIntervenant.getId() == id ) return categorieIntervenant;
+		return null;
+	}
+
 	public static boolean delete(CategorieIntervenant categorieIntervenant){
 		try{
-			psDelete.setString(1, categorieIntervenant.getCode());
+			psDelete.setInt(1, categorieIntervenant.getId());
 			if ( DB.update(psDelete) == 1){
 				categoriesIntervenant.remove(categorieIntervenant);
 				return true;
@@ -74,15 +86,13 @@ public class CategorieIntervenantDB {
 	public static boolean save(CategorieIntervenant categorieIntervenant){
 		if ( categoriesIntervenant.contains(categorieIntervenant) ){
 			try{
-				System.out.println(categorieIntervenant.getCode() + "-------" + categorieIntervenant.getCodeOrigine());
 				psUpdate.setString(1, categorieIntervenant.getCode());
 				psUpdate.setString(2, categorieIntervenant.getNom());
 				psUpdate.setInt(3, categorieIntervenant.getMinH());
 				psUpdate.setInt(4, categorieIntervenant.getMaxH());
 				psUpdate.setDouble(5, categorieIntervenant.getCoefTp());
-				psUpdate.setString(6, categorieIntervenant.getCodeOrigine());
+				psUpdate.setInt(6, categorieIntervenant.getId());
 				if ( DB.update(psUpdate) == 1 ){
-					categorieIntervenant.setCodeOrigine(categorieIntervenant.getCode());
 					return true;
 				} else {
 					return false;
@@ -92,13 +102,15 @@ public class CategorieIntervenantDB {
 			}
 		} else {
 			try{
-				psCreate.setString(1, categorieIntervenant.getCode());
-				psCreate.setString(2, categorieIntervenant.getNom());
-				psCreate.setInt(3, categorieIntervenant.getMinH());
-				psCreate.setInt(4, categorieIntervenant.getMaxH());
-				psCreate.setDouble(5, categorieIntervenant.getCoefTp());
+				psCreate.setInt(1, ++dernierId);
+				psCreate.setString(2, categorieIntervenant.getCode());
+				psCreate.setString(3, categorieIntervenant.getNom());
+				psCreate.setInt(4, categorieIntervenant.getMinH());
+				psCreate.setInt(5, categorieIntervenant.getMaxH());
+				psCreate.setDouble(6, categorieIntervenant.getCoefTp());
 				if ( DB.update(psCreate) == 1 ){
 					categoriesIntervenant.add(categorieIntervenant);
+					categorieIntervenant.setId(dernierId);
 					return true;
 				} else {
 					return false;
