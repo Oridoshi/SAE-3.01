@@ -37,6 +37,7 @@ public class AffectationDB {
 	static{
 		reset();
 	}
+
 	public static void reset(){
 		affectations = new ArrayList<>();
 		affectationsParIntervenant = new HashMap<>();
@@ -101,6 +102,7 @@ public class AffectationDB {
 			psDeleteAffectation.setInt(1, affectation.getId());
 			if ( DB.update(psDeleteAffectation) == 1){
 				affectations.remove(affectation);
+				AffectationDB.affectationsParModule.get(affectation.getModule().getCode()).remove(affectation);
 				init();
 				return true;
 			} else {

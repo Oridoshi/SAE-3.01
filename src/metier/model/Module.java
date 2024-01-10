@@ -132,10 +132,11 @@ public class Module implements IModifiable
 
 	public boolean sauvegarder()
 	{
+		ModuleDB.save(this);
 		for ( ProgrammeItem item : programme.listProgrammeItems() ){
 			item.sauvegarder();
 		}
-		return ModuleDB.save(this);
+		return true;
 	}
 
 	public int getTotalAffecteParTypeHeureEqTd(String typeHeure){

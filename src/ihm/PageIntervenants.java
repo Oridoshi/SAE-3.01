@@ -226,8 +226,6 @@ public class PageIntervenants extends JPanel implements ActionListener, ListSele
 			if(!this.hashInterModif.containsKey(inter))
 				this.hashInterModif.put(inter, new Intervenant(inter.getId(), inter.getCategorie(), inter.getNom(), inter.getPrenom(), inter.getHMin(), inter.gethMax(), inter.getCoefTP()));
 
-			System.out.println(inter);
-
 			new PageEditionIntervenant(this.mere, ctrl, inter);
 			this.majTab();
 		}

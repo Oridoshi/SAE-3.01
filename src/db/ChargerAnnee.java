@@ -53,13 +53,10 @@ public class ChargerAnnee
 					String line = sc.nextLine();
 					ps = db.prepareStatement(line);
 					ps.executeUpdate();
-					System.out.println(line);
 				}
+
+				ctrl.reset();
 			} catch (Exception e) { System.out.println(e.getMessage()); }
-		}
-		else
-		{
-			System.out.println("Aucune option sélectionnée");
 		}
 	}
 }

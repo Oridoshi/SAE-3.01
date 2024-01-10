@@ -134,7 +134,7 @@ public class PageCreaCategorieIntervenant implements ActionListener
 		this.dial.setLocationRelativeTo(mere);
 		
 		// Ajout du Button Ajouter
-		JButton ajout = new JButton("Ajouter");
+		JButton ajout = new JButton("Valider");
 		ajout.addActionListener(this);
 		
 		this.dial.add(ajout, BorderLayout.SOUTH);
@@ -253,8 +253,8 @@ public class PageCreaCategorieIntervenant implements ActionListener
 			{
 				this.categorieIntervenantModif.setCode(this.textFieldCode.getText().trim());
 				this.categorieIntervenantModif.setNom(this.textFieldNom.getText());
-				this.categorieIntervenantModif.setMinH(this.textFieldMinH.getValue());
 				this.categorieIntervenantModif.setMaxH(this.textFieldMaxH.getValue());
+				this.categorieIntervenantModif.setMinH(this.textFieldMinH.getValue());
 				this.categorieIntervenantModif.setCoefTp(this.textFieldCoefTP.getValue());
 				this.ctrl.ajouterSauvAttente(this.categorieIntervenantModif);
 			}

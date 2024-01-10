@@ -82,7 +82,7 @@ public class PageEtats extends JPanel implements ActionListener
 
 		this.btnResetData = new JButton("Reset Data");
 
-		this.btnCreeAnnee = new JButton("Créer une année");
+		this.btnCreeAnnee = new JButton("Sauvegarder une année");
 		this.btnChargerAnnee = new JButton("Charger une année");	
 
 		//premiere ligne
@@ -156,7 +156,6 @@ public class PageEtats extends JPanel implements ActionListener
 		if (e.getSource() == this.btnEtatIntervenant)
 		{
 			String nomIntervenant = (String) this.cbxIntervenant.getSelectedItem();
-			System.out.println(nomIntervenant);
 			if (nomIntervenant.equals("Tous les intervenants"))
 			{
 				for (Intervenant inter : this.ctrl.getLstIntervenants())
@@ -185,7 +184,6 @@ public class PageEtats extends JPanel implements ActionListener
 		if (e.getSource() == this.btnEtatModule)
 		{
 			String nomModule = (String) this.cbxModule.getSelectedItem();
-			System.out.println(nomModule);
 			if (nomModule.equals("Tous les modules"))
 			{
 				for (Module module : this.ctrl.getLstModule())
@@ -251,7 +249,6 @@ public class PageEtats extends JPanel implements ActionListener
 
 	private void ouvrirePageWeb(String url)
 	{
-		System.out.println(url);
 		try
 		{
 			Desktop.getDesktop().browse((new File(url)).toURI());

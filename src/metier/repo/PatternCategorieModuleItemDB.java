@@ -33,7 +33,6 @@ public class PatternCategorieModuleItemDB {
 		patternCategorieModuleItems = new ArrayList<>();
 		patternCategorieModuleItemsParNomCatModule = new HashMap<>();
 		try{
-			System.out.println("TEST");
 			psGetAll = db.prepareStatement("SELECT * FROM RemplirCategorieModule");
 			psDelete = db.prepareStatement("DELETE FROM RemplirCategorieModule WHERE id = ?");
 			psCreate = db.prepareStatement("INSERT INTO RemplirCategorieModule VALUES (?, ?, ?)");

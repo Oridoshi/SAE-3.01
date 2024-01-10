@@ -108,7 +108,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 
 	public static PageEditionRessource factorieCreationRessource(Controleur ctrl, FrameIhm mere, Semestre semestre)
 	{
-		PageEditionRessource page = new PageEditionRessource(ctrl, mere, semestre, new Module("RX.XX", semestre, ctrl.getCategorieModule("Ressource"), false, "", ""), null);
+		PageEditionRessource page = new PageEditionRessource(ctrl, mere, semestre, new Module("RX.XX", semestre, ctrl.getCategorieModule("Ressource"), false, "", ""), new ArrayList<Affectation>());
 		return page;
 	}
 
@@ -125,10 +125,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		this.MODULE = module;
 		this.lstAffectationSupp = new ArrayList<Affectation>();
 
-		if(lstAffectation != null)
-			this.lstAffectation = lstAffectation;
-		else
-			this.lstAffectation = new ArrayList<Affectation>();
+		this.lstAffectation = lstAffectation;
 
 		this.panelCentre = new JPanel();
 
@@ -1047,17 +1044,17 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 				return false;
 			}
 
-			else if(this.txtFTotEqTdHProCm.getValue() > this.txtFTotCm3.getValue())
+			else if(this.txtFTotCm2.getValue() > this.txtFTotCm3.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure CM affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFTotEqTdHProTd.getValue() > this.txtFTotTd3.getValue())
+			else if(this.txtFTotTd2.getValue() > this.txtFTotTd3.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TD affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			else if(this.txtFTotEqTdHProTp.getValue() > this.txtFTotTp3.getValue())
+			else if(this.txtFTotTp2.getValue() > this.txtFTotTp3.getValue())
 			{
 				JOptionPane.showMessageDialog(this.mere, "Le nombre d'heure TP affecté est inférieur au nombre d'heure programmé !", "ERREUR HEURE AFFECTE", JOptionPane.ERROR_MESSAGE);
 				return false;

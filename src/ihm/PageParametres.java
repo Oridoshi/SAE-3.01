@@ -124,6 +124,7 @@ public class PageParametres extends JPanel implements ActionListener
 		private ListSelectionModel selectionModel;
 		private List<CategorieIntervenant> lstLocalInitial;
 		private JButton btnModifier;
+		private HashMap<CategorieIntervenant, CategorieIntervenant> lstCateModif;
 
 		public PanelCategoriesIntervenant(Controleur ctrl, FrameIhm mere, List<CategorieIntervenant> lstCategorieIntervenant)
 		{
@@ -131,6 +132,7 @@ public class PageParametres extends JPanel implements ActionListener
 
 			this.lstCategorieIntervenantLocal = new ArrayList<CategorieIntervenant>();
 			this.lstLocalInitial = new ArrayList<CategorieIntervenant>();
+			this.lstCateModif = new HashMap<CategorieIntervenant, CategorieIntervenant>();
 			for (CategorieIntervenant categorieIntervenant : lstCategorieIntervenant)
 			{
 				this.lstCategorieIntervenantLocal.add(categorieIntervenant);
@@ -182,6 +184,15 @@ public class PageParametres extends JPanel implements ActionListener
 			for (CategorieIntervenant categorieIntervenant : lstLocalInitial)
 			{
 				this.lstCategorieIntervenantLocal.add(categorieIntervenant);
+			}
+
+			for (CategorieIntervenant categorieIntervenant : lstCateModif.keySet())
+			{
+				categorieIntervenant.setCode(lstCateModif.get(categorieIntervenant).getCode());
+				categorieIntervenant.setNom(lstCateModif.get(categorieIntervenant).getNom());
+				categorieIntervenant.setMinH(lstCateModif.get(categorieIntervenant).getMinH());
+				categorieIntervenant.setMaxH(lstCateModif.get(categorieIntervenant).getMaxH());
+				categorieIntervenant.setCoefTp(lstCateModif.get(categorieIntervenant).getCoefTp());
 			}
 			this.majTab();
 		}
@@ -237,6 +248,7 @@ public class PageParametres extends JPanel implements ActionListener
 			if (e.getSource() == this.btnModifier)
 			{
 				CategorieIntervenant cateIntervenantModif = this.lstCategorieIntervenantLocal.get(this.tableCategorieIntervenant.getSelectedRow());
+				this.lstCateModif.put(cateIntervenantModif, new CategorieIntervenant(cateIntervenantModif.getCode(), cateIntervenantModif.getNom(), cateIntervenantModif.getMinH(), cateIntervenantModif.getMaxH(), cateIntervenantModif.getCoefTp()));
 				new PageCreaCategorieIntervenant(this.mere, ctrl, cateIntervenantModif, this.lstCategorieIntervenantLocal);
 			}
 

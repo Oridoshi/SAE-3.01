@@ -26,7 +26,7 @@ public class Controleur
 	{
 		this.listSauvegarder = new ArrayList<>();
 		this.listSuppression = new ArrayList<>();
-		this.version = "v1.0.2";
+		this.version = "v1.1.0";
 
 		new FrameIhm(this);
 	}
@@ -161,13 +161,13 @@ public class Controleur
 	}
 
 	public void reset(){
-		AffectationDB.reset();
-		CategorieHeureDB.reset();
+		SemestreDB.reset();
 		CategorieIntervenantDB.reset();
+		CategorieHeureDB.reset();
 		CategorieModuleDB.reset();
-		IntervenantDB.reset();
 		ModuleDB.reset();
 		PatternCategorieModuleItemDB.reset();
-		SemestreDB.reset();
+		IntervenantDB.reset();
+		AffectationDB.reset();
 	}
 }

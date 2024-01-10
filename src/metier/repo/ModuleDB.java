@@ -123,7 +123,7 @@ public class ModuleDB {
 				psCreate.setString(2, module.getCode());
 				psCreate.setBoolean(3, module.isValider());
 				psCreate.setInt(4, module.getSemestre().getId());
-				psCreate.setString(5, module.getCategorieModule().getNom());
+				psCreate.setInt(5, module.getCategorieModule().getId());
 				psCreate.setString(6, module.getLibelleCourt());
 				psCreate.setString(7, module.getLibelleLong());
 				if ( DB.update(psCreate) == 1 ){

@@ -86,65 +86,66 @@ public class CreationAnnee
 		"CREATE TABLE RemplirProgramme("+
 		"	id SERIAL PRIMARY KEY,"+
 		"	idCatModule INT NOT NULL,"+
-			"	idCatH INT NOT NULL,"+
-			"	idModule INT NOT NULL,"+
-			"	nbHProgramme INT NOT NULL,"+
-			"	nbHPromo INT default 0 NOT NULL,"+
-			"	nbSemaine INT default 0 NOT NULL,"+
-			"	FOREIGN KEY (idCatModule) REFERENCES CategorieModule(id),"+
-			"	FOREIGN KEY (idCatH) REFERENCES CategorieHeure(id),"+
-			"	FOREIGN KEY (idModule) REFERENCES Module(id)"+
-			");"+
-			
-			"CREATE TABLE RemplirCategorieModule ("+
-			"	id SERIAL PRIMARY KEY,"+
-			"	idCatModule INT NOT NULL,"+
-			"	idCatH INT NOT NULL,"+
-			"	FOREIGN KEY (idCatModule) REFERENCES CategorieModule(id),"+
-			"	FOREIGN KEY (idCatH) REFERENCES CategorieHeure(id)"+
-			");"+
-			
-			"CREATE TABLE Intervenant ("+
-			"	id SERIAL PRIMARY KEY,"+
-			"	idCatIntervenant INT NOT NULL,"+
-			"	nom VARCHAR(255) NOT NULL,"+
-			"	prenom VARCHAR(255) NOT NULL,"+
-			"	hMax INT default 0 NOT NULL,"+
-			"	hMin INT default 0 NOT NULL,"+
-			"	coefTp DECIMAL(5, 2) NOT NULL default 1,"+
-			"	FOREIGN KEY (idCatIntervenant) REFERENCES CategorieIntervenant(id)"+
-			");"+
-			
-			"CREATE TABLE Affectation ("+
-			"	id SERIAL PRIMARY KEY,"+
-			"	idIntervenant INT NOT NULL,"+
-			"	idCatHeure INT NOT NULL,"+
-			"	nbH INT default 0 NOT NULL,"+
-			"	nbGrp INT default 0 NOT NULL,"+
-			"	idModule INT NOT NULL,"+
-			"	commentaire TEXT,"+
-			"	nbSemaine INT default 0 NOT NULL,"+
-			"	FOREIGN KEY (idIntervenant) REFERENCES Intervenant(id),"+
-			"	FOREIGN KEY (idCatHeure) REFERENCES CategorieHeure(id),"+
-			"	FOREIGN KEY (idModule) REFERENCES Module(id)"+
-			");"
-			;
-			
-			/*********/
-			/*données*/
-			/*********/
-			
-			// semestres
-			String txt = null;
-			for (int cpt = 1; cpt <= 6; cpt++)
-			{
-				Semestre s = this.ctrl.getSemestre(cpt);
-				if (txt != null)
-				txt += ",(" + s.getId() + ", " + s.getNbGroupeTd() + ", " + s.getNbGroupeTp() + ", " + s.getNbEtu() + ", " + s.getNbSemaine() + ")";
-				else
-				txt = "(" + s.getId() + ", " + s.getNbGroupeTd() + ", " + s.getNbGroupeTp() + ", " + s.getNbEtu() + ", " + s.getNbSemaine() + ")";
-			}
-		annee += "\nINSERT INTO Semestre VALUES " + txt + ";";
+		"	idCatH INT NOT NULL,"+
+		"	idModule INT NOT NULL,"+
+		"	nbHProgramme INT NOT NULL,"+
+		"	nbHPromo INT default 0 NOT NULL,"+
+		"	nbSemaine INT default 0 NOT NULL,"+
+		"	FOREIGN KEY (idCatModule) REFERENCES CategorieModule(id),"+
+		"	FOREIGN KEY (idCatH) REFERENCES CategorieHeure(id),"+
+		"	FOREIGN KEY (idModule) REFERENCES Module(id)"+
+		");"+
+		
+		"CREATE TABLE RemplirCategorieModule ("+
+		"	id SERIAL PRIMARY KEY,"+
+		"	idCatModule INT NOT NULL,"+
+		"	idCatH INT NOT NULL,"+
+		"	FOREIGN KEY (idCatModule) REFERENCES CategorieModule(id),"+
+		"	FOREIGN KEY (idCatH) REFERENCES CategorieHeure(id)"+
+		");"+
+		
+		"CREATE TABLE Intervenant ("+
+		"	id SERIAL PRIMARY KEY,"+
+		"	idCatIntervenant INT NOT NULL,"+
+		"	nom VARCHAR(255) NOT NULL,"+
+		"	prenom VARCHAR(255) NOT NULL,"+
+		"	hMax INT default 0 NOT NULL,"+
+		"	hMin INT default 0 NOT NULL,"+
+		"	coefTp DECIMAL(5, 2) NOT NULL default 1,"+
+		"	FOREIGN KEY (idCatIntervenant) REFERENCES CategorieIntervenant(id)"+
+		");"+
+		
+		"CREATE TABLE Affectation ("+
+		"	id SERIAL PRIMARY KEY,"+
+		"	idIntervenant INT NOT NULL,"+
+		"	idCatHeure INT NOT NULL,"+
+		"	nbH INT default 0 NOT NULL,"+
+		"	nbGrp INT default 0 NOT NULL,"+
+		"	idModule INT NOT NULL,"+
+		"	commentaire TEXT,"+
+		"	nbSemaine INT default 0 NOT NULL,"+
+		"	FOREIGN KEY (idIntervenant) REFERENCES Intervenant(id),"+
+		"	FOREIGN KEY (idCatHeure) REFERENCES CategorieHeure(id),"+
+		"	FOREIGN KEY (idModule) REFERENCES Module(id)"+
+		");"
+		;
+		
+		/*********/
+		/*données*/
+		/*********/
+		
+		// semestres
+		String txt = null;
+		for (int cpt = 1; cpt <= 6; cpt++)
+		{
+			Semestre s = this.ctrl.getSemestre(cpt);
+			if (txt != null)
+			txt += ",(" + s.getId() + ", " + s.getNbGroupeTd() + ", " + s.getNbGroupeTp() + ", " + s.getNbEtu() + ", " + s.getNbSemaine() + ")";
+			else
+			txt = "(" + s.getId() + ", " + s.getNbGroupeTd() + ", " + s.getNbGroupeTp() + ", " + s.getNbEtu() + ", " + s.getNbSemaine() + ")";
+		}
+		if(txt != null)
+			annee += "\nINSERT INTO Semestre VALUES " + txt + ";";
 		
 		// catégories d'intervenants
 		txt = null;
@@ -155,7 +156,8 @@ public class CreationAnnee
 			else
 			txt = "('" + ci.getCode() + "', '" + ci.getNom() + "', " + ci.getMinH() + ", " + ci.getMaxH() + ", " + ci.getCoefTp() + ")";
 		}
-		annee += "\nINSERT INTO CategorieIntervenant (code, nom, minH, maxH, coefTp) VALUES " + txt + ";";
+		if(txt != null)
+			annee += "\nINSERT INTO CategorieIntervenant (code, nom, minH, maxH, coefTp) VALUES " + txt + ";";
 		
 		// catégories d'heures
 		txt = null;
@@ -166,18 +168,20 @@ public class CreationAnnee
 			else
 			txt = "('" + ch.getNom() + "', " + ch.getCoef() + ")";
 		}
-		annee += "\nINSERT INTO CategorieHeure (nom, coeffCat) VALUES " + txt + ";";
+		if(txt != null)
+			annee += "\nINSERT INTO CategorieHeure (nom, coeffCat) VALUES " + txt + ";";
 		
 		// catégories de modules
 		txt = null;
 		for (CategorieModule cm : this.ctrl.getLstCategorieModule())
 		{
 			if(txt != null)
-			txt += ",('" + cm.getNom() + "')";
+			txt += ",(" + cm.getId() + ", '" + cm.getNom() + "')";
 			else
-			txt = "('" + cm.getNom() + "')";
+			txt = "(" + cm.getId() + ", '" + cm.getNom() + "')";
 		}
-		annee += "\nINSERT INTO CategorieModule (nom) VALUES " + txt + ";";
+		if(txt != null)
+			annee += "\nINSERT INTO CategorieModule VALUES " + txt + ";";
 		
 		// modules
 		/*
@@ -192,11 +196,27 @@ public class CreationAnnee
 		for(Module m : this.ctrl.getLstModule())
 		{
 			if(txt != null)
-			txt += ",('" + m.getCode() + "', " + m.isValider() + ", " + m.getSemestre().getId() + ", " + m.getCategorieModule().getId() + ", '" + m.getLibelleLong() + "', '" + m.getLibelleCourt() + "')";
+			txt += ",( " + m.getId() +", '" + m.getCode() + "', " + m.isValider() + ", " + m.getSemestre().getId() + ", " + m.getCategorieModule().getId() + ", '" + m.getLibelleLong() + "', '" + m.getLibelleCourt() + "')";
 			else
-			txt = "('" + m.getCode() + "', " + m.isValider() + ", " + m.getSemestre().getId() + ", " + m.getCategorieModule().getId() + ", '" + m.getLibelleLong() + "', '" + m.getLibelleCourt() + "')";
+			txt = "( " + m.getId() +", '" + m.getCode() + "', " + m.isValider() + ", " + m.getSemestre().getId() + ", " + m.getCategorieModule().getId() + ", '" + m.getLibelleLong() + "', '" + m.getLibelleCourt() + "')";
 		}
-		annee += "\nINSERT INTO Module (code, forceValider, idSemestre, idCatModule, libLong, libCourt) VALUES " + txt + ";";
+		if(txt != null)
+			annee += "\nINSERT INTO Module (id, code, forceValider, idSemestre, idCatModule, libLong, libCourt) VALUES " + txt + ";";
+		
+		// remplir catégorie module
+		txt = null;
+		for(CategorieModule cm : this.ctrl.getLstCategorieModule())
+		{
+			for (int i = 0; i < cm.getCategorieHeures().size(); i++)
+			{
+				if(txt != null)
+				txt += ",(" + cm.getId() + ", " + cm.getCategorieHeures().get(i).getCategorieHeure().getId() + ")";
+				else
+				txt = "(" + cm.getId() + ", " + cm.getCategorieHeures().get(i).getCategorieHeure().getId() + ")";
+			}
+		}
+		if(txt != null)
+			annee += "\nINSERT INTO RemplirCategorieModule (idCatModule, idCatH) VALUES " + txt + ";";
 		
 		// remplir programme
 		/*
@@ -213,26 +233,26 @@ public class CreationAnnee
 			for (int i = 0; i < m.getCategorieModule().getCategorieHeures().size(); i++)
 			{
 				if(txt != null)
-					txt += ",(" + m.getCategorieModule().getId() + ", " + m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getId() + ", " + m.getId() + ", " + m.getNbHeureProgramme(m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getNom()) + "," + m.getNbHeureSemaine(m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getNom()) + "," + m.getNbSemaine(m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getNom()) + ")";
-				else
-					txt = "(" + m.getCategorieModule().getId() + ", " + m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getId() + ", " + m.getId() + ", " + m.getNbHeureProgramme(m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getNom()) + "," + m.getNbHeureSemaine(m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getNom()) + "," + m.getNbSemaine(m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getNom()) + ")";
+					txt += ",(" + 
+					m.getCategorieModule().getId() + ", " + 
+					m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getId() + ", " + 
+					m.getId() + ", " + 
+					m.getNbHeureProgramme(m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getNom()) + "," 
+					+ m.getNbHeureSemaine(m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getNom()) + "," 
+					+ m.getNbSemaine(m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getNom()) + ")";
+				else{
+					txt = "(" + 
+					m.getCategorieModule().getId() + ", " + 
+					m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getId() + ", " + 
+					m.getId() + ", " + 
+					m.getNbHeureProgramme(m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getNom()) + "," + 
+					m.getNbHeureSemaine(m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getNom()) + "," + 
+					m.getNbSemaine(m.getCategorieModule().getCategorieHeures().get(i).getCategorieHeure().getNom()) + ")";
+				}
 			}
 		}
-		annee += "\nINSERT INTO RemplirProgramme (idCatModule, idCatH, idModule, nbHProgramme, nbHPromo, nbSemaine) VALUES " + txt + ";";
-		
-		// remplir catégorie module
-		txt = null;
-		for(CategorieModule cm : this.ctrl.getLstCategorieModule())
-		{
-			for (int i = 0; i < cm.getCategorieHeures().size(); i++)
-			{
-				if(txt != null)
-				txt += ",(" + cm.getId() + ", " + cm.getCategorieHeures().get(i).getCategorieHeure().getId() + ")";
-				else
-				txt = "(" + cm.getId() + ", " + cm.getCategorieHeures().get(i).getCategorieHeure().getId() + ")";
-			}
-		}
-		annee += "\nINSERT INTO RemplirCategorieModule (idCatModule, idCatH) VALUES " + txt + ";";
+		if(txt != null)
+			annee += "\nINSERT INTO RemplirProgramme (idCatModule, idCatH, idModule, nbHProgramme, nbHPromo, nbSemaine) VALUES " + txt + ";";
 		
 		// intervenants
 		txt = null;
@@ -243,7 +263,8 @@ public class CreationAnnee
 			else
 			txt = "(" + i.getId() + ", " + i.getCategorie().getId() + ", '" + i.getNom() + "', '" + i.getPrenom() + "', " + i.gethMax() + ", " + i.getHMin() + ", " + i.getCoefTP() + ")";
 		}
-		annee += "\nINSERT INTO Intervenant VALUES " + txt + ";";
+		if(txt != null)
+			annee += "\nINSERT INTO Intervenant VALUES " + txt + ";";
 		
 		// affectations
 		txt = null;
@@ -253,14 +274,40 @@ public class CreationAnnee
 			for(Affectation a : this.ctrl.getLstAffectationParIntervenant(i.getId()))
 			{
 				if(txt != null)
-				txt += ",(" + a.getId() + ", " + a.getIntervenant().getId() + ", " + a.getCategorieHeure().getId() + ", " + a.getNbHeure()==null?"0":a.getNbHeure() + ", " + a.getNbGroupe()==null?"0":a.getNbGroupe() + ", " + a.getModule().getId() + ", '" + (a.getCommentaire()==null?"":a.getCommentaire()) + "', " + a.getNbSemaine()==null?"0":a.getNbSemaine() + ")";
+				txt += ",(" + a.getId() + ", " + 
+				a.getIntervenant().getId() + ", " + 
+				a.getCategorieHeure().getId() + ", " + 
+				(a.getNbHeure()==null?"0":a.getNbHeure()) + ", " + 
+				(a.getNbGroupe()==null?"0":a.getNbGroupe()) + ", " + 
+				a.getModule().getId() + ", '" + 
+				(a.getCommentaire()==null?"":a.getCommentaire()) + "', " + 
+				(a.getNbSemaine()==null?"0":a.getNbSemaine()) + ")";
 				else
-				txt = "(" + a.getId() + ", " + a.getIntervenant().getId() + ", " + a.getCategorieHeure().getId() + ", " + a.getNbHeure()==null?"0":a.getNbHeure() + ", " + a.getNbGroupe()==null?"0":a.getNbGroupe() + ", " + a.getModule().getId() + ", '" + (a.getCommentaire()==null?"":a.getCommentaire()) + "', " + a.getNbSemaine()==null?"0":a.getNbSemaine() + ")";
+				txt = "(" + a.getId() + ", " + 
+				a.getIntervenant().getId() + ", " + 
+				a.getCategorieHeure().getId() + ", " + 
+				(a.getNbHeure()==null?"0":a.getNbHeure()) + ", " + 
+				(a.getNbGroupe()==null?"0":a.getNbGroupe()) + ", " + 
+				a.getModule().getId() + ", '" + 
+				(a.getCommentaire()==null?"":a.getCommentaire()) + "', " + 
+				(a.getNbSemaine()==null?"0":a.getNbSemaine()) + ")";
 			}
 		}
-		annee += "\nINSERT INTO Affectation VALUES " + txt + ";";
+		if(txt != null)
+			annee += "\nINSERT INTO Affectation VALUES " + txt + ";";
 		
 		DuplicationDB.save(nomAnnee, annee);
+
+		// try
+		// {
+		// 	PrintWriter pw = new PrintWriter("src/db/annee.txt");
+		// 	pw.println(annee);
+		// 	pw.close();
+		// }
+		// catch (Exception e)
+		// {
+		// 	e.printStackTrace();
+		// }
 
 		int rep = JOptionPane.showConfirmDialog(mere, "Voulez vous copier les données de l'année sur la quelle vous travaillez sur votre nouvelle année ?", "Copy", JOptionPane.YES_NO_OPTION);
 		if(rep == JOptionPane.NO_OPTION)

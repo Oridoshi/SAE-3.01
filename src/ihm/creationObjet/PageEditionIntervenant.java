@@ -220,13 +220,14 @@ public class PageEditionIntervenant implements ActionListener
 			}
 			else
 			{
-				if(this.txtFHServ.getValue() > this.txtFHMax.getValue())
+				CategorieIntervenant cateInter = (CategorieIntervenant) cbIntervenant.getSelectedItem();
+
+				if(this.txtFHServ.getValue() > (this.txtFHMax.isEmpty()?cateInter.getMaxH():this.txtFHMax.getValue()))
 				{
 					JOptionPane.showMessageDialog(this.dial, "Le nombre d'heures de minimum ne peut pas être supérieur au nombre d'heures maximum", "ERREUR HEURE", JOptionPane.ERROR_MESSAGE);
 				}
 				else
 				{
-					CategorieIntervenant cateInter = (CategorieIntervenant) cbIntervenant.getSelectedItem();
 					this.inter.setCategorie(cateInter);
 
 					this.inter.setNom(this.txtFNom.getText());
