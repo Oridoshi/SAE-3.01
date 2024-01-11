@@ -6,7 +6,7 @@ Pour installer l'application sur votre appareil, suivez ces étapes :
 - Accédez au projet GitHub depuis ce lien : https://github.com/Oridoshi/SAE-3.01
 - Dirigez-vous vers la section des versions (releases) : https://github.com/Oridoshi/SAE-3.01/releases
 - Téléchargez l'installeur (AstreSetup.exe) à partir de là.
-OU
+**OU**
 - Accéder directement au téléchargement ci dessous : https://github.com/Oridoshi/SAE-3.01/releases/download/V1.1.0/AstreSetup.exe
 Une fois que vous avez l'installeur à votre disposition, lancez-le et suivez les différentes étapes. Grâce à cela, vous serez en mesure d'utiliser l'application Astre à votre convenance.
 ### Linux
@@ -14,7 +14,7 @@ Pour installer l'application sur votre appareil, suivez ces étapes :
 - Accédez au projet GitHub depuis ce lien : https://github.com/Oridoshi/SAE-3.01
 - Dirigez-vous vers la section des versions (releases) : https://github.com/Oridoshi/SAE-3.01/releases
 - Téléchargez l'archive (AstreLinux.tar).
-OU
+**OU**
 - Accéder directement au téléchargement ci dessous : https://github.com/Oridoshi/SAE-3.01/releases/download/V1.1.0/AstreLinux.tar
 Une fois que vous avez installé le dossier .tar, décompressez-le. Vous pourrez trouver à l'intérieur un dossier "data" et un fichier .jar. Ne touchez pas au dossier "data" ni au fichier .jar ; les deux doivent toujours être dans le même dossier.
 Une fois les tous ceci fait lancer le .jar avec la commande “java -jar SAE-3.01.jar“ et l’application ce lanceras
