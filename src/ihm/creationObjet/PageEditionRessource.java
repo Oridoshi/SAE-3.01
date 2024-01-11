@@ -108,7 +108,7 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 
 	public static PageEditionRessource factorieCreationRessource(Controleur ctrl, FrameIhm mere, Semestre semestre)
 	{
-		PageEditionRessource page = new PageEditionRessource(ctrl, mere, semestre, new Module("RX.XX", semestre, ctrl.getCategorieModule("Ressource"), false, "", ""), new ArrayList<Affectation>());
+		PageEditionRessource page = new PageEditionRessource(ctrl, mere, semestre, new Module("RX.XX", semestre, ctrl.getCategorieModule("Ressource"), false, "", ""), null);
 		return page;
 	}
 
@@ -125,7 +125,10 @@ public class PageEditionRessource extends JPanel implements ActionListener, Focu
 		this.MODULE = module;
 		this.lstAffectationSupp = new ArrayList<Affectation>();
 
-		this.lstAffectation = lstAffectation;
+		if(lstAffectation == null)
+			this.lstAffectation = new ArrayList<Affectation>();
+		else
+			this.lstAffectation = lstAffectation;
 
 		this.panelCentre = new JPanel();
 
