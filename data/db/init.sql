@@ -8,6 +8,11 @@ DROP TABLE if exists CategorieModule cascade;
 DROP TABLE if exists Affectation cascade;
 DROP TABLE if exists RemplirCategorieModule cascade;
 
+CREATE TABLE if not exists Duplication(
+	libelle VARCHAR PRIMARY KEY,
+	content TEXT NOT NULL
+);
+
 CREATE TABLE Semestre (
 	id SERIAL PRIMARY KEY,
 	nbGrpTd INT NOT NULL,

@@ -26,8 +26,6 @@ INSERT INTO CategorieHeure (nom, coeffCat) VALUES
 ('HSAE', 1  ),
 ('HP'  , 1  );
 
-
-
 -- INSERT valeurs de CATEGORIEMODULE
 INSERT INTO CategorieModule (nom) VALUES
 ('Ressource'  ),
@@ -38,22 +36,22 @@ INSERT INTO CategorieModule (nom) VALUES
 
 -- INSERT valeurs de MODLULE
 INSERT INTO Module (code, forceValider, idSemestre, idCatModule, libLong, libCourt) VALUES
-	( 'R1.01', false , 1, 1  , 'Initiation au développement'                        , 'Init dev'            ),
-	( 'R1.02', false , 1, 1  , 'Developpement Interfaces Web'                       , 'Intro web'           ),
-	( 'R1.03', false , 1, 1  , 'Introduction Architecture'                          , 'Intro archi'         ),
-	( 'R1.04', false , 1, 1  , 'Introduction Système'                               , 'Intro sys'           ),
+	( 'R1.01', true , 1, 1  , 'Initiation au développement'                        , 'Init dev'            ),
+	( 'R1.02', true , 1, 1  , 'Developpement Interfaces Web'                       , 'Intro web'           ),
+	( 'R1.03', true , 1, 1  , 'Introduction Architecture'                          , 'Intro archi'         ),
+	( 'R1.04', true , 1, 1  , 'Introduction Système'                               , 'Intro sys'           ),
 	( 'R1.05', false , 1, 1  , 'Introduction aux bases de Données'                  , 'BD1'                 ),
-	( 'R1.06', false , 1, 1  , 'Math discrètes'                                     , 'Math discrètes'      ),
-	( 'R1.07', false, 1, 1  , 'Outils Mathématiques fondamentaux'                  , 'Outils fondamentaux' ),
-	( 'R1.08', false, 1, 1  , 'Gestion de projet & des organisations'              , 'GPO 1'               ),
-	( 'R1.09', false, 1, 1  , 'Intro Economie'                                     , 'Eco 1'               ),
+	( 'R1.06', true , 1, 1  , 'Math discrètes'                                     , 'Math discrètes'      ),
+	( 'R1.07', true, 1, 1  , 'Outils Mathématiques fondamentaux'                  , 'Outils fondamentaux' ),
+	( 'R1.08', true, 1, 1  , 'Gestion de projet & des organisations'              , 'GPO 1'               ),
+	( 'R1.09', true, 1, 1  , 'Intro Economie'                                     , 'Eco 1'               ),
 	( 'R1.10', false, 1, 1  , 'Anglais Technique'                                  , 'Anglais 1'           ),
 	( 'R1.11', false, 1, 1  , 'Bases de la communication'                          , 'Comm 1'              ),
-	( 'R1.12', false, 1, 1  , 'Projet Professionnel et personnel'                  , 'PPP 1'               ),
+	( 'R1.12', true, 1, 1  , 'Projet Professionnel et personnel'                  , 'PPP 1'               ),
 
 	( 'S1.01', false , 1, 3        , 'SAE 1'                                              , 'SAE 1'               ),
 	( 'S1.02', false , 1, 3        , 'SAE 2'                                              , 'SAE 2'               ),
-	( 'S1.03', false , 1, 3        , 'SAE 3'                                              , 'SAE 3'               ),
+	( 'S1.03', true , 1, 3        , 'SAE 3'                                              , 'SAE 3'               ),
 	( 'S1.04', false , 1, 3        , 'SAE 4'                                              , 'SAE 4'               ),
 	( 'S1.05', false , 1, 3        , 'SAE 5'                                              , 'SAE 5'               ),
 	( 'S1.06', false , 1, 3        , 'SAE 6'                                              , 'SAE 6'               ),
@@ -63,109 +61,109 @@ INSERT INTO Module (code, forceValider, idSemestre, idCatModule, libLong, libCou
 
 -- INSERT valeurs de REMPLIRCATEGORIEMODULE
 INSERT INTO RemplirCategorieModule (idCatModule, idCatH) VALUES
-(1, 1),
-(1, 2),
-(1, 3),
-(1, 7),
-(2, 4),
-(2, 1),
-(2, 2),
-(2, 3),
-(2, 7),
-(3, 4),
-(3, 6),
-(4, 4),
-(4, 5);
+( 1, 1 ),
+( 1, 2 ),
+( 1, 3 ),
+( 1, 7 ),
+( 3, 4 ),
+( 3, 6 ),
+( 4, 4 ),
+( 2, 4 ),
+( 2, 1 ),
+( 2, 2 ),
+( 2, 3 ),
+( 2, 7 ),
+( 4, 5 );
 
 -- INSERT valeurs de REMPLIRPROGRAMME
 INSERT INTO RemplirProgramme (idCatModule, idCatH, idModule, nbHProgramme, nbHPromo, nbSemaine) VALUES
 
-(2, 4, 19, 2,2,0),
-(2, 1, 19, 0,0,0),
-(2, 2, 19, 7,7,0),
-(2, 3, 19, 7,7,0),
-(2, 7, 19, 0,0,0),
+( 1, 1, 1,  6,    1, 6 ),
+( 1, 2, 1, 65,    4, 14 ),
+( 1, 3, 1, 28,    2, 14 ),
+( 1, 7, 1,  0,    9, 0  ),
 
-(1, 1, 1, 6,1,6),
-(1, 2, 1, 65,4,14),
-(1, 3, 1, 28,2,14),
-(1, 7, 1, 0,9,0),
+( 1, 1, 2,  0,    0, 0 ),
+( 1, 2, 2, 30,    2, 13 ),
+( 1, 3, 2,  0,    0, 0 ),
+( 1, 7, 2,  0,    4, 0  ),
 
-(1, 1, 2, 0,0,0),
-(1, 2, 2, 30,2,13),
-(1, 3, 2, 0,0,0),
-(1, 7, 2, 0,4,0),
+( 1, 1, 3,  0,    0, 0 ),
+( 1, 2, 3, 15,   2, 7 ),
+( 1, 3, 3,  7,   1, 7 ),
+( 1, 7, 3,  0,    1, 0  ),
 
-(1, 1, 3, 0,0,0),
-(1, 2, 3, 15,2,7),
-(1, 3, 3, 7,1,7),
-(1, 7, 3, 0,1,0),
+( 1, 1, 4,  0,    0, 0 ),
+( 1, 2, 4, 15,   2, 7 ),
+( 1, 3, 4,  7,   1, 7 ),
+( 1, 7, 4,  0,    1, 0  ),
 
-(1, 1, 4, 0,0,0),
-(1, 2, 4, 15,2,7),
-(1, 3, 4, 7,1,7),
-(1, 7, 4, 0,1,0),
+( 1, 1, 5,  0,    0, 0 ),
+( 1, 2, 5, 31,    2, 14 ),
+( 1, 3, 5, 14,    1, 14 ),
+( 1, 7, 5,  0,    3, 0  ),
 
-(1, 1, 5, 0,0,0),
-(1, 2, 5, 31,2,14),
-(1, 3, 5, 14,1,14),
-(1, 7, 5, 0,3,0),
+( 1, 1, 6,  0,    0, 0 ),
+( 1, 2, 6, 38,    2, 14 ),
+( 1, 3, 6,  0,    0, 0 ),
+( 1, 7, 6,  0,    10, 0  ),
 
-(1, 1, 6, 0,0,0),
-(1, 2, 6, 38,2,14),
-(1, 3, 6, 0,0,0),
-(1, 7, 6, 0,10,0),
+( 1, 1, 7,  0,    0, 0 ),
+( 1, 2, 7, 24,    1, 14 ),
+( 1, 3, 7,  0,    0, 0 ),
+( 1, 7, 7,  0,    10, 0  ),
 
-(1, 1, 7, 0,0,0),
-(1, 2, 7, 24,1,14),
-(1, 3, 7, 0,0,0),
-(1, 7, 7, 0,10,0),
+( 1, 1, 8,  6,    1, 6 ),
+( 1, 2, 8, 23,    1, 14 ),
+( 1, 3, 8,  0,    0, 0 ),
+( 1, 7, 8,  0,    9, 0  ),
 
-(1, 1, 8, 6,1,6),
-(1, 2, 8, 23,1,14),
-(1, 3, 8, 0,0,0),
-(1, 7, 8, 0,9,0),
+( 1, 1, 9,  0,    0, 0 ),
+( 1, 2, 9, 22,    1, 14 ),
+( 1, 3, 9,  0,    0, 0 ),
+( 1, 7, 9,  0,    8, 0  ),
 
-(1, 1, 9, 0,0,0),
-(1, 2, 9, 22,1,14),
-(1, 3, 9, 0,0,0),
-(1, 7, 9, 0,8,0),
+( 1, 1, 10,  0,    0, 0 ),
+( 1, 2, 10, 16,    1, 14 ),
+( 1, 3, 10, 14,    1, 14 ),
+( 1, 7, 10,  0,    2, 0  ),
 
-(1, 1, 10, 0,0,0),
-(1, 2, 10, 16,1,14),
-(1, 3, 10, 14,1,14),
-(1, 7, 10, 0,2,0),
+( 1, 1, 11,  0,    0, 0 ),
+( 1, 2, 11, 17,    1, 15 ),
+( 1, 3, 11, 15,    1, 15 ),
+( 1, 7, 11,  0,    2, 0  ),
 
-(1, 1, 11, 0,0,0),
-(1, 2, 11, 17,1,15),
-(1, 3, 11, 15,1,15),
-(1, 7, 11, 0,2,0),
+( 1, 1, 12,  0,    0, 0 ),
+( 1, 2, 12,  7,    1, 7 ),
+( 1, 3, 12,  7,    1, 7 ),
+( 1, 7, 12,  0,    2, 0  ),
 
-(1, 1, 12, 0,0,0),
-(1, 2, 12, 7,1,7),
-(1, 3, 12, 7,1,7),
-(1, 7, 12, 0,2,0),
+( 4, 5, 20,  10,    10, 0  ),
+( 4, 4, 20,  10,    10, 0  ),
 
-(3, 4, 13, 18,18,0),
-(3, 6, 13, 9,9,0),
+( 2, 1, 19,  0,    0, 0 ),
+( 2, 2, 19,  7,    7, 0 ),
+( 2, 3, 19,  7,    7, 0 ),
+( 2, 4, 19,  2,    2, 0  ),
+( 2, 7, 19,  0,    0, 0  ),
 
-(3, 4, 14, 18,18,0),
-(3, 6, 14, 9,9,0),
+( 3, 4, 13,  18,  18, 0 ),
+( 3, 6, 13,  9,  9, 0 ),
 
-(3, 4, 15, 18,18,0),
-(3, 6, 15, 9,9,0),
+( 3, 4, 14,   18,  18, 0 ),
+( 3, 6, 14, 9,  9, 0 ),
 
-(3, 4, 16, 18,18,0),
-(3, 6, 16, 9,9,0),
+( 3, 4, 15,   18,  18, 0 ),
+( 3, 6, 15, 9,  9, 0 ),
 
-(3, 4, 17, 18,18,0),
-(3, 6, 17, 9,9,0),
+( 3, 4, 16,   18,  18, 0 ),
+( 3, 6, 16, 9,  9, 0 ),
 
-(3, 4, 18, 18,18,0),
-(3, 6, 18, 9,9,0),
+( 3, 4, 17,   18,  18, 0 ),
+( 3, 6, 17, 9,  9, 0 ),
 
-(4, 4, 20, 10,10,0),
-(4, 5, 20, 10,10,0);
+( 3, 4, 18,   18,  18, 0 ),
+( 3, 6, 18, 9,  9, 0 );
 
 
 -- INSERT valeurs de INTERVENANT

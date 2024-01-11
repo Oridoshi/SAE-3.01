@@ -1,6 +1,6 @@
 .vscode
 /bin
-*.jar
+# *.jar
 *.xml
 *.iss
 *.log
