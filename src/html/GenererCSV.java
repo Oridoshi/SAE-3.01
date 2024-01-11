@@ -56,16 +56,25 @@ public class GenererCSV
 
 		try
 		{
-			File fichier1 = new File (this.fichier);
-			File fichier = new File (fichier1.getAbsolutePath());
-			System.out.println(this.fichier + "\n" + fichier1.getAbsolutePath());
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fichier.getAbsoluteFile(), true), "UTF-8"));
+			// Créer un objet File avec le chemin du fichier
+			File fichier = new File(this.fichier);
 
-			// Vérifier si le fichier existe
-			if ( fichier.exists() )
-				System.out.println(fichier.delete());
+			// Créer le dossier parent s'il n'existe pas
+			fichier.getParentFile().mkdirs();
 
-			fichier.createNewFile();
+			// Créer le fichier s'il n'existe pas
+			if (!fichier.exists())
+			{
+				fichier.createNewFile();
+			}
+			else
+			{
+				fichier.delete();
+				fichier.createNewFile();
+			}
+
+			// Créer le PrintWriter avec le fichier et l'encodage UTF-8
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fichier, true), "UTF-8"));
 
 
 			for ( int i = 0 ; i < lstNomsCell.length - 1 ; i++ )
